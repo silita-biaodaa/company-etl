@@ -5,7 +5,7 @@
     <display-name>company-etl</display-name>
     <context-param>
         <param-name>webAppRootKey</param-name>
-        <param-value>trasen-manage</param-value>
+        <param-value>company-etl</param-value>
     </context-param>
     <context-param>
         <param-name>log4jRefreshInterval</param-name>
