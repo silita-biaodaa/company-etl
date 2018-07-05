@@ -39,6 +39,8 @@ public class ReceiveMsg extends KafkaConsumerBase {
             if (!exists) {
                 mohurdService.insertCompany(company);
                 redisUtils.hset(Constant.REDIS_COMPANY, md5, com_id);
+            } else {
+                logger.info(String.format("=============%s 已存在！", md5));
             }
         }
     }
