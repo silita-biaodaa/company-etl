@@ -37,7 +37,7 @@
 	</bean>
 	<!-- spring与mybatis整合配置，扫描所有dao -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
-		  p:basePackage="com.silita.biaodaa.dao" p:sqlSessionFactoryBeanName="sqlSessionFactory" />
+		  p:basePackage="com.silita.dao" p:sqlSessionFactoryBeanName="sqlSessionFactory" />
 
 	<bean id="txManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

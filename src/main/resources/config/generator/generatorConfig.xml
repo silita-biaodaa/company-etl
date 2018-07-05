@@ -11,7 +11,7 @@
         <property name="endingDelimiter" value="`"/>
 
         <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
-            <property name="mappers" value="com.silita.biaodaa.utils.MyMapper"/>
+            <property name="mappers" value="com.silita.utils.MyMapper"/>
         </plugin>
 
         <jdbcConnection driverClass="${jdbc.driverClassName}"
@@ -20,11 +20,11 @@
                         password="${jdbc.password}">
         </jdbcConnection>
 
-        <javaModelGenerator targetPackage="com.silita.biaodaa.model" targetProject="src/main/java"/>
+        <javaModelGenerator targetPackage="com.silita.model" targetProject="src/main/java"/>
 
         <sqlMapGenerator targetPackage="mappers" targetProject="src/main/resources/config/mybatis"/>
 
-        <javaClientGenerator targetPackage="com.silita.biaodaa.dao" targetProject="src/main/java"
+        <javaClientGenerator targetPackage="com.silita.dao" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
         <table tableName="snatchpress">
