@@ -10,6 +10,10 @@ import java.io.Serializable;
 public class Company implements Serializable {
     private static final long serialVersionUID = 2680866379272673386L;
     /**
+     * 实体MD5
+     */
+    private String md5;
+    /**
      * 企业id
      */
     private String com_id;
@@ -156,6 +160,14 @@ public class Company implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 
     @Override

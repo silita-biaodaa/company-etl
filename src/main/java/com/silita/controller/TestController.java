@@ -27,10 +27,6 @@ public class TestController {
     @Autowired
     TestService testService;
 
-    @Autowired
-    RedisTemplate redisTemplate;
-
-
     private Lock lock = new ReentrantLock();//基于底层IO阻塞考虑
 
     private static final Logger logger = Logger.getLogger(TestController.class);

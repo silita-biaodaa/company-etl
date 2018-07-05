@@ -26,7 +26,7 @@ public class RedisUtils {
     @Autowired
     private ShardedJedisPool shardedJedisPool;//注入ShardedJedisPool
 
-    public String buildKey(String key){
+    public String buildKey(String key) {
         return VIRTUAL_COURSE_PREX + key;
     }
 
@@ -34,15 +34,15 @@ public class RedisUtils {
         Set<String> setResult = new HashSet<>();
         ShardedJedis jedis = null;
         try {
-            jedis =  getJedis();
+            jedis = getJedis();
             Iterator<Jedis> jedisIterator = jedis.getAllShards().iterator();
-            while(jedisIterator.hasNext()){
-                setResult.addAll(jedisIterator.next().keys(prefix+"*"));
+            while (jedisIterator.hasNext()) {
+                setResult.addAll(jedisIterator.next().keys(prefix + "*"));
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-        }finally{
-            if(jedis != null) {
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
@@ -51,22 +51,23 @@ public class RedisUtils {
 
     /**
      * 根据前缀模糊匹配所有key，然后批量删除
+     *
      * @param prefix 前缀字符
      */
-    public void batchDel(String prefix){
-        ShardedJedis jedis= null;
+    public void batchDel(String prefix) {
+        ShardedJedis jedis = null;
         try {
             Set<String> keys = getByPrefix(prefix);
-            if(keys != null && keys.size()>0) {
+            if (keys != null && keys.size() > 0) {
                 jedis = getJedis();
                 for (String key : keys) {
                     jedis.del(key);
                 }
             }
-        }catch (Exception e){
-            logger.error("batchDel key error : "+e,e);
-        }finally{
-            if(jedis != null) {
+        } catch (Exception e) {
+            logger.error("batchDel key error : " + e, e);
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
@@ -74,19 +75,20 @@ public class RedisUtils {
 
     /**
      * 删除元素
+     *
      * @param key
      */
-    public void del(String key){
+    public void del(String key) {
         ShardedJedis jedis = null;
         try {
-            jedis =  getJedis();
+            jedis = getJedis();
             jedis.del(key);
-        }catch (RuntimeException e) {
-            logger.error("del key RuntimeException error : "+e,e);
+        } catch (RuntimeException e) {
+            logger.error("del key RuntimeException error : " + e, e);
         } catch (Exception e) {
-            logger.error("del key error : "+e,e);
-        }finally{
-            if(jedis != null) {
+            logger.error("del key error : " + e, e);
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
@@ -94,18 +96,19 @@ public class RedisUtils {
 
     /**
      * 设置 String
+     *
      * @param key
      * @param value
      */
-    public void setString(String key ,String value){
+    public void setString(String key, String value) {
         ShardedJedis jedis = null;
         try {
-            jedis =  getJedis();
-            jedis.set(buildKey(key),value);
+            jedis = getJedis();
+            jedis.set(buildKey(key), value);
         } catch (Exception e) {
-            logger.error("Set key error : "+e);
-        }finally{
-            if(jedis != null) {
+            logger.error("Set key error : " + e);
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
@@ -113,19 +116,20 @@ public class RedisUtils {
 
     /**
      * 设置 过期时间
+     *
      * @param key
      * @param value
      * @param seconds 以秒为单位
      */
-    public void setString(String key ,String value,int seconds){
+    public void setString(String key, String value, int seconds) {
         ShardedJedis jedis = null;
         try {
-            jedis =  getJedis();
+            jedis = getJedis();
             jedis.setex(buildKey(key), seconds, value);
         } catch (Exception e) {
-            logger.error("Set keyex error : "+e);
-        }finally{
-            if(jedis != null) {
+            logger.error("Set keyex error : " + e);
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
@@ -133,10 +137,11 @@ public class RedisUtils {
 
     /**
      * 获取String值
+     *
      * @param key
      * @return value
      */
-    public String getString(String key){
+    public String getString(String key) {
         ShardedJedis jedis = null;
         String value = null;
         try {
@@ -145,11 +150,11 @@ public class RedisUtils {
             if (jedis == null || !jedis.exists(bKey)) {
                 return null;
             }
-            value= jedis.get(bKey);
-        }catch (Exception e){
-            logger.error(e,e);
-        }finally{
-            if(jedis != null) {
+            value = jedis.get(bKey);
+        } catch (Exception e) {
+            logger.error(e, e);
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
@@ -161,23 +166,22 @@ public class RedisUtils {
     }
 
 
-
-    public <T> void setList(String key ,List<T> list,int seconds){
+    public <T> void setList(String key, List<T> list, int seconds) {
         ShardedJedis jedis = null;
         try {
             String bKey = buildKey(key);
-            jedis =getJedis();
-            jedis.setex(bKey.getBytes(),seconds, ObjectTranscoder.serialize(list));
+            jedis = getJedis();
+            jedis.setex(bKey.getBytes(), seconds, ObjectTranscoder.serialize(list));
         } catch (Exception e) {
-            logger.error("setList error : "+e);
-        }finally {
-            if(jedis != null) {
+            logger.error("setList error : " + e);
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
     }
 
-    public <T> List<T> getList(String key){
+    public <T> List<T> getList(String key) {
         List<T> list = null;
         ShardedJedis jedis = null;
         try {
@@ -188,10 +192,10 @@ public class RedisUtils {
             }
             byte[] in = jedis.get(bKey.getBytes());
             list = (List<T>) ObjectTranscoder.deserialize(in);
-        }catch(Exception e){
-            logger.error(e,e);
-        }finally{
-            if(jedis != null) {
+        } catch (Exception e) {
+            logger.error(e, e);
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
@@ -199,23 +203,22 @@ public class RedisUtils {
     }
 
 
-
-    public void setObject(String key ,Object obj,int seconds){
+    public void setObject(String key, Object obj, int seconds) {
         ShardedJedis jedis = null;
         try {
             String bKey = buildKey(key);
-            jedis =getJedis();
-            jedis.setex(bKey.getBytes(),seconds, ObjectTranscoder.serialize(obj));
+            jedis = getJedis();
+            jedis.setex(bKey.getBytes(), seconds, ObjectTranscoder.serialize(obj));
         } catch (Exception e) {
-            logger.error("setObject error : "+e);
-        }finally {
-            if(jedis != null) {
+            logger.error("setObject error : " + e);
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
     }
 
-    public Object getObject(String key){
+    public Object getObject(String key) {
         Object obj = null;
         ShardedJedis jedis = null;
         try {
@@ -226,16 +229,43 @@ public class RedisUtils {
             }
             byte[] in = jedis.get(bKey.getBytes());
             obj = ObjectTranscoder.deserialize(in);
-        }catch(Exception e){
-            logger.error(e,e);
-        }finally{
-            if(jedis != null) {
+        } catch (Exception e) {
+            logger.error(e, e);
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
         return obj;
     }
 
+    public boolean hexists(String key, String field) {
+        boolean exists = false;
+        ShardedJedis jedis = null;
+        try {
+            jedis = getJedis();
+            exists = jedis.hexists(key, field);
+        } catch (Exception e) {
+            logger.error(e, e);
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return exists;
+    }
 
-
+    public void hset(String key, String field, String value) {
+        ShardedJedis jedis = null;
+        try {
+            jedis = getJedis();
+            jedis.hset(key, field, value);
+        } catch (Exception e) {
+            logger.error(e, e);
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
 }
