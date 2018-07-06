@@ -17,7 +17,7 @@
         <mockito.version>1.9.0</mockito.version>
         <bonecp.version>0.7.1.RELEASE</bonecp.version>
         <ant.version>1.8.2</ant.version>
-        <aspectjweaver.version>1.6.8</aspectjweaver.version>
+        <aspectj.version>1.6.8</aspectj.version>
 
         <cglib.version>2.2</cglib.version>
         <mybatis.version>3.1.1</mybatis.version>
@@ -157,8 +157,13 @@
         <!-- Spring aop -->
         <dependency>
             <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>${aspectjweaver.version}</version>
+            <version>${aspectj.version}</version>
         </dependency>
         <!-- Spring tx -->
         <dependency>
