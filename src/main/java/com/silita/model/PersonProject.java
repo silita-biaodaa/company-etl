@@ -5,14 +5,19 @@ import java.io.Serializable;
 /**
  * @Author:chenzhiqiang
  * @Date:2018/5/14 20:14
- * @Description:    项目和人员关系
+ * @Description: 项目和人员关系
  */
 public class PersonProject implements Serializable {
     private static final long serialVersionUID = 8187930481824856143L;
     /**
      * 主键id
      */
-    private int pkid;
+    private String pkid;
+
+    /**
+     * 实体MD5
+     */
+    private String md5;
 
     /**
      * 网站内部id
@@ -22,12 +27,12 @@ public class PersonProject implements Serializable {
     /**
      * 项目id
      */
-    private int pro_id;
+    private String pro_id;
 
     /**
      * 子项目id
      */
-    private int pid;
+    private String pid;
 
     /**
      * 企业名称
@@ -74,28 +79,12 @@ public class PersonProject implements Serializable {
      */
     private String remark;
 
-    public int getPkid() {
-        return pkid;
-    }
-
-    public void setPkid(int pkid) {
-        this.pkid = pkid;
-    }
-
     public String getInnerid() {
         return innerid;
     }
 
     public void setInnerid(String innerid) {
         this.innerid = innerid;
-    }
-
-    public int getPid() {
-        return pid;
-    }
-
-    public void setPid(int pid) {
-        this.pid = pid;
     }
 
     public String getCom_name() {
@@ -170,11 +159,35 @@ public class PersonProject implements Serializable {
         this.type = type;
     }
 
-    public int getPro_id() {
+    public String getPkid() {
+        return pkid;
+    }
+
+    public void setPkid(String pkid) {
+        this.pkid = pkid;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
+    }
+
+    public String getPro_id() {
         return pro_id;
     }
 
-    public void setPro_id(int pro_id) {
+    public void setPro_id(String pro_id) {
         this.pro_id = pro_id;
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
     }
 }

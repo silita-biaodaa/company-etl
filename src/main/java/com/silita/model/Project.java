@@ -12,7 +12,12 @@ public class Project implements Serializable {
     /**
      * 主键id
      */
-    private int pro_id;
+    private String pro_id;
+
+    /**
+     * 实体MD5
+     */
+    private String md5;
 
     /**
      * 网站内部id
@@ -103,14 +108,6 @@ public class Project implements Serializable {
      * url
      */
     private String url;
-
-    public int getPro_id() {
-        return pro_id;
-    }
-
-    public void setPro_id(int pro_id) {
-        this.pro_id = pro_id;
-    }
 
     public String getXmid() {
         return xmid;
@@ -254,5 +251,21 @@ public class Project implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getPro_id() {
+        return pro_id;
+    }
+
+    public void setPro_id(String pro_id) {
+        this.pro_id = pro_id;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 }

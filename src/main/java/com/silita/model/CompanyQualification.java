@@ -12,7 +12,12 @@ public class CompanyQualification implements Serializable {
     /**
      * 企业资质id
      */
-    private int pkid;
+    private String pkid;
+
+    /**
+     * 实体MD5
+     */
+    private String md5;
 
     /**
      * 来源类型 1表示全国四库一
@@ -72,19 +77,27 @@ public class CompanyQualification implements Serializable {
     /**
      * 企业id
      */
-    private int com_id;
+    private String com_id;
 
     /**
      * 企业名称
      */
     private String com_name;
 
-    public int getPkid() {
+    public String getPkid() {
         return pkid;
     }
 
-    public void setPkid(int pkid) {
+    public void setPkid(String pkid) {
         this.pkid = pkid;
+    }
+
+    public int getChannel() {
+        return channel;
+    }
+
+    public void setChannel(int channel) {
+        this.channel = channel;
     }
 
     public String getCorpid() {
@@ -151,11 +164,11 @@ public class CompanyQualification implements Serializable {
         this.url = url;
     }
 
-    public int getCom_id() {
+    public String getCom_id() {
         return com_id;
     }
 
-    public void setCom_id(int com_id) {
+    public void setCom_id(String com_id) {
         this.com_id = com_id;
     }
 
@@ -183,22 +196,11 @@ public class CompanyQualification implements Serializable {
         this.qual_name = qual_name;
     }
 
-    @Override
-    public String toString() {
-        return "CompanyQualification{" +
-                "pkid=" + pkid +
-                ", corpid='" + corpid + '\'' +
-                ", tab='" + tab + '\'' +
-                ", qual_type='" + qual_type + '\'' +
-                ", cert_no='" + cert_no + '\'' +
-                ", cert_org='" + cert_org + '\'' +
-                ", cert_date='" + cert_date + '\'' +
-                ", valid_date='" + valid_date + '\'' +
-                ", qual_name='" + qual_name + '\'' +
-                ", range='" + range + '\'' +
-                ", url='" + url + '\'' +
-                ", com_id=" + com_id +
-                ", com_name='" + com_name + '\'' +
-                '}';
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 }

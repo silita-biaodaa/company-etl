@@ -12,7 +12,12 @@ public class ShiGongTuShenCha implements Serializable {
     /**
      * 主键id
      */
-    private int pkid;
+    private String pkid;
+
+    /**
+     * 实体MD5
+     */
+    private String md5;
 
     /**
      * 网站内部id
@@ -22,7 +27,7 @@ public class ShiGongTuShenCha implements Serializable {
     /**
      * 项目id
      */
-    private int pro_id;
+    private String pro_id;
 
     /**
      * 项目名称
@@ -74,28 +79,12 @@ public class ShiGongTuShenCha implements Serializable {
      */
     private String check_finish_date;
 
-    public int getPkid() {
-        return pkid;
-    }
-
-    public void setPkid(int pkid) {
-        this.pkid = pkid;
-    }
-
     public String getSgtxh() {
         return sgtxh;
     }
 
     public void setSgtxh(String sgtxh) {
         this.sgtxh = sgtxh;
-    }
-
-    public int getPro_id() {
-        return pro_id;
-    }
-
-    public void setPro_id(int pro_id) {
-        this.pro_id = pro_id;
     }
 
     public String getCheck_org() {
@@ -176,5 +165,29 @@ public class ShiGongTuShenCha implements Serializable {
 
     public void setCheck_org_code(String check_org_code) {
         this.check_org_code = check_org_code;
+    }
+
+    public String getPkid() {
+        return pkid;
+    }
+
+    public void setPkid(String pkid) {
+        this.pkid = pkid;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
+    }
+
+    public String getPro_id() {
+        return pro_id;
+    }
+
+    public void setPro_id(String pro_id) {
+        this.pro_id = pro_id;
     }
 }

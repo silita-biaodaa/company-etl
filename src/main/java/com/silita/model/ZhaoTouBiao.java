@@ -12,7 +12,12 @@ public class ZhaoTouBiao implements Serializable {
     /**
      * 主键id
      */
-    private int pkid;
+    private String pkid;
+
+    /**
+     * 实体MD5
+     */
+    private String md5;
 
     /**
      * 项目id
@@ -83,14 +88,6 @@ public class ZhaoTouBiao implements Serializable {
      * 记录登记时间
      */
     private String record_date;
-
-    public int getPkid() {
-        return pkid;
-    }
-
-    public void setPkid(int pkid) {
-        this.pkid = pkid;
-    }
 
     public String getPro_id() {
         return pro_id;
@@ -204,24 +201,19 @@ public class ZhaoTouBiao implements Serializable {
         this.area = area;
     }
 
-    @Override
-    public String toString() {
-        return "ZhaoTouBiao{" +
-                "pkid=" + pkid +
-                ", pro_id='" + pro_id + '\'' +
-                ", zhongbiao_code='" + zhongbiao_code + '\'' +
-                ", prov_zhongbiao_code='" + prov_zhongbiao_code + '\'' +
-                ", zhaobiao_type='" + zhaobiao_type + '\'' +
-                ", zhaobiao_way='" + zhaobiao_way + '\'' +
-                ", zhongbiao_date='" + zhongbiao_date + '\'' +
-                ", build_scale='" + build_scale + '\'' +
-                ", area='" + area + '\'' +
-                ", zhongbiao_amount='" + zhongbiao_amount + '\'' +
-                ", zhaobiao_agency_company='" + zhaobiao_agency_company + '\'' +
-                ", zhaobiao_company_code='" + zhaobiao_company_code + '\'' +
-                ", zhongbiao_company='" + zhongbiao_company + '\'' +
-                ", zhongbiao_company_code='" + zhongbiao_company_code + '\'' +
-                ", record_date='" + record_date + '\'' +
-                '}';
+    public String getPkid() {
+        return pkid;
+    }
+
+    public void setPkid(String pkid) {
+        this.pkid = pkid;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 }

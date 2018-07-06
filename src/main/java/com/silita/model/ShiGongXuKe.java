@@ -12,7 +12,12 @@ public class ShiGongXuKe implements Serializable {
     /**
      * 主键id
      */
-    private int pkid;
+    private String pkid;
+
+    /**
+     * 实体MD5
+     */
+    private String md5;
 
     /**
      * 网站内部id
@@ -22,7 +27,7 @@ public class ShiGongXuKe implements Serializable {
     /**
      * 项目id
      */
-    private int pro_id;
+    private String pro_id;
 
     /**
      * 项目名称
@@ -69,28 +74,12 @@ public class ShiGongXuKe implements Serializable {
      */
     private String record_date;
 
-    public int getPkid() {
-        return pkid;
-    }
-
-    public void setPkid(int pkid) {
-        this.pkid = pkid;
-    }
-
     public String getBdxh() {
         return bdxh;
     }
 
     public void setBdxh(String bdxh) {
         this.bdxh = bdxh;
-    }
-
-    public int getPro_id() {
-        return pro_id;
-    }
-
-    public void setPro_id(int pro_id) {
-        this.pro_id = pro_id;
     }
 
     public String getPro_name() {
@@ -163,5 +152,29 @@ public class ShiGongXuKe implements Serializable {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getPkid() {
+        return pkid;
+    }
+
+    public void setPkid(String pkid) {
+        this.pkid = pkid;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
+    }
+
+    public String getPro_id() {
+        return pro_id;
+    }
+
+    public void setPro_id(String pro_id) {
+        this.pro_id = pro_id;
     }
 }

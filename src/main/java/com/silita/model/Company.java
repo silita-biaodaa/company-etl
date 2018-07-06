@@ -9,10 +9,12 @@ import java.io.Serializable;
  */
 public class Company implements Serializable {
     private static final long serialVersionUID = 2680866379272673386L;
+
     /**
      * 实体MD5
      */
     private String md5;
+
     /**
      * 企业id
      */
@@ -168,23 +170,5 @@ public class Company implements Serializable {
 
     public void setMd5(String md5) {
         this.md5 = md5;
-    }
-
-    @Override
-    public String toString() {
-        return "Company{" +
-                "com_id='" + com_id + '\'' +
-                ", com_name='" + com_name + '\'' +
-                ", type='" + type + '\'' +
-                ", credit_code='" + credit_code + '\'' +
-                ", org_code='" + org_code + '\'' +
-                ", business_num='" + business_num + '\'' +
-                ", regis_address='" + regis_address + '\'' +
-                ", com_address='" + com_address + '\'' +
-                ", legal_person='" + legal_person + '\'' +
-                ", economic_type='" + economic_type + '\'' +
-                ", regis_capital='" + regis_capital + '\'' +
-                ", url='" + url + '\'' +
-                '}';
     }
 }

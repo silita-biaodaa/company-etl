@@ -12,12 +12,17 @@ public class HeTongBeiAn implements Serializable {
     /**
      * 主键id
      */
-    private int pkid;
+    private String pkid;
+
+    /**
+     * 实体MD5
+     */
+    private String md5;
 
     /**
      * 项目id
      */
-    private int pro_id;
+    private String pro_id;
 
     /**
      * 合同备案编号
@@ -64,19 +69,11 @@ public class HeTongBeiAn implements Serializable {
      */
     private String record_date;
 
-    public int getPkid() {
-        return pkid;
-    }
-
-    public void setPkid(int pkid) {
-        this.pkid = pkid;
-    }
-
-    public int getPro_id() {
+    public String getPro_id() {
         return pro_id;
     }
 
-    public void setPro_id(int pro_id) {
+    public void setPro_id(String pro_id) {
         this.pro_id = pro_id;
     }
 
@@ -152,20 +149,19 @@ public class HeTongBeiAn implements Serializable {
         this.record_date = record_date;
     }
 
-    @Override
-    public String toString() {
-        return "HeTongBeiAn{" +
-                "pkid=" + pkid +
-                ", pro_id=" + pro_id +
-                ", record_code='" + record_code + '\'' +
-                ", prov_record_code='" + prov_record_code + '\'' +
-                ", code='" + code + '\'' +
-                ", category='" + category + '\'' +
-                ", type='" + type + '\'' +
-                ", amount='" + amount + '\'' +
-                ", build_scale='" + build_scale + '\'' +
-                ", sign_date='" + sign_date + '\'' +
-                ", record_date='" + record_date + '\'' +
-                '}';
+    public String getPkid() {
+        return pkid;
+    }
+
+    public void setPkid(String pkid) {
+        this.pkid = pkid;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 }

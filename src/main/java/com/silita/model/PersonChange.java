@@ -12,7 +12,12 @@ public class PersonChange implements Serializable {
     /**
      * 主键id
      */
-    private int pkid;
+    private String pkid;
+
+    /**
+     * 实体MD5
+     */
+    private String md5;
 
     /**
      * 公司名称
@@ -38,14 +43,6 @@ public class PersonChange implements Serializable {
      * 人员唯一标志
      */
     private String flag;
-
-    public int getPkid() {
-        return pkid;
-    }
-
-    public void setPkid(int pkid) {
-        this.pkid = pkid;
-    }
 
     public String getCom_name() {
         return com_name;
@@ -87,15 +84,19 @@ public class PersonChange implements Serializable {
         this.flag = flag;
     }
 
-    @Override
-    public String toString() {
-        return "PersonChange{" +
-                "pkid=" + pkid +
-                ", com_name='" + com_name + '\'' +
-                ", major='" + major + '\'' +
-                ", change_date='" + change_date + '\'' +
-                ", remark='" + remark + '\'' +
-                ", flag='" + flag + '\'' +
-                '}';
+    public String getPkid() {
+        return pkid;
+    }
+
+    public void setPkid(String pkid) {
+        this.pkid = pkid;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 }

@@ -29,6 +29,21 @@ public class MohurdService {
 
     /**
      * 查询企业
+     * 条件中不带公司名称查
+     *
+     * @param company
+     * @return 企业id
+     */
+    public String selectCompany(Company company) {
+        String id = mohurdMapper.selectCompanyByName(company.getCom_name());//先通过公司名称查
+        if (StringUtils.isBlank(id)) {
+            id = mohurdMapper.selectCompany(company);//如果企业名称未查到再通过三证查
+        }
+        return id;
+    }
+
+    /**
+     * 查询企业
      * 条件中必须带公司名称查
      *
      * @param companyName
@@ -86,7 +101,7 @@ public class MohurdService {
      * @param qualification
      * @return
      */
-    public Integer selectCompanyQualification(CompanyQualification qualification) {
+    public String selectCompanyQualification(CompanyQualification qualification) {
         return mohurdMapper.selectCompanyQualification(qualification);
     }
 
@@ -96,7 +111,9 @@ public class MohurdService {
      * @param companyQualification
      */
     public void updateCompanyQualification(CompanyQualification companyQualification) {
-        mohurdMapper.updateCompanyQualification(companyQualification);
+        if (StringUtils.isNotBlank(companyQualification.getPkid())) {
+            mohurdMapper.updateCompanyQualification(companyQualification);
+        }
     }
 
     /**
@@ -104,7 +121,7 @@ public class MohurdService {
      *
      * @param person
      */
-    public Integer selectPerson(Person person) {
+    public String selectPerson(Person person) {
         return mohurdMapper.selectPerson(person);
     }
 
@@ -113,7 +130,7 @@ public class MohurdService {
      *
      * @param person
      */
-    public Integer insertPerson(Person person) {
+    public String insertPerson(Person person) {
         mohurdMapper.insertPerson(person);
         return person.getPkid();
     }
@@ -124,7 +141,7 @@ public class MohurdService {
      * @param person
      */
     public void updatePerson(Person person) {
-        if (person.getPkid() > 0) {
+        if (StringUtils.isNotBlank(person.getPkid())) {
             mohurdMapper.updatePerson(person);
         }
     }
@@ -135,7 +152,7 @@ public class MohurdService {
      * @param personChange
      * @return
      */
-    public Integer selectPersonChange(PersonChange personChange) {
+    public String selectPersonChange(PersonChange personChange) {
         return mohurdMapper.selectPersonChange(personChange);
     }
 
@@ -154,7 +171,7 @@ public class MohurdService {
      * @param personChange
      */
     public void updatePersonChange(PersonChange personChange) {
-        if (personChange.getPkid() > 0) {
+        if (StringUtils.isNotBlank(personChange.getPkid())) {
             mohurdMapper.updatePersonChange(personChange);
         }
     }
@@ -165,7 +182,7 @@ public class MohurdService {
      * @param project
      * @return
      */
-    public Integer selectProject(Project project) {
+    public String selectProject(Project project) {
         return mohurdMapper.selectProject(project);
     }
 
@@ -184,7 +201,7 @@ public class MohurdService {
      * @param project
      */
     public void updateProject(Project project) {
-        if (project.getPro_id() > 0) {
+        if (StringUtils.isNotBlank(project.getPro_id())) {
             mohurdMapper.updateProject(project);
         }
     }
@@ -195,7 +212,7 @@ public class MohurdService {
      * @param zhaoTouBiao
      * @return
      */
-    public Integer selectZhaoTouBiao(ZhaoTouBiao zhaoTouBiao) {
+    public String selectZhaoTouBiao(ZhaoTouBiao zhaoTouBiao) {
         return mohurdMapper.selectZhaoTouBiao(zhaoTouBiao);
     }
 
@@ -214,7 +231,7 @@ public class MohurdService {
      * @param zhaoTouBiao
      */
     public void updateZhaoTouBiao(ZhaoTouBiao zhaoTouBiao) {
-        if (zhaoTouBiao.getPkid() > 0) {
+        if (StringUtils.isNotBlank(zhaoTouBiao.getPkid())) {
             mohurdMapper.updateZhaoTouBiao(zhaoTouBiao);
         }
     }
@@ -224,7 +241,7 @@ public class MohurdService {
      *
      * @param personProject
      */
-    public Integer selectPersonProject(PersonProject personProject) {
+    public String selectPersonProject(PersonProject personProject) {
         return mohurdMapper.selectPersonProject(personProject);
     }
 
@@ -243,7 +260,7 @@ public class MohurdService {
      * @param personProject
      */
     public void updatePersonProject(PersonProject personProject) {
-        if (personProject.getPkid() > 0) {
+        if (StringUtils.isNotBlank(personProject.getPkid())) {
             mohurdMapper.updatePersonProject(personProject);
         }
     }
@@ -254,7 +271,7 @@ public class MohurdService {
      * @param shenCha
      * @return
      */
-    public Integer selectShiGongTuShenCha(ShiGongTuShenCha shenCha) {
+    public String selectShiGongTuShenCha(ShiGongTuShenCha shenCha) {
         return mohurdMapper.selectShiGongTuShenCha(shenCha);
     }
 
@@ -273,7 +290,7 @@ public class MohurdService {
      * @param shencha
      */
     public void updateShiGongTuShenCha(ShiGongTuShenCha shencha) {
-        if (shencha.getPkid() > 0) {
+        if (StringUtils.isNotBlank(shencha.getPkid())) {
             mohurdMapper.updateShiGongTuShenCha(shencha);
         }
     }
@@ -284,14 +301,14 @@ public class MohurdService {
      * @param projectCompany
      * @return
      */
-    public Integer selectProjectCompany(ProjectCompany projectCompany) {
+    public String selectProjectCompany(ProjectCompany projectCompany) {
         String innerId = projectCompany.getInnerId();
         String companyName = projectCompany.getCom_name();
         if (StringUtils.isNotBlank(innerId)) {
             // 如果innerId不为空，就把公司名清空，这种做法是是避免公司名变了导致存多条数据
             projectCompany.setCom_name(null);
         }
-        Integer id = mohurdMapper.selectProjectCompany(projectCompany);
+        String id = mohurdMapper.selectProjectCompany(projectCompany);
         //查询之前去掉了，查询之后要补上
         projectCompany.setCom_name(companyName);
         return id;
@@ -314,7 +331,7 @@ public class MohurdService {
      * @param projectCompany
      */
     public void updateProjectCompany(ProjectCompany projectCompany) {
-        if (StringUtils.isNotBlank(projectCompany.getCom_name()) && projectCompany.getPro_id() > 0) {
+        if (StringUtils.isNotBlank(projectCompany.getCom_name()) && StringUtils.isNotBlank(projectCompany.getPro_id())) {
             mohurdMapper.updateProjectCompany(projectCompany);
         }
     }
@@ -325,7 +342,7 @@ public class MohurdService {
      * @param shiGongXuKe
      * @return
      */
-    public Integer selectShiGongXuKe(ShiGongXuKe shiGongXuKe) {
+    public String selectShiGongXuKe(ShiGongXuKe shiGongXuKe) {
         return mohurdMapper.selectShiGongXuKe(shiGongXuKe);
     }
 
@@ -344,7 +361,7 @@ public class MohurdService {
      * @param shiGongXuKe
      */
     public void updateShiGongXuKe(ShiGongXuKe shiGongXuKe) {
-        if (shiGongXuKe.getPkid() > 0) {
+        if (StringUtils.isNotBlank(shiGongXuKe.getPkid())) {
             mohurdMapper.updateShiGongXuKe(shiGongXuKe);
         }
     }
@@ -355,7 +372,7 @@ public class MohurdService {
      * @param heTongBeiAn
      * @return
      */
-    public Integer selectHeTongBeiAn(HeTongBeiAn heTongBeiAn) {
+    public String selectHeTongBeiAn(HeTongBeiAn heTongBeiAn) {
         return mohurdMapper.selectHeTongBeiAn(heTongBeiAn);
     }
 
@@ -374,7 +391,7 @@ public class MohurdService {
      * @param heTongBeiAn
      */
     public void updateHeTongBeiAn(HeTongBeiAn heTongBeiAn) {
-        if (heTongBeiAn.getPkid() > 0) {
+        if (StringUtils.isNotBlank(heTongBeiAn.getPkid())) {
             mohurdMapper.updateHeTongBeiAn(heTongBeiAn);
         }
     }
@@ -385,7 +402,7 @@ public class MohurdService {
      * @param junGongBeiAn
      * @return
      */
-    public Integer selectJunGongBeiAn(JunGongBeiAn junGongBeiAn) {
+    public String selectJunGongBeiAn(JunGongBeiAn junGongBeiAn) {
         return mohurdMapper.selectJunGongBeiAn(junGongBeiAn);
     }
 
@@ -404,7 +421,7 @@ public class MohurdService {
      * @param junGongBeiAn
      */
     public void updateJunGongBeiAn(JunGongBeiAn junGongBeiAn) {
-        if (junGongBeiAn.getPkid() > 0) {
+        if (StringUtils.isNotBlank(junGongBeiAn.getPkid())) {
             mohurdMapper.updateJunGongBeiAn(junGongBeiAn);
         }
     }

@@ -64,7 +64,7 @@ public interface MohurdMapper {
      * @param qualification
      * @return 资质id
      */
-    public Integer selectCompanyQualification(CompanyQualification qualification);
+    public String selectCompanyQualification(CompanyQualification qualification);
 
     /**
      * 更新企业资质
@@ -79,7 +79,7 @@ public interface MohurdMapper {
      * @param person
      * @return 人员id
      */
-    public Integer selectPerson(Person person);
+    public String selectPerson(Person person);
 
     /**
      * 插入人员信息
@@ -101,7 +101,7 @@ public interface MohurdMapper {
      * @param personChange
      * @return
      */
-    public Integer selectPersonChange(PersonChange personChange);
+    public String selectPersonChange(PersonChange personChange);
 
     /**
      * 插入人员变更记录
@@ -123,7 +123,7 @@ public interface MohurdMapper {
      * @param project
      * @return
      */
-    public Integer selectProject(Project project);
+    public String selectProject(Project project);
 
     /**
      * 插入项目基本信息
@@ -145,7 +145,7 @@ public interface MohurdMapper {
      * @param zhaoTouBiao
      * @return
      */
-    public Integer selectZhaoTouBiao(ZhaoTouBiao zhaoTouBiao);
+    public String selectZhaoTouBiao(ZhaoTouBiao zhaoTouBiao);
 
     /**
      * 插入招投标
@@ -167,7 +167,7 @@ public interface MohurdMapper {
      * @param personProject
      * @return id
      */
-    public Integer selectPersonProject(PersonProject personProject);
+    public String selectPersonProject(PersonProject personProject);
 
     /**
      * 插入人员和项目的关系
@@ -189,7 +189,7 @@ public interface MohurdMapper {
      * @param shenCha
      * @return
      */
-    public Integer selectShiGongTuShenCha(ShiGongTuShenCha shenCha);
+    public String selectShiGongTuShenCha(ShiGongTuShenCha shenCha);
 
     /**
      * 插入施工图审查
@@ -211,7 +211,7 @@ public interface MohurdMapper {
      * @param projectCompany
      * @return
      */
-    public Integer selectProjectCompany(ProjectCompany projectCompany);
+    public String selectProjectCompany(ProjectCompany projectCompany);
 
     /**
      * 插入项目和公司的关系
@@ -233,7 +233,7 @@ public interface MohurdMapper {
      * @param shiGongXuKe
      * @return
      */
-    public Integer selectShiGongXuKe(ShiGongXuKe shiGongXuKe);
+    public String selectShiGongXuKe(ShiGongXuKe shiGongXuKe);
 
     /**
      * 新增施工许可
@@ -255,7 +255,7 @@ public interface MohurdMapper {
      * @param heTongBeiAn
      * @return
      */
-    public Integer selectHeTongBeiAn(HeTongBeiAn heTongBeiAn);
+    public String selectHeTongBeiAn(HeTongBeiAn heTongBeiAn);
 
     /**
      * 新增合同备案
@@ -277,7 +277,7 @@ public interface MohurdMapper {
      * @param junGongBeiAn
      * @return
      */
-    public Integer selectJunGongBeiAn(JunGongBeiAn junGongBeiAn);
+    public String selectJunGongBeiAn(JunGongBeiAn junGongBeiAn);
 
     /**
      * 新增竣工验收备案

@@ -12,12 +12,17 @@ public class JunGongBeiAn implements Serializable {
     /**
      * 主键id
      */
-    private int pkid;
+    private String pkid;
+
+    /**
+     * 实体MD5
+     */
+    private String md5;
 
     /**
      * 项目id
      */
-    private int pro_id;
+    private String pro_id;
 
     /**
      * 竣工备案编号
@@ -69,21 +74,6 @@ public class JunGongBeiAn implements Serializable {
      */
     private String remark;
 
-    public int getPkid() {
-        return pkid;
-    }
-
-    public void setPkid(int pkid) {
-        this.pkid = pkid;
-    }
-
-    public int getPro_id() {
-        return pro_id;
-    }
-
-    public void setPro_id(int pro_id) {
-        this.pro_id = pro_id;
-    }
 
     public String getCode() {
         return code;
@@ -165,21 +155,27 @@ public class JunGongBeiAn implements Serializable {
         this.remark = remark;
     }
 
-    @Override
-    public String toString() {
-        return "JunGongBeiAn{" +
-                "pkid=" + pkid +
-                ", pro_id=" + pro_id +
-                ", code='" + code + '\'' +
-                ", prov_code='" + prov_code + '\'' +
-                ", cost='" + cost + '\'' +
-                ", area='" + area + '\'' +
-                ", build_scale='" + build_scale + '\'' +
-                ", struct='" + struct + '\'' +
-                ", build_start='" + build_start + '\'' +
-                ", build_end='" + build_end + '\'' +
-                ", record_date='" + record_date + '\'' +
-                ", remark='" + remark + '\'' +
-                '}';
+    public String getPkid() {
+        return pkid;
+    }
+
+    public void setPkid(String pkid) {
+        this.pkid = pkid;
+    }
+
+    public String getPro_id() {
+        return pro_id;
+    }
+
+    public void setPro_id(String pro_id) {
+        this.pro_id = pro_id;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 }

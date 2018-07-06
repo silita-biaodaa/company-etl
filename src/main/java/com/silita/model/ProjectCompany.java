@@ -12,7 +12,12 @@ public class ProjectCompany implements Serializable {
     /**
      * 主键id
      */
-    private int pkid;
+    private String pkid;
+
+    /**
+     * 实体MD5
+     */
+    private String md5;
 
     /**
      * 企业内部id
@@ -22,12 +27,12 @@ public class ProjectCompany implements Serializable {
     /**
      * 项目id
      */
-    private int pro_id;
+    private String pro_id;
 
     /**
      * 子项目id
      */
-    private int pid;
+    private String pid;
 
     /**
      * 涉及角色
@@ -59,21 +64,6 @@ public class ProjectCompany implements Serializable {
      */
     private String remark;
 
-    public int getPkid() {
-        return pkid;
-    }
-
-    public void setPkid(int pkid) {
-        this.pkid = pkid;
-    }
-
-    public int getPro_id() {
-        return pro_id;
-    }
-
-    public void setPro_id(int pro_id) {
-        this.pro_id = pro_id;
-    }
 
     public String getRole() {
         return role;
@@ -131,11 +121,35 @@ public class ProjectCompany implements Serializable {
         this.type = type;
     }
 
-    public int getPid() {
+    public String getPkid() {
+        return pkid;
+    }
+
+    public void setPkid(String pkid) {
+        this.pkid = pkid;
+    }
+
+    public String getPro_id() {
+        return pro_id;
+    }
+
+    public void setPro_id(String pro_id) {
+        this.pro_id = pro_id;
+    }
+
+    public String getPid() {
         return pid;
     }
 
-    public void setPid(int pid) {
+    public void setPid(String pid) {
         this.pid = pid;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
     }
 }

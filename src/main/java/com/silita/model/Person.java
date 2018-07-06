@@ -12,7 +12,12 @@ public class Person implements Serializable {
     /**
      * 人员主键
      */
-    private int pkid;
+    private String pkid;
+
+    /**
+     * 实体MD5
+     */
+    private String md5;
 
     /**
      * 表名
@@ -82,7 +87,7 @@ public class Person implements Serializable {
     /**
      * 所在企业id
      */
-    private int com_id;
+    private String com_id;
 
     /**
      * 所在企业名称
@@ -91,13 +96,6 @@ public class Person implements Serializable {
 
     private int type = 1;
 
-    public int getPkid() {
-        return pkid;
-    }
-
-    public void setPkid(int pkid) {
-        this.pkid = pkid;
-    }
 
     public String getName() {
         return name;
@@ -195,11 +193,11 @@ public class Person implements Serializable {
         this.flag = flag;
     }
 
-    public int getCom_id() {
+    public String getCom_id() {
         return com_id;
     }
 
-    public void setCom_id(int com_id) {
+    public void setCom_id(String com_id) {
         this.com_id = com_id;
     }
 
@@ -227,10 +225,27 @@ public class Person implements Serializable {
         this.type = type;
     }
 
+    public String getPkid() {
+        return pkid;
+    }
+
+    public void setPkid(String pkid) {
+        this.pkid = pkid;
+    }
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
-                "pkid=" + pkid +
+                "pkid='" + pkid + '\'' +
+                ", md5='" + md5 + '\'' +
                 ", table='" + table + '\'' +
                 ", name='" + name + '\'' +
                 ", sex='" + sex + '\'' +
@@ -244,7 +259,7 @@ public class Person implements Serializable {
                 ", valid_date='" + valid_date + '\'' +
                 ", url='" + url + '\'' +
                 ", flag='" + flag + '\'' +
-                ", com_id=" + com_id +
+                ", com_id='" + com_id + '\'' +
                 ", com_name='" + com_name + '\'' +
                 ", type=" + type +
                 '}';
