@@ -1,13 +1,9 @@
 package com.silita.task;
 
-import com.silita.common.Constant;
 import com.silita.common.kafka.KafkaConsumerBase;
-import com.silita.common.redis.RedisUtils;
 import com.silita.factory.AbstractFactory;
 import com.silita.factory.MohurdFactory;
-import com.silita.model.Company;
 import com.silita.model.Document;
-import com.silita.service.MohurdService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
