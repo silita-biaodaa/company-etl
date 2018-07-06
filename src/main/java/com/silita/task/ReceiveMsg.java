@@ -31,7 +31,7 @@ public class ReceiveMsg extends KafkaConsumerBase {
     @Override
     protected void msgHandle(Object msg) throws Exception {
         Document document = (Document) msg;
-        logger.debug(String.format("开始接收消息>>> 实体类：%s", document.getObject().getClass().getName()));
+        logger.info(String.format("接收消息==>实体类：%s", document.getObject().getClass().getName()));
         factory.process(document.getObject());
     }
 }
