@@ -4,7 +4,6 @@ import com.silita.common.Constant;
 import com.silita.common.redis.RedisUtils;
 import com.silita.model.*;
 import com.silita.service.MohurdService;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +36,17 @@ public class MohurdFactory extends AbstractFactory {
                 if (!exists) {//主键md5不存在，新增
                     //String id = mohurdService.selectCompany(company);
                     //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertCompany(company);//新增
+                    mohurdService.insertCompany(company);//新增
                     //}
                     redisUtils.hset(Constant.Cache_Company, com_id, "");
+                    logger.info(String.format("新增企业基本信息 %s", com_id));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateCompany(company);// 更新
+                    logger.info(String.format("更新企业基本信息 %s", com_id));
                 }
                 redisUtils.hset(Constant.Cache_Company, md5, "");
+            } else {
+                logger.info(String.format("[查Redis缓存] %s 企业基本信息实体MD5已存在，不做任何操作", md5));
             }
         } else if (object instanceof CompanyQualification) {
             CompanyQualification qualification = (CompanyQualification) object;
@@ -55,13 +58,17 @@ public class MohurdFactory extends AbstractFactory {
                 if (!exists) {//主键md5不存在，新增
                     //String id = mohurdService.selectCompanyQualification(qualification);
                     //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertCompanyQualification(qualification);//新增
+                    mohurdService.insertCompanyQualification(qualification);//新增
                     //}
                     redisUtils.hset(Constant.Cache_CompanyQual, pkid, "");
+                    logger.info(String.format("新增企业资质 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateCompanyQualification(qualification);// 更新
+                    logger.info(String.format("更新企业资质 %s", pkid));
                 }
                 redisUtils.hset(Constant.Cache_CompanyQual, md5, "");
+            } else {
+                logger.info(String.format("[查Redis缓存] %s 企业资质实体MD5已存在，不做任何操作", md5));
             }
         } else if (object instanceof Project) {
             Project project = (Project) object;
@@ -73,13 +80,17 @@ public class MohurdFactory extends AbstractFactory {
                 if (!exists) {//主键md5不存在，新增
                     //String id = mohurdService.selectProject(project);
                     //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertProject(project);//新增
+                    mohurdService.insertProject(project);//新增
                     //}
                     redisUtils.hset(Constant.Cache_Project, pkid, "");
+                    logger.info(String.format("新增项目 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateProject(project);// 更新
+                    logger.info(String.format("更新项目 %s", pkid));
                 }
                 redisUtils.hset(Constant.Cache_Project, md5, "");
+            } else {
+                logger.info(String.format("[查Redis缓存] %s 项目实体MD5已存在，不做任何操作", md5));
             }
         } else if (object instanceof Person) {
             Person person = (Person) object;
@@ -91,13 +102,17 @@ public class MohurdFactory extends AbstractFactory {
                 if (!exists) {//主键md5不存在，新增
                     //String id = mohurdService.selectPerson(person);
                     //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertPerson(person);//新增
+                    mohurdService.insertPerson(person);//新增
                     //}
                     redisUtils.hset(Constant.Cache_Person, pkid, "");
+                    logger.info(String.format("新增人员 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updatePerson(person);// 更新
+                    logger.info(String.format("更新人员 %s", pkid));
                 }
                 redisUtils.hset(Constant.Cache_Person, md5, "");
+            } else {
+                logger.info(String.format("[查Redis缓存] %s 人员实体MD5已存在，不做任何操作", md5));
             }
         } else if (object instanceof PersonChange) {
             PersonChange change = (PersonChange) object;
@@ -109,13 +124,17 @@ public class MohurdFactory extends AbstractFactory {
                 if (!exists) {//主键md5不存在，新增
                     //String id = mohurdService.selectPersonChange(change);
                     //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertPersonChange(change);//新增
+                    mohurdService.insertPersonChange(change);//新增
                     //}
                     redisUtils.hset(Constant.Cache_PersonChange, pkid, "");
+                    logger.info(String.format("新增人员变更 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updatePersonChange(change);// 更新
+                    logger.info(String.format("更新人员变更 %s", pkid));
                 }
                 redisUtils.hset(Constant.Cache_PersonChange, md5, "");
+            } else {
+                logger.info(String.format("[查Redis缓存] %s 人员变更实体MD5已存在，不做任何操作", md5));
             }
         } else if (object instanceof PersonProject) {
             PersonProject personProject = (PersonProject) object;
@@ -127,13 +146,17 @@ public class MohurdFactory extends AbstractFactory {
                 if (!exists) {//主键md5不存在，新增
                     //String id = mohurdService.selectPersonProject(personProject);
                     //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertPersonProject(personProject);//新增
+                    mohurdService.insertPersonProject(personProject);//新增
                     //}
                     redisUtils.hset(Constant.Cache_PersonProject, pkid, "");
+                    logger.info(String.format("新增人员项目关系 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updatePersonProject(personProject);// 更新
+                    logger.info(String.format("更新人员项目关系 %s", pkid));
                 }
                 redisUtils.hset(Constant.Cache_PersonProject, md5, "");
+            } else {
+                logger.info(String.format("[查Redis缓存] %s 人员项目关系实体MD5已存在，不做任何操作", md5));
             }
         } else if (object instanceof ProjectCompany) {
             ProjectCompany projectCompany = (ProjectCompany) object;
@@ -145,13 +168,17 @@ public class MohurdFactory extends AbstractFactory {
                 if (!exists) {//主键md5不存在，新增
                     //String id = mohurdService.selectProjectCompany(projectCompany);
                     //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertProjectCompany(projectCompany);//新增
+                    mohurdService.insertProjectCompany(projectCompany);//新增
                     //}
                     redisUtils.hset(Constant.Cache_ProjectCompany, pkid, "");
+                    logger.info(String.format("新增项目企业关系 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateProjectCompany(projectCompany);// 更新
+                    logger.info(String.format("更新项目企业关系 %s", pkid));
                 }
                 redisUtils.hset(Constant.Cache_ProjectCompany, md5, "");
+            } else {
+                logger.info(String.format("[查Redis缓存] %s 项目企业关系实体MD5已存在，不做任何操作", md5));
             }
         } else if (object instanceof ZhaoTouBiao) {
             ZhaoTouBiao zhaoTouBiao = (ZhaoTouBiao) object;
@@ -163,13 +190,17 @@ public class MohurdFactory extends AbstractFactory {
                 if (!exists) {//主键md5不存在，新增
                     //String id = mohurdService.selectZhaoTouBiao(zhaoTouBiao);
                     //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertZhaoTouBiao(zhaoTouBiao);//新增
+                    mohurdService.insertZhaoTouBiao(zhaoTouBiao);//新增
                     //}
                     redisUtils.hset(Constant.Cache_ZhaoTouBiao, pkid, "");
+                    logger.info(String.format("新增招投标 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateZhaoTouBiao(zhaoTouBiao);// 更新
+                    logger.info(String.format("更新招投标 %s", pkid));
                 }
                 redisUtils.hset(Constant.Cache_ZhaoTouBiao, md5, "");
+            } else {
+                logger.info(String.format("[查Redis缓存] %s 招投标实体MD5已存在，不做任何操作", md5));
             }
         } else if (object instanceof ShiGongTuShenCha) {
             ShiGongTuShenCha shiGongTuShenCha = (ShiGongTuShenCha) object;
@@ -181,13 +212,17 @@ public class MohurdFactory extends AbstractFactory {
                 if (!exists) {//主键md5不存在，新增
                     //String id = mohurdService.selectShiGongTuShenCha(shiGongTuShenCha);
                     //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertShiGongTuShenCha(shiGongTuShenCha);//新增
+                    mohurdService.insertShiGongTuShenCha(shiGongTuShenCha);//新增
                     //}
                     redisUtils.hset(Constant.Cache_ShiGongTuShenCha, pkid, "");
+                    logger.info(String.format("新增施工图审查 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateShiGongTuShenCha(shiGongTuShenCha);// 更新
+                    logger.info(String.format("更新施工图审查 %s", pkid));
                 }
                 redisUtils.hset(Constant.Cache_ShiGongTuShenCha, md5, "");
+            } else {
+                logger.info(String.format("[查Redis缓存] %s 施工图审查实体MD5已存在，不做任何操作", md5));
             }
         } else if (object instanceof ShiGongXuKe) {
             ShiGongXuKe shiGongXuKe = (ShiGongXuKe) object;
@@ -199,13 +234,17 @@ public class MohurdFactory extends AbstractFactory {
                 if (!exists) {//主键md5不存在，新增
                     //String id = mohurdService.selectShiGongXuKe(shiGongXuKe);
                     //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertShiGongXuKe(shiGongXuKe);//新增
+                    mohurdService.insertShiGongXuKe(shiGongXuKe);//新增
                     //}
                     redisUtils.hset(Constant.Cache_ShiGongXuKe, pkid, "");
+                    logger.info(String.format("新增施工许可 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateShiGongXuKe(shiGongXuKe);// 更新
+                    logger.info(String.format("更新施工许可 %s", pkid));
                 }
                 redisUtils.hset(Constant.Cache_ShiGongXuKe, md5, "");
+            } else {
+                logger.info(String.format("[查Redis缓存] %s 施工许可实体MD5已存在，不做任何操作", md5));
             }
         } else if (object instanceof HeTongBeiAn) {
             HeTongBeiAn heTongBeiAn = (HeTongBeiAn) object;
@@ -217,13 +256,17 @@ public class MohurdFactory extends AbstractFactory {
                 if (!exists) {//主键md5不存在，新增
                     //String id = mohurdService.selectHeTongBeiAn(heTongBeiAn);
                     //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertHeTongBeiAn(heTongBeiAn);//新增
-                   //}
+                    mohurdService.insertHeTongBeiAn(heTongBeiAn);//新增
+                    //}
                     redisUtils.hset(Constant.Cache_HeTongBeiAn, pkid, "");
+                    logger.info(String.format("新增合同备案 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateHeTongBeiAn(heTongBeiAn);// 更新
+                    logger.info(String.format("更新合同备案 %s", pkid));
                 }
                 redisUtils.hset(Constant.Cache_HeTongBeiAn, md5, "");
+            } else {
+                logger.info(String.format("[查Redis缓存] %s 合同备案实体MD5已存在，不做任何操作", md5));
             }
         } else if (object instanceof JunGongBeiAn) {
             JunGongBeiAn junGongBeiAn = (JunGongBeiAn) object;
@@ -235,13 +278,17 @@ public class MohurdFactory extends AbstractFactory {
                 if (!exists) {//主键md5不存在，新增
                     //String id = mohurdService.selectJunGongBeiAn(junGongBeiAn);
                     //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertJunGongBeiAn(junGongBeiAn);//新增
+                    mohurdService.insertJunGongBeiAn(junGongBeiAn);//新增
                     //}
                     redisUtils.hset(Constant.Cache_JunGongBeiAn, pkid, "");
+                    logger.info(String.format("新增竣工验收备案 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateJunGongBeiAn(junGongBeiAn);// 更新
+                    logger.info(String.format("更新竣工验收备案 %s", pkid));
                 }
                 redisUtils.hset(Constant.Cache_JunGongBeiAn, md5, "");
+            } else {
+                logger.info(String.format("[查Redis缓存] %s 竣工验收备案实体MD5已存在，不做任何操作", md5));
             }
         }
     }

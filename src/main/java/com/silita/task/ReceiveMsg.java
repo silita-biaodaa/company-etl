@@ -4,7 +4,6 @@ import com.silita.common.kafka.KafkaConsumerBase;
 import com.silita.factory.AbstractFactory;
 import com.silita.factory.MohurdFactory;
 import com.silita.model.Document;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +14,6 @@ import javax.annotation.PostConstruct;
  */
 @Component
 public class ReceiveMsg extends KafkaConsumerBase {
-    private static Logger logger = Logger.getLogger(ReceiveMsg.class);
-
     private AbstractFactory factory;
 
     @Autowired
@@ -31,7 +28,6 @@ public class ReceiveMsg extends KafkaConsumerBase {
     @Override
     protected void msgHandle(Object msg) throws Exception {
         Document document = (Document) msg;
-        logger.info(String.format("接收消息==>当前处理对象：%s", document.getObject().getClass().getName()));
         factory.process(document.getObject());
     }
 }
