@@ -37,9 +37,9 @@ public class MohurdFactory extends AbstractFactory {
                     //String id = mohurdService.selectCompany(company);
                     //if (StringUtils.isBlank(id)) {
                     mohurdService.insertCompany(company);//新增
+                    logger.info(String.format("新增企业基本信息 %s", com_id));
                     //}
                     redisUtils.hset(Constant.Cache_Company, com_id, "");
-                    logger.info(String.format("新增企业基本信息 %s", com_id));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateCompany(company);// 更新
                     logger.info(String.format("更新企业基本信息 %s", com_id));
@@ -59,9 +59,9 @@ public class MohurdFactory extends AbstractFactory {
                     //String id = mohurdService.selectCompanyQualification(qualification);
                     //if (StringUtils.isBlank(id)) {
                     mohurdService.insertCompanyQualification(qualification);//新增
+                    logger.info(String.format("新增企业资质 %s", pkid));
                     //}
                     redisUtils.hset(Constant.Cache_CompanyQual, pkid, "");
-                    logger.info(String.format("新增企业资质 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateCompanyQualification(qualification);// 更新
                     logger.info(String.format("更新企业资质 %s", pkid));
@@ -81,9 +81,9 @@ public class MohurdFactory extends AbstractFactory {
                     //String id = mohurdService.selectProject(project);
                     //if (StringUtils.isBlank(id)) {
                     mohurdService.insertProject(project);//新增
+                    logger.info(String.format("新增项目 %s", pkid));
                     //}
                     redisUtils.hset(Constant.Cache_Project, pkid, "");
-                    logger.info(String.format("新增项目 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateProject(project);// 更新
                     logger.info(String.format("更新项目 %s", pkid));
@@ -103,9 +103,9 @@ public class MohurdFactory extends AbstractFactory {
                     //String id = mohurdService.selectPerson(person);
                     //if (StringUtils.isBlank(id)) {
                     mohurdService.insertPerson(person);//新增
+                    logger.info(String.format("新增人员 %s", pkid));
                     //}
                     redisUtils.hset(Constant.Cache_Person, pkid, "");
-                    logger.info(String.format("新增人员 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updatePerson(person);// 更新
                     logger.info(String.format("更新人员 %s", pkid));
@@ -125,9 +125,9 @@ public class MohurdFactory extends AbstractFactory {
                     //String id = mohurdService.selectPersonChange(change);
                     //if (StringUtils.isBlank(id)) {
                     mohurdService.insertPersonChange(change);//新增
+                    logger.info(String.format("新增人员变更 %s", pkid));
                     //}
                     redisUtils.hset(Constant.Cache_PersonChange, pkid, "");
-                    logger.info(String.format("新增人员变更 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updatePersonChange(change);// 更新
                     logger.info(String.format("更新人员变更 %s", pkid));
@@ -147,9 +147,9 @@ public class MohurdFactory extends AbstractFactory {
                     //String id = mohurdService.selectPersonProject(personProject);
                     //if (StringUtils.isBlank(id)) {
                     mohurdService.insertPersonProject(personProject);//新增
+                    logger.info(String.format("新增人员项目关系 %s", pkid));
                     //}
                     redisUtils.hset(Constant.Cache_PersonProject, pkid, "");
-                    logger.info(String.format("新增人员项目关系 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updatePersonProject(personProject);// 更新
                     logger.info(String.format("更新人员项目关系 %s", pkid));
@@ -169,9 +169,9 @@ public class MohurdFactory extends AbstractFactory {
                     //String id = mohurdService.selectProjectCompany(projectCompany);
                     //if (StringUtils.isBlank(id)) {
                     mohurdService.insertProjectCompany(projectCompany);//新增
+                    logger.info(String.format("新增项目企业关系 %s", pkid));
                     //}
                     redisUtils.hset(Constant.Cache_ProjectCompany, pkid, "");
-                    logger.info(String.format("新增项目企业关系 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateProjectCompany(projectCompany);// 更新
                     logger.info(String.format("更新项目企业关系 %s", pkid));
@@ -191,9 +191,9 @@ public class MohurdFactory extends AbstractFactory {
                     //String id = mohurdService.selectZhaoTouBiao(zhaoTouBiao);
                     //if (StringUtils.isBlank(id)) {
                     mohurdService.insertZhaoTouBiao(zhaoTouBiao);//新增
+                    logger.info(String.format("新增招投标 %s", pkid));
                     //}
                     redisUtils.hset(Constant.Cache_ZhaoTouBiao, pkid, "");
-                    logger.info(String.format("新增招投标 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateZhaoTouBiao(zhaoTouBiao);// 更新
                     logger.info(String.format("更新招投标 %s", pkid));
@@ -213,9 +213,9 @@ public class MohurdFactory extends AbstractFactory {
                     //String id = mohurdService.selectShiGongTuShenCha(shiGongTuShenCha);
                     //if (StringUtils.isBlank(id)) {
                     mohurdService.insertShiGongTuShenCha(shiGongTuShenCha);//新增
+                    logger.info(String.format("新增施工图审查 %s", pkid));
                     //}
                     redisUtils.hset(Constant.Cache_ShiGongTuShenCha, pkid, "");
-                    logger.info(String.format("新增施工图审查 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateShiGongTuShenCha(shiGongTuShenCha);// 更新
                     logger.info(String.format("更新施工图审查 %s", pkid));
@@ -235,9 +235,9 @@ public class MohurdFactory extends AbstractFactory {
                     //String id = mohurdService.selectShiGongXuKe(shiGongXuKe);
                     //if (StringUtils.isBlank(id)) {
                     mohurdService.insertShiGongXuKe(shiGongXuKe);//新增
+                    logger.info(String.format("新增施工许可 %s", pkid));
                     //}
                     redisUtils.hset(Constant.Cache_ShiGongXuKe, pkid, "");
-                    logger.info(String.format("新增施工许可 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateShiGongXuKe(shiGongXuKe);// 更新
                     logger.info(String.format("更新施工许可 %s", pkid));
@@ -257,9 +257,9 @@ public class MohurdFactory extends AbstractFactory {
                     //String id = mohurdService.selectHeTongBeiAn(heTongBeiAn);
                     //if (StringUtils.isBlank(id)) {
                     mohurdService.insertHeTongBeiAn(heTongBeiAn);//新增
+                    logger.info(String.format("新增合同备案 %s", pkid));
                     //}
                     redisUtils.hset(Constant.Cache_HeTongBeiAn, pkid, "");
-                    logger.info(String.format("新增合同备案 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateHeTongBeiAn(heTongBeiAn);// 更新
                     logger.info(String.format("更新合同备案 %s", pkid));
@@ -279,9 +279,9 @@ public class MohurdFactory extends AbstractFactory {
                     //String id = mohurdService.selectJunGongBeiAn(junGongBeiAn);
                     //if (StringUtils.isBlank(id)) {
                     mohurdService.insertJunGongBeiAn(junGongBeiAn);//新增
+                    logger.info(String.format("新增竣工验收备案 %s", pkid));
                     //}
                     redisUtils.hset(Constant.Cache_JunGongBeiAn, pkid, "");
-                    logger.info(String.format("新增竣工验收备案 %s", pkid));
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateJunGongBeiAn(junGongBeiAn);// 更新
                     logger.info(String.format("更新竣工验收备案 %s", pkid));
