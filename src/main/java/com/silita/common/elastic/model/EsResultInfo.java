@@ -2,9 +2,6 @@ package com.silita.common.elastic.model;
 
 import java.util.List;
 
-/**
- * Created by dh on 2017/10/30.
- */
 public class EsResultInfo {
 
     private long total=-1;

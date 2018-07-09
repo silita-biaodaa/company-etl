@@ -6,12 +6,8 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldIndex;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-/**
- * Created by gmy on 2017/10/23.
- */
-//@Document(indexName = "bdd_zhaobiao", type = "zhaobiao_snatch", shards = 4, replicas = 1, indexStoreType = "memory", refreshInterval = "1")
-@Document(indexName = "bdd_zhaobiao", type = "zhaobiao_snatch", shards = 4, replicas = 1, refreshInterval = "1")
-public class IdxZhaobiaoSnatch extends ElasticEntity {
+@Document(indexName = "silit_test", type = "hello_es", shards = 4, replicas = 1, refreshInterval = "1")
+public class IdxExample extends ElasticEntity {
     @Field(type = FieldType.String)
     private String snatchId;  //公告ID
     @Field(type = FieldType.String,  index = FieldIndex.not_analyzed)

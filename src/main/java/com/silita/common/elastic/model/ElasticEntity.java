@@ -7,9 +7,6 @@ import org.springframework.data.elasticsearch.annotations.FieldIndex;
 
 import java.io.Serializable;
 
-/**
- * Created by dh on 2017/10/20.
- */
 public class ElasticEntity implements Serializable {
     @Id
     @Field(index = FieldIndex.not_analyzed, store = true)
