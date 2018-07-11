@@ -4,6 +4,7 @@ import com.silita.common.Constant;
 import com.silita.common.redis.RedisUtils;
 import com.silita.model.*;
 import com.silita.service.MohurdService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,11 @@ public class MohurdFactory extends AbstractFactory {
             if (!exists) {//实体MD5不存在
                 exists = redisUtils.hexists(Constant.Cache_Company, com_id);
                 if (!exists) {//主键md5不存在，新增
-                    //String id = mohurdService.selectCompany(company);
-                    //if (StringUtils.isBlank(id)) {
-                    mohurdService.insertCompany(company);//新增
-                    logger.info(String.format("新增企业基本信息 %s", com_id));
-                    //}
+                    String id = mohurdService.selectCompany(company);
+                    if (StringUtils.isBlank(id)) {
+                        mohurdService.insertCompany(company);//新增
+                        logger.info(String.format("新增企业基本信息 %s", com_id));
+                    }
                     redisUtils.hset(Constant.Cache_Company, com_id, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateCompany(company);// 更新
@@ -56,11 +57,11 @@ public class MohurdFactory extends AbstractFactory {
             if (!exists) {//实体MD5不存在
                 exists = redisUtils.hexists(Constant.Cache_CompanyQual, pkid);
                 if (!exists) {//主键md5不存在，新增
-                    //String id = mohurdService.selectCompanyQualification(qualification);
-                    //if (StringUtils.isBlank(id)) {
-                    mohurdService.insertCompanyQualification(qualification);//新增
-                    logger.info(String.format("新增企业资质 %s", pkid));
-                    //}
+                    String id = mohurdService.selectCompanyQualification(qualification);
+                    if (StringUtils.isBlank(id)) {
+                        mohurdService.insertCompanyQualification(qualification);//新增
+                        logger.info(String.format("新增企业资质 %s", pkid));
+                    }
                     redisUtils.hset(Constant.Cache_CompanyQual, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updateCompanyQualification(qualification);// 更新
@@ -100,11 +101,11 @@ public class MohurdFactory extends AbstractFactory {
             if (!exists) {//实体MD5不存在
                 exists = redisUtils.hexists(Constant.Cache_Person, pkid);
                 if (!exists) {//主键md5不存在，新增
-                    //String id = mohurdService.selectPerson(person);
-                    //if (StringUtils.isBlank(id)) {
-                    mohurdService.insertPerson(person);//新增
-                    logger.info(String.format("新增人员 %s", pkid));
-                    //}
+                    String id = mohurdService.selectPerson(person);
+                    if (StringUtils.isBlank(id)) {
+                        mohurdService.insertPerson(person);//新增
+                        logger.info(String.format("新增人员 %s", pkid));
+                    }
                     redisUtils.hset(Constant.Cache_Person, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updatePerson(person);// 更新
@@ -122,11 +123,11 @@ public class MohurdFactory extends AbstractFactory {
             if (!exists) {//实体MD5不存在
                 exists = redisUtils.hexists(Constant.Cache_PersonChange, pkid);
                 if (!exists) {//主键md5不存在，新增
-                    //String id = mohurdService.selectPersonChange(change);
-                    //if (StringUtils.isBlank(id)) {
-                    mohurdService.insertPersonChange(change);//新增
-                    logger.info(String.format("新增人员变更 %s", pkid));
-                    //}
+                    String id = mohurdService.selectPersonChange(change);
+                    if (StringUtils.isBlank(id)) {
+                        mohurdService.insertPersonChange(change);//新增
+                        logger.info(String.format("新增人员变更 %s", pkid));
+                    }
                     redisUtils.hset(Constant.Cache_PersonChange, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     mohurdService.updatePersonChange(change);// 更新
