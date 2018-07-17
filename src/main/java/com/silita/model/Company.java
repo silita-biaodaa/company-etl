@@ -25,6 +25,11 @@ public class Company implements Serializable {
     private String com_name;
 
     /**
+     * 企业名称首字母
+     */
+    private String com_name_py;
+
+    /**
      * 企业类型
      */
     private String type;
@@ -170,5 +175,13 @@ public class Company implements Serializable {
 
     public void setMd5(String md5) {
         this.md5 = md5;
+    }
+
+    public String getCom_name_py() {
+        return com_name_py;
+    }
+
+    public void setCom_name_py(String com_name_py) {
+        this.com_name_py = com_name_py;
     }
 }

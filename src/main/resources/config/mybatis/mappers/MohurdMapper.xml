@@ -38,13 +38,13 @@
 
     <!-- 插入企业 -->
     <insert id="insertCompany" useGeneratedKeys="true" keyProperty="com_id" parameterType="com.silita.model.Company">
-        insert into tb_company(com_id, md5, com_name, org_code, credit_code, business_num, regis_address, com_address, legal_person, economic_type, regis_capital, url, created)
-        values(#{com_id}, #{md5},#{com_name}, #{org_code}, #{credit_code}, #{business_num}, #{regis_address}, #{com_address}, #{legal_person}, #{economic_type}, #{regis_capital}, #{url}, NOW())
+        insert into tb_company(com_id, md5, com_name, org_code, credit_code, business_num, regis_address, com_address, legal_person, economic_type, regis_capital, url, com_name_py, created)
+        values(#{com_id}, #{md5},#{com_name}, #{org_code}, #{credit_code}, #{business_num}, #{regis_address}, #{com_address}, #{legal_person}, #{economic_type}, #{regis_capital}, #{url}, #{com_name_py}, NOW())
     </insert>
 
     <!-- 更新企业 -->
     <update id="updateCompany" parameterType="com.silita.model.Company">
-        update tb_company set md5=#{md5}, com_name=#{com_name}, credit_code=#{credit_code}, org_code=#{org_code}, business_num=#{business_num}, regis_address=#{regis_address}, legal_person=#{legal_person}, economic_type=#{economic_type}, url=#{url}, updated=NOW()
+        update tb_company set md5=#{md5}, com_name=#{com_name}, credit_code=#{credit_code}, org_code=#{org_code}, business_num=#{business_num}, regis_address=#{regis_address}, legal_person=#{legal_person}, economic_type=#{economic_type}, url=#{url}, com_name_py=#{com_name_py}, updated=NOW()
         where com_id=#{com_id}
     </update>
 
