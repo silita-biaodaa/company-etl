@@ -54,6 +54,4 @@
     </bean>
 
     <import resource="applicationContext-redis.xml"/>
-    <import resource="applicationContext-cache.xml"/>
-    <import resource="applicationContext-es.xml"/>
 </beans>
