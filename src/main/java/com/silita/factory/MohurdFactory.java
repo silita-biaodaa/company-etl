@@ -6,6 +6,7 @@ import com.silita.model.*;
 import com.silita.service.MohurdService;
 import com.silita.utils.Pinyin;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class MohurdFactory extends AbstractFactory {
                             logger.info(String.format("新增企业基本信息 %s", com_id));
                         }
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                     redisUtils.hset(Constant.Cache_Company, com_id, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
@@ -52,7 +53,7 @@ public class MohurdFactory extends AbstractFactory {
                         mohurdService.updateCompany(company);// 更新
                         logger.info(String.format("更新企业基本信息 %s", com_id));
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                 }
                 redisUtils.hset(Constant.Cache_Company, md5, "");
@@ -74,7 +75,7 @@ public class MohurdFactory extends AbstractFactory {
                             logger.info(String.format("新增企业资质 %s", pkid));
                         }
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                     redisUtils.hset(Constant.Cache_CompanyQual, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
@@ -82,7 +83,7 @@ public class MohurdFactory extends AbstractFactory {
                         mohurdService.updateCompanyQualification(qualification);// 更新
                         logger.info(String.format("更新企业资质 %s", pkid));
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                 }
                 redisUtils.hset(Constant.Cache_CompanyQual, md5, "");
@@ -98,13 +99,13 @@ public class MohurdFactory extends AbstractFactory {
                 exists = redisUtils.hexists(Constant.Cache_Project, pkid);
                 if (!exists) {//主键md5不存在，新增
                     try {
-                        //String id = mohurdService.selectProject(project);
-                        //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertProject(project);//新增
-                        logger.info(String.format("新增项目 %s", pkid));
-                        //}
+                        String id = mohurdService.selectProject(project);
+                        if (StringUtils.isBlank(id)) {
+                            mohurdService.insertProject(project);//新增
+                            logger.info(String.format("新增项目 %s", pkid));
+                        }
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                     redisUtils.hset(Constant.Cache_Project, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
@@ -112,7 +113,7 @@ public class MohurdFactory extends AbstractFactory {
                         mohurdService.updateProject(project);// 更新
                         logger.info(String.format("更新项目 %s", pkid));
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                 }
                 redisUtils.hset(Constant.Cache_Project, md5, "");
@@ -134,7 +135,7 @@ public class MohurdFactory extends AbstractFactory {
                             logger.info(String.format("新增人员 %s", pkid));
                         }
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                     redisUtils.hset(Constant.Cache_Person, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
@@ -142,7 +143,7 @@ public class MohurdFactory extends AbstractFactory {
                         mohurdService.updatePerson(person);// 更新
                         logger.info(String.format("更新人员 %s", pkid));
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                 }
                 redisUtils.hset(Constant.Cache_Person, md5, "");
@@ -164,7 +165,7 @@ public class MohurdFactory extends AbstractFactory {
                             logger.info(String.format("新增人员变更 %s", pkid));
                         }
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                     redisUtils.hset(Constant.Cache_PersonChange, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
@@ -172,7 +173,7 @@ public class MohurdFactory extends AbstractFactory {
                         mohurdService.updatePersonChange(change);// 更新
                         logger.info(String.format("更新人员变更 %s", pkid));
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                 }
                 redisUtils.hset(Constant.Cache_PersonChange, md5, "");
@@ -188,13 +189,13 @@ public class MohurdFactory extends AbstractFactory {
                 exists = redisUtils.hexists(Constant.Cache_PersonProject, pkid);
                 if (!exists) {//主键md5不存在，新增
                     try {
-                        //String id = mohurdService.selectPersonProject(personProject);
-                        //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertPersonProject(personProject);//新增
-                        logger.info(String.format("新增人员项目关系 %s", pkid));
-                        //}
+                        String id = mohurdService.selectPersonProject(personProject);
+                        if (StringUtils.isBlank(id)) {
+                            mohurdService.insertPersonProject(personProject);//新增
+                            logger.info(String.format("新增人员项目关系 %s", pkid));
+                        }
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                     redisUtils.hset(Constant.Cache_PersonProject, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
@@ -202,7 +203,7 @@ public class MohurdFactory extends AbstractFactory {
                         mohurdService.updatePersonProject(personProject);// 更新
                         logger.info(String.format("更新人员项目关系 %s", pkid));
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                 }
                 redisUtils.hset(Constant.Cache_PersonProject, md5, "");
@@ -218,13 +219,13 @@ public class MohurdFactory extends AbstractFactory {
                 exists = redisUtils.hexists(Constant.Cache_ProjectCompany, pkid);
                 if (!exists) {//主键md5不存在，新增
                     try {
-                        //String id = mohurdService.selectProjectCompany(projectCompany);
-                        //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertProjectCompany(projectCompany);//新增
-                        logger.info(String.format("新增项目企业关系 %s", pkid));
-                        //}
+                        String id = mohurdService.selectProjectCompany(projectCompany);
+                        if (StringUtils.isBlank(id)) {
+                            mohurdService.insertProjectCompany(projectCompany);//新增
+                            logger.info(String.format("新增项目企业关系 %s", pkid));
+                        }
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                     redisUtils.hset(Constant.Cache_ProjectCompany, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
@@ -232,7 +233,7 @@ public class MohurdFactory extends AbstractFactory {
                         mohurdService.updateProjectCompany(projectCompany);// 更新
                         logger.info(String.format("更新项目企业关系 %s", pkid));
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                 }
                 redisUtils.hset(Constant.Cache_ProjectCompany, md5, "");
@@ -248,13 +249,13 @@ public class MohurdFactory extends AbstractFactory {
                 exists = redisUtils.hexists(Constant.Cache_ZhaoTouBiao, pkid);
                 if (!exists) {//主键md5不存在，新增
                     try {
-                        //String id = mohurdService.selectZhaoTouBiao(zhaoTouBiao);
-                        //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertZhaoTouBiao(zhaoTouBiao);//新增
-                        logger.info(String.format("新增招投标 %s", pkid));
-                        //}
+                        String id = mohurdService.selectZhaoTouBiao(zhaoTouBiao);
+                        if (StringUtils.isBlank(id)) {
+                            mohurdService.insertZhaoTouBiao(zhaoTouBiao);//新增
+                            logger.info(String.format("新增招投标 %s", pkid));
+                        }
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                     redisUtils.hset(Constant.Cache_ZhaoTouBiao, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
@@ -262,7 +263,7 @@ public class MohurdFactory extends AbstractFactory {
                         mohurdService.updateZhaoTouBiao(zhaoTouBiao);// 更新
                         logger.info(String.format("更新招投标 %s", pkid));
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                 }
                 redisUtils.hset(Constant.Cache_ZhaoTouBiao, md5, "");
@@ -278,13 +279,13 @@ public class MohurdFactory extends AbstractFactory {
                 exists = redisUtils.hexists(Constant.Cache_ShiGongTuShenCha, pkid);
                 if (!exists) {//主键md5不存在，新增
                     try {
-                        //String id = mohurdService.selectShiGongTuShenCha(shiGongTuShenCha);
-                        //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertShiGongTuShenCha(shiGongTuShenCha);//新增
-                        logger.info(String.format("新增施工图审查 %s", pkid));
-                        //}
+                        String id = mohurdService.selectShiGongTuShenCha(shiGongTuShenCha);
+                        if (StringUtils.isBlank(id)) {
+                            mohurdService.insertShiGongTuShenCha(shiGongTuShenCha);//新增
+                            logger.info(String.format("新增施工图审查 %s", pkid));
+                        }
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                     redisUtils.hset(Constant.Cache_ShiGongTuShenCha, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
@@ -292,7 +293,7 @@ public class MohurdFactory extends AbstractFactory {
                         mohurdService.updateShiGongTuShenCha(shiGongTuShenCha);// 更新
                         logger.info(String.format("更新施工图审查 %s", pkid));
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                 }
                 redisUtils.hset(Constant.Cache_ShiGongTuShenCha, md5, "");
@@ -308,13 +309,13 @@ public class MohurdFactory extends AbstractFactory {
                 exists = redisUtils.hexists(Constant.Cache_ShiGongXuKe, pkid);
                 if (!exists) {//主键md5不存在，新增
                     try {
-                        //String id = mohurdService.selectShiGongXuKe(shiGongXuKe);
-                        //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertShiGongXuKe(shiGongXuKe);//新增
-                        logger.info(String.format("新增施工许可 %s", pkid));
-                        //}
+                        String id = mohurdService.selectShiGongXuKe(shiGongXuKe);
+                        if (StringUtils.isBlank(id)) {
+                            mohurdService.insertShiGongXuKe(shiGongXuKe);//新增
+                            logger.info(String.format("新增施工许可 %s", pkid));
+                        }
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                     redisUtils.hset(Constant.Cache_ShiGongXuKe, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
@@ -322,7 +323,7 @@ public class MohurdFactory extends AbstractFactory {
                         mohurdService.updateShiGongXuKe(shiGongXuKe);// 更新
                         logger.info(String.format("更新施工许可 %s", pkid));
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                 }
                 redisUtils.hset(Constant.Cache_ShiGongXuKe, md5, "");
@@ -338,13 +339,13 @@ public class MohurdFactory extends AbstractFactory {
                 exists = redisUtils.hexists(Constant.Cache_HeTongBeiAn, pkid);
                 if (!exists) {//主键md5不存在，新增
                     try {
-                        //String id = mohurdService.selectHeTongBeiAn(heTongBeiAn);
-                        //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertHeTongBeiAn(heTongBeiAn);//新增
-                        logger.info(String.format("新增合同备案 %s", pkid));
-                        //}
+                        String id = mohurdService.selectHeTongBeiAn(heTongBeiAn);
+                        if (StringUtils.isBlank(id)) {
+                            mohurdService.insertHeTongBeiAn(heTongBeiAn);//新增
+                            logger.info(String.format("新增合同备案 %s", pkid));
+                        }
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                     redisUtils.hset(Constant.Cache_HeTongBeiAn, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
@@ -352,7 +353,7 @@ public class MohurdFactory extends AbstractFactory {
                         mohurdService.updateHeTongBeiAn(heTongBeiAn);// 更新
                         logger.info(String.format("更新合同备案 %s", pkid));
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                 }
                 redisUtils.hset(Constant.Cache_HeTongBeiAn, md5, "");
@@ -368,13 +369,13 @@ public class MohurdFactory extends AbstractFactory {
                 exists = redisUtils.hexists(Constant.Cache_JunGongBeiAn, pkid);
                 if (!exists) {//主键md5不存在，新增
                     try {
-                        //String id = mohurdService.selectJunGongBeiAn(junGongBeiAn);
-                        //if (StringUtils.isBlank(id)) {
-                        mohurdService.insertJunGongBeiAn(junGongBeiAn);//新增
-                        logger.info(String.format("新增竣工验收备案 %s", pkid));
-                        //}
+                        String id = mohurdService.selectJunGongBeiAn(junGongBeiAn);
+                        if (StringUtils.isBlank(id)) {
+                            mohurdService.insertJunGongBeiAn(junGongBeiAn);//新增
+                            logger.info(String.format("新增竣工验收备案 %s", pkid));
+                        }
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                     redisUtils.hset(Constant.Cache_JunGongBeiAn, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
@@ -382,7 +383,7 @@ public class MohurdFactory extends AbstractFactory {
                         mohurdService.updateJunGongBeiAn(junGongBeiAn);// 更新
                         logger.info(String.format("更新竣工验收备案 %s", pkid));
                     } catch (Exception e) {
-                        //logger.warn(ExceptionUtils.getStackTrace(e));
+                        logger.warn(ExceptionUtils.getStackTrace(e));
                     }
                 }
                 redisUtils.hset(Constant.Cache_JunGongBeiAn, md5, "");
