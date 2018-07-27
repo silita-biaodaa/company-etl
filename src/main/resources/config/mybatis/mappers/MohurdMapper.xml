@@ -257,7 +257,7 @@
     </update>
 
     <!-- 查询施工图审查 -->
-    <select id="selectShiGongTuShenCha" parameterType="com.silita.model.ShiGongTuShenCha" resultType="Integer">
+    <select id="selectShiGongTuShenCha" parameterType="com.silita.model.ShiGongTuShenCha" resultType="String">
         select pkid from tb_project_design
         where 1=1
         <if test="pro_id !=null">
