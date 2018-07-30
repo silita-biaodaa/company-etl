@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.CompanyQualificationMapper">
+
+    <select id="getCompanyQualificationTotal" resultType="Integer">
+        SELECT COUNT(*)
+        FROM mishu.tb_company_qualification
+    </select>
+
+    <select id="listCompanyQualification" parameterType="Map"
+            resultType="com.silita.model.CompanyQualification">
+        SELECT *
+        FROM mishu.tb_company_qualification
+        LIMIT #{start}, #{pageSize}
+    </select>
+
+    <select id="getCompanyQualificationByComId" parameterType="String"
+            resultType="com.silita.model.CompanyQualification">
+         SELECT * FROM mishu.tb_company_qualification WHERE com_id = #{companyId}
+    </select>
+</mapper>

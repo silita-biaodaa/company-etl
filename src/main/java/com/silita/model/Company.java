@@ -73,6 +73,8 @@ public class Company implements Serializable {
      */
     private String url;
 
+    private String range;
+
     public String getCom_id() {
         return com_id;
     }
@@ -183,5 +185,13 @@ public class Company implements Serializable {
 
     public void setCom_name_py(String com_name_py) {
         this.com_name_py = com_name_py;
+    }
+
+    public String getRange() {
+        return range;
+    }
+
+    public void setRange(String range) {
+        this.range = range;
     }
 }
