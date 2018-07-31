@@ -30,7 +30,7 @@ public interface MohurdMapper {
     public String selectCompanyByName(String companyName);
 
     /**
-     * 查询企业
+     * 通过id查询企业
      *
      * @param id
      * @return
@@ -59,6 +59,14 @@ public interface MohurdMapper {
     public void insertCompanyQualification(CompanyQualification qualification);
 
     /**
+     * 通过id查询企业资质
+     *
+     * @param id
+     * @return
+     */
+    public CompanyQualification selectCompanyQualById(String id);
+
+    /**
      * 查询企业资质
      *
      * @param qualification
@@ -80,6 +88,14 @@ public interface MohurdMapper {
      * @return 人员id
      */
     public String selectPerson(Person person);
+
+    /**
+     * 通过id查询人员
+     *
+     * @param person
+     * @return
+     */
+    public Person selectPersonById(Person person);
 
     /**
      * 插入人员信息
@@ -126,6 +142,14 @@ public interface MohurdMapper {
     public String selectProject(Project project);
 
     /**
+     * 通过id查询项目
+     *
+     * @param id
+     * @return
+     */
+    public Project selectProjectById(String id);
+
+    /**
      * 插入项目基本信息
      *
      * @param project
@@ -146,6 +170,14 @@ public interface MohurdMapper {
      * @return
      */
     public String selectZhaoTouBiao(ZhaoTouBiao zhaoTouBiao);
+
+    /**
+     * 通过id查询招投标
+     *
+     * @param id
+     * @return
+     */
+    public ZhaoTouBiao selectZhaoTouBiaoById(String id);
 
     /**
      * 插入招投标
@@ -192,6 +224,14 @@ public interface MohurdMapper {
     public String selectShiGongTuShenCha(ShiGongTuShenCha shenCha);
 
     /**
+     * 通过id查询施工图审查
+     *
+     * @param id
+     * @return
+     */
+    public ShiGongTuShenCha selectShiGongTuShenChaById(String id);
+
+    /**
      * 插入施工图审查
      *
      * @param shencha
@@ -236,6 +276,14 @@ public interface MohurdMapper {
     public String selectShiGongXuKe(ShiGongXuKe shiGongXuKe);
 
     /**
+     * 通过id查施工许可
+     *
+     * @param id
+     * @return
+     */
+    public ShiGongXuKe selectShiGongXuKeById(String id);
+
+    /**
      * 新增施工许可
      *
      * @param shiGongXuKe
@@ -256,6 +304,14 @@ public interface MohurdMapper {
      * @return
      */
     public String selectHeTongBeiAn(HeTongBeiAn heTongBeiAn);
+
+    /**
+     * 通过id查询合同备案
+     *
+     * @param id
+     * @return
+     */
+    public HeTongBeiAn selectHeTongBeiAnById(String id);
 
     /**
      * 新增合同备案
@@ -280,6 +336,14 @@ public interface MohurdMapper {
     public String selectJunGongBeiAn(JunGongBeiAn junGongBeiAn);
 
     /**
+     * 通过id查询竣工验收备案
+     *
+     * @param id
+     * @return
+     */
+    public JunGongBeiAn selectJunGongBeiAnById(String id);
+
+    /**
      * 新增竣工验收备案
      *
      * @param junGongBeiAn
@@ -300,4 +364,11 @@ public interface MohurdMapper {
      * @return
      */
     public List<Map<String, Object>> selectNoQualificationCompany();
+
+    /**
+     * 插入字段变更记录
+     *
+     * @param change
+     */
+    public void insertFieldChangeRecord(FieldChange change);
 }

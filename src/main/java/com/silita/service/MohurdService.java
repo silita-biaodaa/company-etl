@@ -54,6 +54,16 @@ public class MohurdService {
     }
 
     /**
+     * 通过id查询企业
+     *
+     * @param id
+     * @return
+     */
+    public Company selectCompanyById(String id) {
+        return mohurdMapper.selectCompanyById(id);
+    }
+
+    /**
      * 插入企业
      *
      * @param company
@@ -96,6 +106,16 @@ public class MohurdService {
     }
 
     /**
+     * 通过id查询企业资质
+     *
+     * @param id
+     * @return
+     */
+    public CompanyQualification selectCompanyQualById(String id) {
+        return mohurdMapper.selectCompanyQualById(id);
+    }
+
+    /**
      * 查询企业资质
      *
      * @param qualification
@@ -114,6 +134,16 @@ public class MohurdService {
         if (StringUtils.isNotBlank(companyQualification.getPkid())) {
             mohurdMapper.updateCompanyQualification(companyQualification);
         }
+    }
+
+    /**
+     * 通过id查询人员
+     *
+     * @param person
+     * @return
+     */
+    public Person selectPersonById(Person person) {
+        return mohurdMapper.selectPersonById(person);
     }
 
     /**
@@ -187,6 +217,16 @@ public class MohurdService {
     }
 
     /**
+     * 通过id查询项目
+     *
+     * @param id
+     * @return
+     */
+    public Project selectProjectById(String id) {
+        return mohurdMapper.selectProjectById(id);
+    }
+
+    /**
      * 插入项目基本信息
      *
      * @param project
@@ -214,6 +254,16 @@ public class MohurdService {
      */
     public String selectZhaoTouBiao(ZhaoTouBiao zhaoTouBiao) {
         return mohurdMapper.selectZhaoTouBiao(zhaoTouBiao);
+    }
+
+    /**
+     * 通过id查询招投标
+     *
+     * @param id
+     * @return
+     */
+    public ZhaoTouBiao selectZhaoTouBiaoById(String id) {
+        return mohurdMapper.selectZhaoTouBiaoById(id);
     }
 
     /**
@@ -273,6 +323,16 @@ public class MohurdService {
      */
     public String selectShiGongTuShenCha(ShiGongTuShenCha shenCha) {
         return mohurdMapper.selectShiGongTuShenCha(shenCha);
+    }
+
+    /**
+     * 通过id查询施工图审查
+     *
+     * @param id
+     * @return
+     */
+    public ShiGongTuShenCha selectShiGongTuShenChaById(String id) {
+        return mohurdMapper.selectShiGongTuShenChaById(id);
     }
 
     /**
@@ -347,6 +407,16 @@ public class MohurdService {
     }
 
     /**
+     * 通过id查施工许可
+     *
+     * @param id
+     * @return
+     */
+    public ShiGongXuKe selectShiGongXuKeById(String id) {
+        return mohurdMapper.selectShiGongXuKeById(id);
+    }
+
+    /**
      * 新增施工许可
      *
      * @param shiGongXuKe
@@ -374,6 +444,16 @@ public class MohurdService {
      */
     public String selectHeTongBeiAn(HeTongBeiAn heTongBeiAn) {
         return mohurdMapper.selectHeTongBeiAn(heTongBeiAn);
+    }
+
+    /**
+     * 通过id查询合同备案
+     *
+     * @param id
+     * @return
+     */
+    public HeTongBeiAn selectHeTongBeiAnById(String id) {
+        return mohurdMapper.selectHeTongBeiAnById(id);
     }
 
     /**
@@ -407,6 +487,16 @@ public class MohurdService {
     }
 
     /**
+     * 通过id查询竣工验收备案
+     *
+     * @param id
+     * @return
+     */
+    public JunGongBeiAn selectJunGongBeiAnById(String id) {
+        return mohurdMapper.selectJunGongBeiAnById(id);
+    }
+
+    /**
      * 新增竣工验收备案
      *
      * @param junGongBeiAn
@@ -434,5 +524,14 @@ public class MohurdService {
      */
     public List<Map<String, Object>> selectNoQualificationCompany() {
         return mohurdMapper.selectNoQualificationCompany();
+    }
+
+    /**
+     * 插入字段变更记录
+     *
+     * @param change
+     */
+    public void insertFieldChangeRecord(FieldChange change) {
+        mohurdMapper.insertFieldChangeRecord(change);
     }
 }

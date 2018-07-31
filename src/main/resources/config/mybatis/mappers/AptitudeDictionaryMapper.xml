@@ -4,7 +4,9 @@
 
     <select id="getMajorNameBymajorUuid" parameterType="String" resultType="String">
         SELECT `majorName`
-        FROM mishu.aptitude_dictionary
+        FROM aptitude_dictionary
         WHERE majorUuid = #{majorUuid}
+        ORDER BY id DESC
+        limit 1
     </select>
 </mapper>

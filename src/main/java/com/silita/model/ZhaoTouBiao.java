@@ -1,5 +1,7 @@
 package com.silita.model;
 
+import com.silita.annotations.FieldChangeRecord;
+
 import java.io.Serializable;
 
 /**
@@ -7,6 +9,8 @@ import java.io.Serializable;
  * @Date:2018/5/14 19:39
  * @Description: 招投标
  */
+@FieldChangeRecord(table = "tb_project_zhaotoubiao", id = "pkid",
+        fields = {"zhaobiao_type", "zhaobiao_way", "zhongbiao_date", "build_scale", "area", "zhongbiao_amount", "zhaobiao_agency_company", "zhongbiao_company", "record_date"})
 public class ZhaoTouBiao implements Serializable {
     private static final long serialVersionUID = -3512445499815864995L;
     /**

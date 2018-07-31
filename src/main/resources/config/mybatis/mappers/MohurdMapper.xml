@@ -29,11 +29,7 @@
 
     <!-- 通过id查询企业 -->
     <select id="selectCompanyById" parameterType="String" resultType="com.silita.model.Company">
-        select * from tb_company
-        where 1=1
-        <if test="_parameter !=null">
-            and com_id=#{_parameter}
-        </if>
+        select * from tb_company where com_id=#{_parameter}
     </select>
 
     <!-- 插入企业 -->
@@ -44,7 +40,7 @@
 
     <!-- 更新企业 -->
     <update id="updateCompany" parameterType="com.silita.model.Company">
-        update tb_company set md5=#{md5}, com_name=#{com_name}, credit_code=#{credit_code}, org_code=#{org_code}, business_num=#{business_num}, regis_address=#{regis_address}, legal_person=#{legal_person}, economic_type=#{economic_type}, url=#{url}, com_name_py=#{com_name_py}, updated=NOW()
+        update tb_company set md5=#{md5}, com_name=#{com_name}, credit_code=#{credit_code}, org_code=#{org_code}, business_num=#{business_num}, regis_address=#{regis_address}, com_address=#{com_address}, legal_person=#{legal_person}, economic_type=#{economic_type}, url=#{url}, com_name_py=#{com_name_py}, updated=NOW()
         where com_id=#{com_id}
     </update>
 
@@ -53,6 +49,11 @@
         insert into tb_company_qualification(pkid, md5, corpid, tab, qual_type, cert_no, cert_org, cert_date, valid_date, qual_name, `range`, url, com_id, com_name, channel, created, updated)
         values(#{pkid}, #{md5}, #{corpid}, #{tab}, #{qual_type}, #{cert_no}, #{cert_org}, #{cert_date}, #{valid_date}, #{qual_name}, #{range}, #{url}, #{com_id}, #{com_name}, #{channel}, NOW(), NOW())
     </insert>
+
+    <!-- 通过id查询企业资质 -->
+    <select id="selectCompanyQualById" parameterType="String" resultType="com.silita.model.CompanyQualification">
+        select * from tb_company_qualification where pkid=#{_parameter}
+    </select>
 
     <!-- 查询企业资质 -->
     <select id="selectCompanyQualification" parameterType="com.silita.model.CompanyQualification" resultType="String">
@@ -110,6 +111,11 @@
         limit 1
     </select>
 
+    <!-- 通过id查询人员 -->
+    <select id="selectPersonById" parameterType="com.silita.model.Person" resultType="com.silita.model.Person">
+        select * from tb_person_${table} where pkid=#{pkid}
+    </select>
+
     <!-- 更新人员信息 -->
     <update id="updatePerson" parameterType="com.silita.model.Person">
         update tb_person_${table} set md5=#{md5}, `name`=#{name}, sex=#{sex}, id_card=#{id_card}, innerid=#{innerid}, category=#{category}, cert_no=#{cert_no}, seal_no=#{seal_no}, major=#{major}, cert_date=#{cert_date}, valid_date=#{valid_date}, url=#{url}, updated=NOW()
@@ -149,6 +155,11 @@
             and project_no=#{project_no}
         </if>
         limit 1
+    </select>
+
+    <!-- 通过id查询项目 -->
+    <select id="selectProjectById" parameterType="String" resultType="com.silita.model.Project">
+        select * from tb_project where pro_id=#{_parameter}
     </select>
 
     <!-- 插入项目基本信息 -->
@@ -244,6 +255,11 @@
         limit 1
     </select>
 
+    <!-- 通过id查询招投标 -->
+    <select id="selectZhaoTouBiaoById" parameterType="String" resultType="com.silita.model.ZhaoTouBiao">
+        select * from tb_project_zhaotoubiao where pkid=#{_parameter}
+    </select>
+
     <!-- 插入招投标 -->
     <insert id="insertZhaoTouBiao" useGeneratedKeys="true" keyProperty="pkid" parameterType="com.silita.model.ZhaoTouBiao">
         insert into tb_project_zhaotoubiao(pkid, md5, pro_id, zhongbiao_code, prov_zhongbiao_code, zhaobiao_type, zhaobiao_way, zhongbiao_date, zhongbiao_amount, build_scale, area, zhaobiao_agency_company, zhaobiao_company_code, zhongbiao_company, zhongbiao_company_code, record_date, created)
@@ -267,6 +283,11 @@
             and check_number=#{check_number}
         </if>
         limit 1
+    </select>
+
+    <!-- 通过id查询施工图审查 -->
+    <select id="selectShiGongTuShenChaById" parameterType="String" resultType="com.silita.model.ShiGongTuShenCha">
+        select * from tb_project_design where pkid=#{_parameter}
     </select>
 
     <!-- 插入施工图审查 -->
@@ -294,6 +315,11 @@
         limit 1
     </select>
 
+    <!-- 通过id查询施工许可 -->
+    <select id="selectShiGongXuKeById" parameterType="String" resultType="com.silita.model.ShiGongXuKe">
+        select * from tb_project_build where pkid=#{_parameter}
+    </select>
+
     <!-- 插入施工许可 -->
     <insert id="insertShiGongXuKe" useGeneratedKeys="true" keyProperty="pkid" parameterType="com.silita.model.ShiGongXuKe">
         insert into tb_project_build(pkid, md5, bdxh, pro_id, pro_name, pro_type, b_org, b_licence, build_licence, review_number, amount, area, record_date, created)
@@ -317,6 +343,11 @@
             and record_code=#{record_code}
         </if>
         limit 1
+    </select>
+
+    <!-- 通过id查询合同备案 -->
+    <select id="selectHeTongBeiAnById" parameterType="String" resultType="com.silita.model.HeTongBeiAn">
+        select * from tb_project_contract where pkid=#{_parameter}
     </select>
 
     <!-- 插入合同备案 -->
@@ -344,6 +375,11 @@
         limit 1
     </select>
 
+    <!-- 通过id查询竣工验收备案 -->
+    <select id="selectJunGongBeiAnById" parameterType="String" resultType="com.silita.model.JunGongBeiAn">
+        select * from tb_project_completion where pkid=#{_parameter}
+    </select>
+
     <!-- 插入竣工验收备案 -->
     <insert id="insertJunGongBeiAn" useGeneratedKeys="true" keyProperty="pkid" parameterType="com.silita.model.JunGongBeiAn">
         insert into tb_project_completion(pkid, md5, pro_id, code, prov_code, cost, area, build_scale, struct, build_start, build_end, record_date, remark, created)
@@ -360,4 +396,10 @@
     <select id="selectNoQualificationCompany" resultType="java.util.Map">
         SELECT * FROM tb_company WHERE com_id not in (SELECT com_id from tb_company_qualification)
     </select>
+
+    <!-- 插入字段变更记录 -->
+    <insert id="insertFieldChangeRecord" useGeneratedKeys="true" keyProperty="id" parameterType="com.silita.model.FieldChange">
+        insert into tb_field_change(tb_name, tb_id, column_name, old_value, new_value, change_time)
+        values(#{tb_name},#{tb_id},#{column_name},#{old_value},#{new_value}, NOW())
+    </insert>
 </mapper>

@@ -4,42 +4,36 @@
 
     <insert id="batchInsertCompanyAptitude" parameterType="com.silita.model.TbCompanyAptitude">
         INSERT INTO
-        mishu.tb_company_aptitude(
-        `qual_id`, `com_id`, `aptitude_name`, `aptitude_uuid`, `mainUuid`,
-        `type`, `created`
-        )
+        tb_company_aptitude(`qual_id`, `com_id`, `aptitude_name`, `aptitude_uuid`, `mainUuid`,`type`, `created`)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (
-            #{item.qualId}, #{item.comId}, #{item.aptitudeName}, #{item.aptitudeUuid}, #{item.mainuuid},
-            #{item.type}, NOW()
-            )
+            (#{item.qualId}, #{item.comId}, #{item.aptitudeName}, #{item.aptitudeUuid}, #{item.mainuuid},#{item.type}, NOW())
         </foreach>
     </insert>
 
     <select id="getCompanyAptitudeTotal" resultType="Integer">
-        SELECT COUNT(*) FROM mishu.tb_company_aptitude
+        SELECT COUNT(*) FROM tb_company_aptitude
     </select>
 
     <select id="listCompanyAptitude" parameterType="Map" resultType="com.silita.model.TbCompanyAptitude">
-        SELECT com_id AS `com_id`, group_concat(`type`) AS `type`, group_concat(`aptitude_uuid`) AS `aptitude_uuid`
-        FROM mishu.tb_company_aptitude
+        SELECT com_id AS `comId`, group_concat(`type`) AS `type`, group_concat(`aptitude_uuid`) AS `aptitudeUuid`
+        FROM tb_company_aptitude
         GROUP BY com_id
         LIMIT #{start}, #{pageSize}
     </select>
 
     <delete id="deleteCompanyAptitude">
-        DELETE FROM mishu.tb_company_aptitude WHERE pkid > 0
+        DELETE FROM tb_company_aptitude WHERE pkid > 0
     </delete>
 
     <select id="listCompanyAptitudeByComPanyId" parameterType="String" resultType="com.silita.model.TbCompanyAptitude">
-        SELECT com_id AS `com_id`, group_concat(`type`) AS `type`, group_concat(`aptitude_uuid`) AS `aptitude_uuid`
-        FROM mishu.tb_company_aptitude
+        SELECT com_id AS `comId`, group_concat(`type`) AS `type`, group_concat(`aptitude_uuid`) AS `aptitudeUuid`
+        FROM tb_company_aptitude
         WHERE com_id = #{companyId}
     </select>
 
     <delete id="deleteCompanyAptitudeByCompanyId" parameterType="String">
-        DELETE FROM mishu.tb_company_aptitude
+        DELETE FROM tb_company_aptitude
         WHERE com_id = #{companyId}
     </delete>
 </mapper>

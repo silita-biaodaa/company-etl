@@ -4,7 +4,7 @@
 
     <select id="getAllZhByName" parameterType="String" resultType="com.silita.model.AllZh">
       SELECT *
-      FROM mishu.all_zh
+      FROM all_zh
       WHERE `name` = #{name} AND finalUuid is not null
     </select>
 </mapper>

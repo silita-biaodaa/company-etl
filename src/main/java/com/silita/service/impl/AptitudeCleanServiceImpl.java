@@ -2,8 +2,13 @@ package com.silita.service.impl;
 
 import com.google.common.base.Splitter;
 import com.silita.dao.*;
-import com.silita.model.*;
+import com.silita.model.AllZh;
+import com.silita.model.Company;
+import com.silita.model.CompanyQualification;
+import com.silita.model.TbCompanyAptitude;
 import com.silita.service.IAptitudeCleanService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -12,6 +17,7 @@ import java.util.*;
 
 @Service("aptitudeCleanService")
 public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private CompanyQualificationMapper companyQualificationMapper;
@@ -42,7 +48,6 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
             params.put("start", batchCount * pageNum);
             params.put("pageSize", 5000);
             companyQualificationList = companyQualificationMapper.listCompanyQualification(params);
-            List<TbCompanyAptitude> companyQualifications = new ArrayList<>();
             //遍历证书
             for (int i = 0; i < companyQualificationList.size(); i++) {
                 String qualId = companyQualificationList.get(i).getPkid();
@@ -53,6 +58,7 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
                     if (!StringUtils.isEmpty(qualRange)) {
                         AllZh allZh;
                         TbCompanyAptitude companyAptitude;
+                        List<TbCompanyAptitude> companyQualifications = new ArrayList<>();
                         Iterator<String> iterator = Splitter.onPattern("\\||,|，").omitEmptyStrings().trimResults().split(qualRange).iterator();
                         while (iterator.hasNext()) {
                             String qual = iterator.next();
@@ -68,14 +74,14 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
                                 companyQualifications.add(companyAptitude);
                             }
                         }
+                        if (companyQualifications.size() > 0) {
+                            tbCompanyAptitudeMapper.batchInsertCompanyAptitude(companyQualifications);
+                        }
                     }
                 }
-                if (companyQualifications.size() > 0 && companyQualifications.size() % 100 == 0) {
-                    tbCompanyAptitudeMapper.batchInsertCompanyAptitude(companyQualifications);
-                }
             }
-            tbCompanyAptitudeMapper.batchInsertCompanyAptitude(companyQualifications);
         }
+        logger.info("拆分所有资质完成");
     }
 
     @Override
@@ -105,29 +111,32 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
             //遍历
             for (int i = 0; i < tbCompanyAptitudes.size(); i++) {
                 tbCompanyAptitude = tbCompanyAptitudes.get(i);
-                comId = tbCompanyAptitude.getComId();
-                allType = tbCompanyAptitude.getType();
-                allAptitudeUuid = tbCompanyAptitude.getAptitudeUuid();
-                if (!StringUtils.isEmpty(allType) && !StringUtils.isEmpty(allAptitudeUuid)) {
-                    sb = new StringBuilder();
-                    String[] typeArr = allType.split(",");
-                    String[] aptitudeUuidArr = allAptitudeUuid.split(",");
-                    if (typeArr.length > 0 && aptitudeUuidArr.length > 0 && typeArr.length == aptitudeUuidArr.length) {
-                        for (int j = 0; j < typeArr.length; j++) {
-                            if (j == typeArr.length - 1) {
-                                sb.append(typeArr[j]).append("/").append(aptitudeUuidArr[j]);
-                            } else {
-                                sb.append(typeArr[j]).append("/").append(aptitudeUuidArr[j]).append(",");
+                if (null != tbCompanyAptitude) {
+                    comId = tbCompanyAptitude.getComId();
+                    allType = tbCompanyAptitude.getType();
+                    allAptitudeUuid = tbCompanyAptitude.getAptitudeUuid();
+                    if (!StringUtils.isEmpty(allType) && !StringUtils.isEmpty(allAptitudeUuid)) {
+                        sb = new StringBuilder();
+                        String[] typeArr = allType.split(",");
+                        String[] aptitudeUuidArr = allAptitudeUuid.split(",");
+                        if (typeArr.length > 0 && aptitudeUuidArr.length > 0 && typeArr.length == aptitudeUuidArr.length) {
+                            for (int j = 0; j < typeArr.length; j++) {
+                                if (j == typeArr.length - 1) {
+                                    sb.append(typeArr[j]).append("/").append(aptitudeUuidArr[j]);
+                                } else {
+                                    sb.append(typeArr[j]).append("/").append(aptitudeUuidArr[j]).append(",");
+                                }
                             }
                         }
+                        company = new Company();
+                        company.setCom_id(comId);
+                        company.setRange(sb.toString());
+                        companyMapper.updateCompanyRangeByComId(company);
                     }
-                    company = new Company();
-                    company.setCom_id(comId);
-                    company.setRange(sb.toString());
-                    companyMapper.updateCompanyRangeByComId(company);
                 }
             }
         }
+        logger.info("更新所有资质完成");
         //删除拆分后的公司资质
 //        splitCertService.deleteCompanyAptitude();
     }
@@ -178,30 +187,30 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
         //遍历
         for (int i = 0; i < tbCompanyAptitudes.size(); i++) {
             tbCompanyAptitude = tbCompanyAptitudes.get(i);
-            String comId = tbCompanyAptitude.getComId();
-            String allType = tbCompanyAptitude.getType();
-            String allAptitudeUuid = tbCompanyAptitude.getAptitudeUuid();
-            if (!StringUtils.isEmpty(allType) && !StringUtils.isEmpty(allAptitudeUuid)) {
-                sb = new StringBuilder();
-                String[] typeArr = allType.split(",");
-                String[] aptitudeUuidArr = allAptitudeUuid.split(",");
-                if (typeArr.length > 0 && aptitudeUuidArr.length > 0 && typeArr.length == aptitudeUuidArr.length) {
-                    for (int j = 0; j < typeArr.length; j++) {
-                        if (j == typeArr.length - 1) {
-                            sb.append(typeArr[j]).append("/").append(aptitudeUuidArr[j]);
-                        } else {
-                            sb.append(typeArr[j]).append("/").append(aptitudeUuidArr[j]).append(",");
+            if (null != tbCompanyAptitude) {
+                String comId = tbCompanyAptitude.getComId();
+                String allType = tbCompanyAptitude.getType();
+                String allAptitudeUuid = tbCompanyAptitude.getAptitudeUuid();
+                if (!StringUtils.isEmpty(allType) && !StringUtils.isEmpty(allAptitudeUuid)) {
+                    sb = new StringBuilder();
+                    String[] typeArr = allType.split(",");
+                    String[] aptitudeUuidArr = allAptitudeUuid.split(",");
+                    if (typeArr.length > 0 && aptitudeUuidArr.length > 0 && typeArr.length == aptitudeUuidArr.length) {
+                        for (int j = 0; j < typeArr.length; j++) {
+                            if (j == typeArr.length - 1) {
+                                sb.append(typeArr[j]).append("/").append(aptitudeUuidArr[j]);
+                            } else {
+                                sb.append(typeArr[j]).append("/").append(aptitudeUuidArr[j]).append(",");
+                            }
                         }
                     }
+                    company = new Company();
+                    company.setCom_id(comId);
+                    company.setRange(sb.toString());
+                    companyMapper.updateCompanyRangeByComId(company);
                 }
-                company = new Company();
-                company.setCom_id(comId);
-                company.setRange(sb.toString());
-                companyMapper.updateCompanyRangeByComId(company);
             }
         }
-        System.out.println("完成id为" + companyId + "的企业数据更新！");
+        logger.info("完成id为" + companyId + "的企业数据更新！");
     }
-
-
 }

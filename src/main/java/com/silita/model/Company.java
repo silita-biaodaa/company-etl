@@ -1,5 +1,7 @@
 package com.silita.model;
 
+import com.silita.annotations.FieldChangeRecord;
+
 import java.io.Serializable;
 
 /**
@@ -7,6 +9,8 @@ import java.io.Serializable;
  * @Date:2018/5/8 11:53
  * @Description: 企业基本信息
  */
+@FieldChangeRecord(table = "tb_company", id = "com_id",
+        fields = {"regis_address", "com_address", "legal_person", "economic_type", "regis_capital"})
 public class Company implements Serializable {
     private static final long serialVersionUID = 2680866379272673386L;
 

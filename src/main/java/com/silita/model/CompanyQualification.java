@@ -1,5 +1,7 @@
 package com.silita.model;
 
+import com.silita.annotations.FieldChangeRecord;
+
 import java.io.Serializable;
 
 /**
@@ -7,6 +9,8 @@ import java.io.Serializable;
  * @Date:2018/5/8 16:27
  * @Description: 企业资质
  */
+@FieldChangeRecord(table = "tb_company_qualification", id = "pkid",
+        fields = {"qual_type", "cert_org", "cert_date", "valid_date", "qual_name", "range"})
 public class CompanyQualification implements Serializable {
     private static final long serialVersionUID = -1652063863328030018L;
     /**

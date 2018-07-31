@@ -4,18 +4,18 @@
 
     <select id="getCompanyQualificationTotal" resultType="Integer">
         SELECT COUNT(*)
-        FROM mishu.tb_company_qualification
+        FROM tb_company_qualification
     </select>
 
     <select id="listCompanyQualification" parameterType="Map"
             resultType="com.silita.model.CompanyQualification">
         SELECT *
-        FROM mishu.tb_company_qualification
+        FROM tb_company_qualification
         LIMIT #{start}, #{pageSize}
     </select>
 
     <select id="getCompanyQualificationByComId" parameterType="String"
             resultType="com.silita.model.CompanyQualification">
-         SELECT * FROM mishu.tb_company_qualification WHERE com_id = #{companyId}
+         SELECT * FROM tb_company_qualification WHERE com_id = #{companyId}
     </select>
 </mapper>

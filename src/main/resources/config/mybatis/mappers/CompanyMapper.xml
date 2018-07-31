@@ -3,7 +3,7 @@
 <mapper namespace="com.silita.dao.CompanyMapper" >
 
   <update id="updateCompanyRangeByComId" parameterType="com.silita.model.Company">
-    UPDATE mishu.tb_company
+    UPDATE tb_company
         SET `range` = #{range}
         WHERE `com_id` = #{com_id}
   </update>
