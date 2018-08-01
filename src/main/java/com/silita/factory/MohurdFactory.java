@@ -41,7 +41,9 @@ public class MohurdFactory extends AbstractFactory {
             Company company = (Company) object;
             String com_id = company.getCom_id();
             String md5 = company.getMd5();
-            company.setCom_name_py(Pinyin.getPinYinFirstChar(company.getCom_name()));
+            String com_name = company.getCom_name();
+            com_name = com_name.replaceAll("（|）| |:|：|，|,|;|,|(|)|·|、", "");//去除特殊符号
+            company.setCom_name_py(Pinyin.getPinYinFirstChar(com_name));//得到拼音首字母
             boolean exists = redisUtils.hexists(Constant.Cache_Company, md5);
             if (!exists) {//实体MD5不存在
                 exists = redisUtils.hexists(Constant.Cache_Company, com_id);
@@ -181,6 +183,7 @@ public class MohurdFactory extends AbstractFactory {
                     redisUtils.hset(Constant.Cache_Person, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
                     try {
+                        String table = person.getTable();
                         //记录变更
                         Person old = mohurdService.selectPersonById(person);
                         if (null != old) {
@@ -192,6 +195,7 @@ public class MohurdFactory extends AbstractFactory {
                                 }
                             }
                         }
+                        person.setTable(table);
                         mohurdService.updatePerson(person);// 更新
                         logger.info(String.format("更新人员 %s", pkid));
                     } catch (Exception e) {

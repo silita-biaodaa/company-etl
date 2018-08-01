@@ -25,7 +25,7 @@
     </context:component-scan>
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
-    <!-- 加载redis配置文件 -->
+    <!-- 加载配置文件 -->
     <context:property-placeholder location="classpath:config/company-etl.properties"/>
 
     <import resource="applicationContext-datasource.xml"/>
@@ -40,23 +40,7 @@
         </property>
     </bean>
     <!-- spring与mybatis整合配置，扫描所有dao -->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
-          p:basePackage="com.silita.dao" p:sqlSessionFactoryBeanName="sqlSessionFactory"/>
-
-    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-    <tx:annotation-driven transaction-manager="txManager"/>
-    <tx:advice id="txAdvice" transaction-manager="txManager">
-        <tx:attributes>
-            <tx:method name="select*" read-only="true" propagation="NOT_SUPPORTED"/>
-            <tx:method name="*" rollback-for="java.lang.Exception" propagation="REQUIRED" isolation="SERIALIZABLE"/>
-        </tx:attributes>
-    </tx:advice>
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <!-- 以字节为单位的最大上传文件的大小 the maximum file size in bytes -->
-        <property name="maxUploadSize" value="6000000"/>
-    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" p:basePackage="com.silita.dao" p:sqlSessionFactoryBeanName="sqlSessionFactory"/>
 
     <import resource="applicationContext-redis.xml"/>
 </beans>

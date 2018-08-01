@@ -268,4 +268,20 @@ public class RedisUtils {
             }
         }
     }
+
+    public Long hdel(String key, String field) {
+        ShardedJedis jedis = null;
+        long result = 0;
+        try {
+            jedis = getJedis();
+            result = jedis.hdel(key, field);
+        } catch (Exception e) {
+            logger.error(e, e);
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return result;
+    }
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.DeleteCostCompanyMapper">
+    <!--查询出企业名称大于1的所有企业中的1个-->
+    <select id="selectAllCompanyByName" resultType="java.util.Map">
+        SELECT *, COUNT(com_name) as c from tb_company GROUP BY com_name HAVING c>1
+    </select>
+
+    <!--查询出统一社会信用代码大于1的所有企业中的1个-->
+    <select id="selectAllCompanyByCreditCode" resultType="java.util.Map">
+        SELECT *, COUNT(credit_code) as c from tb_company GROUP BY credit_code  HAVING c>1
+    </select>
+
+    <!--查询出组织机构代码大于1的所有企业中的1个-->
+    <select id="selectAllCompanyByOrgCode" resultType="java.util.Map">
+        SELECT *, COUNT(org_code) as c from tb_company GROUP BY org_code  HAVING c>1
+    </select>
+
+    <!--查询出营业执照编号大于1的所有企业中的1个-->
+    <select id="selectAllCompanyByBussNum" resultType="java.util.Map">
+        SELECT *, COUNT(business_num) as c from tb_company GROUP BY business_num  HAVING c>1
+    </select>
+
+    <!--通过公司名称查询出所有该名称的企业-->
+    <select id="selectCompany_Cost" parameterType="String" resultType="java.util.Map">
+        SELECT * from tb_company WHERE com_name=#{_parameter}
+    </select>
+
+    <!--通过企业id删除公司-->
+    <delete id="deleteCompanyById" parameterType="String">
+        delete FROM tb_company WHERE com_id=#{_parameter}
+    </delete>
+
+    <!--通过企业id查询所有资质-->
+    <select id="selectCompanyQual_Cost" parameterType="String" resultType="java.util.Map">
+        select * FROM tb_company_qualification WHERE com_id=#{_parameter}
+    </select>
+    <!--通过企业id删除所有资质-->
+    <delete id="deleteCompanyQualById" parameterType="String">
+        delete FROM tb_company_qualification WHERE pkid=#{_parameter}
+    </delete>
+
+    <!-- 删除人员信息 -->
+    <select id="selectPerson__Cost" parameterType="com.silita.model.Person" resultType="java.util.Map">
+        select * from tb_person_${table} where com_id=#{com_id}
+    </select>
+
+    <!-- 删除人员信息 -->
+    <delete id="deletePersonById" parameterType="com.silita.model.Person">
+        delete from tb_person_${table} where com_id=#{com_id}
+    </delete>
+</mapper>

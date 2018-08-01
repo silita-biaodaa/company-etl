@@ -142,7 +142,6 @@ public class BeanUtils {
                     fieldChange.setNew_value(StringUtils.defaultIfBlank(fieldValue1, ""));
                     fieldChange.setOld_value(StringUtils.defaultIfBlank(fieldValue2, ""));
                     list.add(fieldChange);
-                    logger.info(fieldChange.toString());
                 }
             }
         } catch (Exception e) {
