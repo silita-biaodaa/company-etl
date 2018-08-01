@@ -2,7 +2,7 @@ package com.silita.service;
 
 
 import com.google.common.collect.ImmutableMap;
-import com.silita.common.redis.RedisUtils;
+import com.silita.consumer.RedisUtils;
 import com.silita.dao.DeleteCostCompanyMapper;
 import com.silita.model.Person;
 import org.apache.commons.lang3.StringUtils;

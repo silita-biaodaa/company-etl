@@ -1,4 +1,4 @@
-package com.silita.common.redis;
+package com.silita.consumer;
 
 import org.apache.log4j.Logger;
 import redis.clients.jedis.Jedis;

@@ -1,4 +1,4 @@
-package com.silita.task;
+package com.silita.consumer;
 
 import com.silita.factory.MohurdFactory;
 import com.silita.model.Document;

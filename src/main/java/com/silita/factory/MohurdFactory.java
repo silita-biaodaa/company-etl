@@ -1,7 +1,8 @@
 package com.silita.factory;
 
 import com.silita.common.Constant;
-import com.silita.common.redis.RedisUtils;
+import com.silita.consumer.RedisUtils;
+import com.silita.consumer.RedisUtilsAlone;
 import com.silita.model.*;
 import com.silita.service.IAptitudeCleanService;
 import com.silita.service.MohurdService;
