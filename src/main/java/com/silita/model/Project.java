@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @Description: 项目基本信息
  */
 @FieldChangeRecord(table = "tb_project", id = "pro_id",
-        fields = {"pro_name", "pro_org", "pro_where", "pro_address", "invest_amount", "pro_type", "build_type", "acreage", "pro_scope", "pro_level", "pro_use"})
+        fields = {"pro_name", "pro_org", "pro_where", "pro_address", "invest_amount", "approval_num", "pro_type", "build_type", "acreage", "pro_scope", "pro_level", "pro_use"})
 public class Project implements Serializable {
     private static final long serialVersionUID = -1778854576294232827L;
     /**
