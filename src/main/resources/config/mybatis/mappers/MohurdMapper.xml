@@ -118,7 +118,7 @@
 
     <!-- 更新人员信息 -->
     <update id="updatePerson" parameterType="com.silita.model.Person">
-        update tb_person_${table} set md5=#{md5}, `name`=#{name}, sex=#{sex}, id_card=#{id_card}, innerid=#{innerid}, category=#{category}, cert_no=#{cert_no}, seal_no=#{seal_no}, major=#{major}, cert_date=#{cert_date}, valid_date=#{valid_date}, url=#{url}, updated=NOW()
+        update tb_person_${table} set md5=#{md5}, `name`=#{name}, sex=#{sex}, id_card=#{id_card}, innerid=#{innerid}, category=#{category}, cert_no=#{cert_no}, seal_no=#{seal_no}, major=#{major}, cert_date=#{cert_date}, valid_date=#{valid_date}, url=#{url}, com_id=#{com_id}, com_name=#{com_name}, updated=NOW()
         where pkid=#{pkid}
     </update>
 
@@ -143,7 +143,7 @@
 
     <!-- 更新人员变更记录 -->
     <update id="updatePersonChange" parameterType="com.silita.model.PersonChange">
-        update tb_person_change set md5=#{md5}, major=#{major}, change_date=#{change_date}, remark=#{remark}, updated=NOW()
+        update tb_person_change set md5=#{md5}, com_name=#{com_name}, major=#{major}, change_date=#{change_date}, remark=#{remark}, updated=NOW()
         where pkid=#{pkid}
     </update>
 
@@ -170,7 +170,7 @@
 
     <!-- 更新项目基本信息 -->
     <update id="updateProject" parameterType="com.silita.model.Project">
-        update tb_project set md5=#{md5}, xmid=#{xmid}, pro_name=#{pro_name}, pro_no=#{pro_no}, pro_org=#{pro_org}, pro_org_code=#{pro_org_code}, pro_where=#{pro_where}, invest_amount=#{invest_amount}, approval_num=#{approval_num}, pro_type=#{pro_type}, build_type=#{build_type}, acreage=#{acreage}, pro_scope=#{pro_scope}, pro_level=#{pro_level}, pro_use=#{pro_use}, url=#{url}, updated=NOW()
+        update tb_project set md5=#{md5}, xmid=#{xmid}, com_name=#{com_name}, pro_name=#{pro_name}, pro_no=#{pro_no}, pro_org=#{pro_org}, pro_org_code=#{pro_org_code}, pro_where=#{pro_where}, pro_address=#{pro_address}, invest_amount=#{invest_amount}, approval_num=#{approval_num}, pro_type=#{pro_type}, build_type=#{build_type}, acreage=#{acreage}, pro_scope=#{pro_scope}, pro_level=#{pro_level}, pro_use=#{pro_use}, url=#{url}, updated=NOW()
         where pro_id=#{pro_id}
     </update>
 
@@ -204,7 +204,7 @@
 
     <!-- 更新人员和项目的关系 -->
     <update id="updatePersonProject" parameterType="com.silita.model.PersonProject">
-        update tb_person_project set md5=#{md5}, innerid=#{innerid}, com_name=#{com_name}, id_card=#{id_card}, major=#{major}, category=#{category}, cert_no=#{cert_no}, type=#{type}, role=#{role}, remark=#{remark}, updated=NOW()
+        update tb_person_project set md5=#{md5}, innerid=#{innerid}, com_name=#{com_name}, major=#{major}, category=#{category}, cert_no=#{cert_no}, type=#{type}, role=#{role}, remark=#{remark}, updated=NOW()
         where pkid=#{pkid}
     </update>
 
@@ -238,7 +238,7 @@
 
     <!-- 更新项目和公司关系 -->
     <update id="updateProjectCompany" parameterType="com.silita.model.ProjectCompany">
-        update tb_project_company set md5=#{md5}, org_code=#{org_code}, province=#{province}, role=#{role}, updated=NOW()
+        update tb_project_company set md5=#{md5}, innerId=#{innerId}, com_name=#{com_name}, org_code=#{org_code}, province=#{province}, role=#{role}, updated=NOW()
         where pkid=#{pkid}
     </update>
 
@@ -268,7 +268,7 @@
 
     <!-- 更新招投标 -->
     <update id="updateZhaoTouBiao" parameterType="com.silita.model.ZhaoTouBiao">
-        update tb_project_zhaotoubiao set md5#{md5}, prov_zhongbiao_code=#{prov_zhongbiao_code}, zhaobiao_type=#{zhaobiao_type}, zhaobiao_way=#{zhaobiao_way}, zhongbiao_date=#{zhongbiao_date}, zhongbiao_amount=#{zhongbiao_amount}, build_scale=#{build_scale}, area=#{area}, zhaobiao_agency_company=#{zhaobiao_agency_company}, zhaobiao_company_code=#{zhaobiao_company_code}, zhongbiao_company=#{zhongbiao_company}, zhongbiao_company_code=#{zhongbiao_company_code}, record_date=#{record_date}, updated=NOW()
+        update tb_project_zhaotoubiao set md5=#{md5}, prov_zhongbiao_code=#{prov_zhongbiao_code}, zhaobiao_type=#{zhaobiao_type}, zhaobiao_way=#{zhaobiao_way}, zhongbiao_date=#{zhongbiao_date}, zhongbiao_amount=#{zhongbiao_amount}, build_scale=#{build_scale}, area=#{area}, zhaobiao_agency_company=#{zhaobiao_agency_company}, zhaobiao_company_code=#{zhaobiao_company_code}, zhongbiao_company=#{zhongbiao_company}, zhongbiao_company_code=#{zhongbiao_company_code}, record_date=#{record_date}, updated=NOW()
         where pkid=#{pkid}
     </update>
 

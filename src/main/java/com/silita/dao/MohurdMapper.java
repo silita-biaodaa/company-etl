@@ -42,21 +42,21 @@ public interface MohurdMapper {
      *
      * @param company
      */
-    public void insertCompany(Company company);
+    public int insertCompany(Company company);
 
     /**
      * 更新企业
      *
      * @param company
      */
-    public void updateCompany(Company company);
+    public int updateCompany(Company company);
 
     /**
      * 插入企业资质
      *
      * @param qualification
      */
-    public void insertCompanyQualification(CompanyQualification qualification);
+    public int insertCompanyQualification(CompanyQualification qualification);
 
     /**
      * 通过id查询企业资质
@@ -79,7 +79,7 @@ public interface MohurdMapper {
      *
      * @param companyQualification
      */
-    public void updateCompanyQualification(CompanyQualification companyQualification);
+    public int updateCompanyQualification(CompanyQualification companyQualification);
 
     /**
      * 查询人员信息
@@ -109,7 +109,7 @@ public interface MohurdMapper {
      *
      * @param person
      */
-    public void updatePerson(Person person);
+    public int updatePerson(Person person);
 
     /**
      * 查询人员变更记录
@@ -124,14 +124,14 @@ public interface MohurdMapper {
      *
      * @param personChange
      */
-    public void insertPersonChange(PersonChange personChange);
+    public int insertPersonChange(PersonChange personChange);
 
     /**
      * 更新人员变更记录
      *
      * @param personChange
      */
-    public void updatePersonChange(PersonChange personChange);
+    public int updatePersonChange(PersonChange personChange);
 
     /**
      * 查询项目基本信息
@@ -154,14 +154,14 @@ public interface MohurdMapper {
      *
      * @param project
      */
-    public void insertProject(Project project);
+    public int insertProject(Project project);
 
     /**
      * 更新项目基本信息
      *
      * @param project
      */
-    public void updateProject(Project project);
+    public int updateProject(Project project);
 
     /**
      * 查询招投标
@@ -184,14 +184,14 @@ public interface MohurdMapper {
      *
      * @param zhaoTouBiao
      */
-    public void insertZhaoTouBiao(ZhaoTouBiao zhaoTouBiao);
+    public int insertZhaoTouBiao(ZhaoTouBiao zhaoTouBiao);
 
     /**
      * 更新招投标
      *
      * @param zhaoTouBiao
      */
-    public void updateZhaoTouBiao(ZhaoTouBiao zhaoTouBiao);
+    public int updateZhaoTouBiao(ZhaoTouBiao zhaoTouBiao);
 
     /**
      * 查询人员和项目的关系
@@ -206,14 +206,14 @@ public interface MohurdMapper {
      *
      * @param personProject
      */
-    public void insertPersonProject(PersonProject personProject);
+    public int insertPersonProject(PersonProject personProject);
 
     /**
      * 更新人员和项目的关系
      *
      * @param personProject
      */
-    public void updatePersonProject(PersonProject personProject);
+    public int updatePersonProject(PersonProject personProject);
 
     /**
      * 查询施工图审查
@@ -236,14 +236,14 @@ public interface MohurdMapper {
      *
      * @param shencha
      */
-    public void insertShiGongTuShenCha(ShiGongTuShenCha shencha);
+    public int insertShiGongTuShenCha(ShiGongTuShenCha shencha);
 
     /**
      * 更新施工图审查
      *
      * @param shencha
      */
-    public void updateShiGongTuShenCha(ShiGongTuShenCha shencha);
+    public int updateShiGongTuShenCha(ShiGongTuShenCha shencha);
 
     /**
      * 查询项目和公司的关系
@@ -258,14 +258,14 @@ public interface MohurdMapper {
      *
      * @param projectCompany
      */
-    public void insertProjectCompany(ProjectCompany projectCompany);
+    public int insertProjectCompany(ProjectCompany projectCompany);
 
     /**
      * 更新项目和公司的关系
      *
      * @param projectCompany
      */
-    public void updateProjectCompany(ProjectCompany projectCompany);
+    public int updateProjectCompany(ProjectCompany projectCompany);
 
     /**
      * 查询施工许可
@@ -288,14 +288,14 @@ public interface MohurdMapper {
      *
      * @param shiGongXuKe
      */
-    public void insertShiGongXuKe(ShiGongXuKe shiGongXuKe);
+    public int insertShiGongXuKe(ShiGongXuKe shiGongXuKe);
 
     /**
      * 更新施工许可
      *
      * @param shiGongXuKe
      */
-    public void updateShiGongXuKe(ShiGongXuKe shiGongXuKe);
+    public int updateShiGongXuKe(ShiGongXuKe shiGongXuKe);
 
     /**
      * 查询合同备案
@@ -318,14 +318,14 @@ public interface MohurdMapper {
      *
      * @param heTongBeiAn
      */
-    public void insertHeTongBeiAn(HeTongBeiAn heTongBeiAn);
+    public int insertHeTongBeiAn(HeTongBeiAn heTongBeiAn);
 
     /**
      * 更新合同备案
      *
      * @param heTongBeiAn
      */
-    public void updateHeTongBeiAn(HeTongBeiAn heTongBeiAn);
+    public int updateHeTongBeiAn(HeTongBeiAn heTongBeiAn);
 
     /**
      * 查询竣工验收备案
@@ -348,14 +348,14 @@ public interface MohurdMapper {
      *
      * @param junGongBeiAn
      */
-    public void insertJunGongBeiAn(JunGongBeiAn junGongBeiAn);
+    public int insertJunGongBeiAn(JunGongBeiAn junGongBeiAn);
 
     /**
      * 更新竣工验收备案
      *
      * @param junGongBeiAn
      */
-    public void updateJunGongBeiAn(JunGongBeiAn junGongBeiAn);
+    public int updateJunGongBeiAn(JunGongBeiAn junGongBeiAn);
 
     /**
      * 查出未抓到资质的公司重新放回抓取队列
@@ -370,5 +370,5 @@ public interface MohurdMapper {
      *
      * @param change
      */
-    public void insertFieldChangeRecord(FieldChange change);
+    public int insertFieldChangeRecord(FieldChange change);
 }

@@ -69,8 +69,8 @@ public class MohurdService {
      * @param company
      * @return
      */
-    public void insertCompany(Company company) {
-        mohurdMapper.insertCompany(company);
+    public int insertCompany(Company company) {
+        return mohurdMapper.insertCompany(company);
     }
 
     /**
@@ -78,7 +78,8 @@ public class MohurdService {
      *
      * @param company
      */
-    public void updateCompany(Company company) {
+    public int updateCompany(Company company) {
+        int result = 0;
         if (StringUtils.isNotBlank(company.getType())) {//造价企业
             Company com = mohurdMapper.selectCompanyById(company.getCom_id());
             if (StringUtils.isBlank(com.getBusiness_num())) {
@@ -90,10 +91,11 @@ public class MohurdService {
             if (StringUtils.isBlank(com.getOrg_code())) {
                 com.setOrg_code(company.getOrg_code());
             }
-            mohurdMapper.updateCompany(com);
+            result = mohurdMapper.updateCompany(com);
         } else {//非造价企业
-            mohurdMapper.updateCompany(company);
+            result = mohurdMapper.updateCompany(company);
         }
+        return result;
     }
 
     /**
@@ -101,8 +103,8 @@ public class MohurdService {
      *
      * @param qualification
      */
-    public void insertCompanyQualification(CompanyQualification qualification) {
-        mohurdMapper.insertCompanyQualification(qualification);
+    public int insertCompanyQualification(CompanyQualification qualification) {
+        return mohurdMapper.insertCompanyQualification(qualification);
     }
 
     /**
@@ -130,10 +132,11 @@ public class MohurdService {
      *
      * @param companyQualification
      */
-    public void updateCompanyQualification(CompanyQualification companyQualification) {
+    public int updateCompanyQualification(CompanyQualification companyQualification) {
         if (StringUtils.isNotBlank(companyQualification.getPkid())) {
-            mohurdMapper.updateCompanyQualification(companyQualification);
+            return mohurdMapper.updateCompanyQualification(companyQualification);
         }
+        return 0;
     }
 
     /**
@@ -170,10 +173,11 @@ public class MohurdService {
      *
      * @param person
      */
-    public void updatePerson(Person person) {
+    public int updatePerson(Person person) {
         if (StringUtils.isNotBlank(person.getPkid())) {
-            mohurdMapper.updatePerson(person);
+            return mohurdMapper.updatePerson(person);
         }
+        return 0;
     }
 
     /**
@@ -191,8 +195,8 @@ public class MohurdService {
      *
      * @param personChange
      */
-    public void insertPersonChange(PersonChange personChange) {
-        mohurdMapper.insertPersonChange(personChange);
+    public int insertPersonChange(PersonChange personChange) {
+        return mohurdMapper.insertPersonChange(personChange);
     }
 
     /**
@@ -200,10 +204,11 @@ public class MohurdService {
      *
      * @param personChange
      */
-    public void updatePersonChange(PersonChange personChange) {
+    public int updatePersonChange(PersonChange personChange) {
         if (StringUtils.isNotBlank(personChange.getPkid())) {
-            mohurdMapper.updatePersonChange(personChange);
+            return mohurdMapper.updatePersonChange(personChange);
         }
+        return 0;
     }
 
     /**
@@ -231,8 +236,8 @@ public class MohurdService {
      *
      * @param project
      */
-    public void insertProject(Project project) {
-        mohurdMapper.insertProject(project);
+    public int insertProject(Project project) {
+        return mohurdMapper.insertProject(project);
     }
 
     /**
@@ -240,10 +245,11 @@ public class MohurdService {
      *
      * @param project
      */
-    public void updateProject(Project project) {
+    public int updateProject(Project project) {
         if (StringUtils.isNotBlank(project.getPro_id())) {
-            mohurdMapper.updateProject(project);
+            return mohurdMapper.updateProject(project);
         }
+        return 0;
     }
 
     /**
@@ -271,8 +277,8 @@ public class MohurdService {
      *
      * @param zhaoTouBiao
      */
-    public void insertZhaoTouBiao(ZhaoTouBiao zhaoTouBiao) {
-        mohurdMapper.insertZhaoTouBiao(zhaoTouBiao);
+    public int insertZhaoTouBiao(ZhaoTouBiao zhaoTouBiao) {
+        return mohurdMapper.insertZhaoTouBiao(zhaoTouBiao);
     }
 
     /**
@@ -280,10 +286,11 @@ public class MohurdService {
      *
      * @param zhaoTouBiao
      */
-    public void updateZhaoTouBiao(ZhaoTouBiao zhaoTouBiao) {
+    public int updateZhaoTouBiao(ZhaoTouBiao zhaoTouBiao) {
         if (StringUtils.isNotBlank(zhaoTouBiao.getPkid())) {
-            mohurdMapper.updateZhaoTouBiao(zhaoTouBiao);
+            return mohurdMapper.updateZhaoTouBiao(zhaoTouBiao);
         }
+        return 0;
     }
 
     /**
@@ -300,8 +307,8 @@ public class MohurdService {
      *
      * @param personProject
      */
-    public void insertPersonProject(PersonProject personProject) {
-        mohurdMapper.insertPersonProject(personProject);
+    public int insertPersonProject(PersonProject personProject) {
+        return mohurdMapper.insertPersonProject(personProject);
     }
 
     /**
@@ -309,10 +316,11 @@ public class MohurdService {
      *
      * @param personProject
      */
-    public void updatePersonProject(PersonProject personProject) {
+    public int updatePersonProject(PersonProject personProject) {
         if (StringUtils.isNotBlank(personProject.getPkid())) {
-            mohurdMapper.updatePersonProject(personProject);
+            return mohurdMapper.updatePersonProject(personProject);
         }
+        return 0;
     }
 
     /**
@@ -340,8 +348,8 @@ public class MohurdService {
      *
      * @param shencha
      */
-    public void insertShiGongTuShenCha(ShiGongTuShenCha shencha) {
-        mohurdMapper.insertShiGongTuShenCha(shencha);
+    public int insertShiGongTuShenCha(ShiGongTuShenCha shencha) {
+        return mohurdMapper.insertShiGongTuShenCha(shencha);
     }
 
     /**
@@ -349,10 +357,11 @@ public class MohurdService {
      *
      * @param shencha
      */
-    public void updateShiGongTuShenCha(ShiGongTuShenCha shencha) {
+    public int updateShiGongTuShenCha(ShiGongTuShenCha shencha) {
         if (StringUtils.isNotBlank(shencha.getPkid())) {
-            mohurdMapper.updateShiGongTuShenCha(shencha);
+            return mohurdMapper.updateShiGongTuShenCha(shencha);
         }
+        return 0;
     }
 
     /**
@@ -379,10 +388,11 @@ public class MohurdService {
      *
      * @param projectCompany
      */
-    public void insertProjectCompany(ProjectCompany projectCompany) {
+    public int insertProjectCompany(ProjectCompany projectCompany) {
         if (StringUtils.isNotBlank(projectCompany.getCom_name())) {
-            mohurdMapper.insertProjectCompany(projectCompany);
+            return mohurdMapper.insertProjectCompany(projectCompany);
         }
+        return 0;
     }
 
     /**
@@ -390,10 +400,11 @@ public class MohurdService {
      *
      * @param projectCompany
      */
-    public void updateProjectCompany(ProjectCompany projectCompany) {
+    public int updateProjectCompany(ProjectCompany projectCompany) {
         if (StringUtils.isNotBlank(projectCompany.getCom_name()) && StringUtils.isNotBlank(projectCompany.getPro_id())) {
-            mohurdMapper.updateProjectCompany(projectCompany);
+            return mohurdMapper.updateProjectCompany(projectCompany);
         }
+        return 0;
     }
 
     /**
@@ -421,8 +432,8 @@ public class MohurdService {
      *
      * @param shiGongXuKe
      */
-    public void insertShiGongXuKe(ShiGongXuKe shiGongXuKe) {
-        mohurdMapper.insertShiGongXuKe(shiGongXuKe);
+    public int insertShiGongXuKe(ShiGongXuKe shiGongXuKe) {
+        return mohurdMapper.insertShiGongXuKe(shiGongXuKe);
     }
 
     /**
@@ -430,10 +441,11 @@ public class MohurdService {
      *
      * @param shiGongXuKe
      */
-    public void updateShiGongXuKe(ShiGongXuKe shiGongXuKe) {
+    public int updateShiGongXuKe(ShiGongXuKe shiGongXuKe) {
         if (StringUtils.isNotBlank(shiGongXuKe.getPkid())) {
-            mohurdMapper.updateShiGongXuKe(shiGongXuKe);
+            return mohurdMapper.updateShiGongXuKe(shiGongXuKe);
         }
+        return 0;
     }
 
     /**
@@ -461,8 +473,8 @@ public class MohurdService {
      *
      * @param heTongBeiAn
      */
-    public void insertHeTongBeiAn(HeTongBeiAn heTongBeiAn) {
-        mohurdMapper.insertHeTongBeiAn(heTongBeiAn);
+    public int insertHeTongBeiAn(HeTongBeiAn heTongBeiAn) {
+        return mohurdMapper.insertHeTongBeiAn(heTongBeiAn);
     }
 
     /**
@@ -470,10 +482,11 @@ public class MohurdService {
      *
      * @param heTongBeiAn
      */
-    public void updateHeTongBeiAn(HeTongBeiAn heTongBeiAn) {
+    public int updateHeTongBeiAn(HeTongBeiAn heTongBeiAn) {
         if (StringUtils.isNotBlank(heTongBeiAn.getPkid())) {
-            mohurdMapper.updateHeTongBeiAn(heTongBeiAn);
+            return mohurdMapper.updateHeTongBeiAn(heTongBeiAn);
         }
+        return 0;
     }
 
     /**
@@ -501,8 +514,8 @@ public class MohurdService {
      *
      * @param junGongBeiAn
      */
-    public void insertJunGongBeiAn(JunGongBeiAn junGongBeiAn) {
-        mohurdMapper.insertJunGongBeiAn(junGongBeiAn);
+    public int insertJunGongBeiAn(JunGongBeiAn junGongBeiAn) {
+        return mohurdMapper.insertJunGongBeiAn(junGongBeiAn);
     }
 
     /**
@@ -510,10 +523,11 @@ public class MohurdService {
      *
      * @param junGongBeiAn
      */
-    public void updateJunGongBeiAn(JunGongBeiAn junGongBeiAn) {
+    public int updateJunGongBeiAn(JunGongBeiAn junGongBeiAn) {
         if (StringUtils.isNotBlank(junGongBeiAn.getPkid())) {
-            mohurdMapper.updateJunGongBeiAn(junGongBeiAn);
+            return mohurdMapper.updateJunGongBeiAn(junGongBeiAn);
         }
+        return 0;
     }
 
     /**
@@ -531,7 +545,7 @@ public class MohurdService {
      *
      * @param change
      */
-    public void insertFieldChangeRecord(FieldChange change) {
-        mohurdMapper.insertFieldChangeRecord(change);
+    public int insertFieldChangeRecord(FieldChange change) {
+        return mohurdMapper.insertFieldChangeRecord(change);
     }
 }

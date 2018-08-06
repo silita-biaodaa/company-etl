@@ -1,8 +1,8 @@
 package com.silita.factory;
 
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import com.silita.common.Constant;
 import com.silita.consumer.RedisUtils;
-import com.silita.consumer.RedisUtilsAlone;
 import com.silita.model.*;
 import com.silita.service.IAptitudeCleanService;
 import com.silita.service.MohurdService;
@@ -43,7 +43,7 @@ public class MohurdFactory extends AbstractFactory {
             String com_id = company.getCom_id();
             String md5 = company.getMd5();
             String com_name = company.getCom_name();
-            com_name = com_name.replaceAll("（|）| |:|：|，|,|;|,|(|)|·|、", "");//去除特殊符号
+            com_name = com_name.replaceAll("（|）| |:|：|，|,|;|,|(|)|·|、", "").trim();//去除特殊符号
             company.setCom_name_py(Pinyin.getPinYinFirstChar(com_name));//得到拼音首字母
             boolean exists = redisUtils.hexists(Constant.Cache_Company, md5);
             if (!exists) {//实体MD5不存在
@@ -52,30 +52,24 @@ public class MohurdFactory extends AbstractFactory {
                     try {
                         String id = mohurdService.selectCompany(company);
                         if (StringUtils.isBlank(id)) {
-                            mohurdService.insertCompany(company);//新增
-                            logger.info(String.format("新增企业基本信息 %s", com_id));
+                            int result = mohurdService.insertCompany(company);//新增
+                            if (result > 0) {
+                                logger.info(String.format("新增企业基本信息 %s", com_id));
+                            }
+                        } else {
+                            company.setCom_id(id);
+                            updateCompany(company);
                         }
                     } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
+                        if (e instanceof MySQLIntegrityConstraintViolationException) {
+                            //忽略主键冲突异常
+                        } else {
+                            logger.warn(ExceptionUtils.getMessage(e));
+                        }
                     }
                     redisUtils.hset(Constant.Cache_Company, com_id, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    try {
-                        // 记录变更
-                        Company old = mohurdService.selectCompanyById(com_id);
-                        if (null != old) {
-                            List<FieldChange> changes = BeanUtils.compare(company, old);
-                            if (!changes.isEmpty()) {
-                                for (FieldChange change : changes) {
-                                    mohurdService.insertFieldChangeRecord(change);
-                                }
-                            }
-                        }
-                        mohurdService.updateCompany(company);// 更新
-                        logger.info(String.format("更新企业基本信息 %s", com_id));
-                    } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
-                    }
+                    updateCompany(company);
                 }
                 redisUtils.hset(Constant.Cache_Company, md5, "");
             } else {
@@ -92,33 +86,24 @@ public class MohurdFactory extends AbstractFactory {
                     try {
                         String id = mohurdService.selectCompanyQualification(qualification);
                         if (StringUtils.isBlank(id)) {
-                            mohurdService.insertCompanyQualification(qualification);//新增
-                            logger.info(String.format("新增企业资质 %s", pkid));
+                            int result = mohurdService.insertCompanyQualification(qualification);//新增
+                            if (result > 0) {
+                                logger.info(String.format("新增企业资质 %s", pkid));
+                            }
+                        } else {
+                            qualification.setPkid(id);
+                            updateCompanyQual(qualification);
                         }
                     } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
+                        if (e instanceof MySQLIntegrityConstraintViolationException) {
+                            //忽略主键冲突异常
+                        } else {
+                            logger.warn(ExceptionUtils.getMessage(e));
+                        }
                     }
                     redisUtils.hset(Constant.Cache_CompanyQual, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    try {
-                        // 记录变更
-                        CompanyQualification old = mohurdService.selectCompanyQualById(pkid);
-                        if (null != old) {
-                            List<FieldChange> changes = BeanUtils.compare(qualification, old);
-                            if (!changes.isEmpty()) {
-                                for (FieldChange change : changes) {
-                                    mohurdService.insertFieldChangeRecord(change);
-                                }
-                            }
-                        }
-                        mohurdService.updateCompanyQualification(qualification);// 更新
-                        logger.info(String.format("更新企业资质 %s", pkid));
-                        //洗资质
-                        aptitudeCleanService.splitCompanyAptitudeByCompanyId(qualification.getCom_id());
-                        aptitudeCleanService.updateCompanyAptitude(qualification.getCom_id());
-                    } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
-                    }
+                    updateCompanyQual(qualification);
                 }
                 redisUtils.hset(Constant.Cache_CompanyQual, md5, "");
             } else {
@@ -135,30 +120,24 @@ public class MohurdFactory extends AbstractFactory {
                     try {
                         String id = mohurdService.selectProject(project);
                         if (StringUtils.isBlank(id)) {
-                            mohurdService.insertProject(project);//新增
-                            logger.info(String.format("新增项目 %s", pkid));
+                            int result = mohurdService.insertProject(project);//新增
+                            if (result > 0) {
+                                logger.info(String.format("新增项目 %s", pkid));
+                            }
+                        } else {
+                            project.setPro_id(id);
+                            updateProject(project);
                         }
                     } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
+                        if (e instanceof MySQLIntegrityConstraintViolationException) {
+                            //忽略主键冲突异常
+                        } else {
+                            logger.warn(ExceptionUtils.getMessage(e));
+                        }
                     }
                     redisUtils.hset(Constant.Cache_Project, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    try {
-                        //记录变更
-                        Project old = mohurdService.selectProjectById(pkid);
-                        if (null != old) {
-                            List<FieldChange> changes = BeanUtils.compare(project, old);
-                            if (!changes.isEmpty()) {
-                                for (FieldChange change : changes) {
-                                    mohurdService.insertFieldChangeRecord(change);
-                                }
-                            }
-                        }
-                        mohurdService.updateProject(project);// 更新
-                        logger.info(String.format("更新项目 %s", pkid));
-                    } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
-                    }
+                    updateProject(project);
                 }
                 redisUtils.hset(Constant.Cache_Project, md5, "");
             } else {
@@ -175,33 +154,24 @@ public class MohurdFactory extends AbstractFactory {
                     try {
                         String id = mohurdService.selectPerson(person);
                         if (StringUtils.isBlank(id)) {
-                            mohurdService.insertPerson(person);//新增
-                            logger.info(String.format("新增人员 %s", pkid));
+                            String result = mohurdService.insertPerson(person);//新增
+                            if (StringUtils.isNotBlank(result)) {
+                                logger.info(String.format("新增人员 %s", pkid));
+                            }
+                        } else {
+                            person.setPkid(id);
+                            updatePerson(person);
                         }
                     } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
+                        if (e instanceof MySQLIntegrityConstraintViolationException) {
+                            //忽略主键冲突异常
+                        } else {
+                            logger.warn(ExceptionUtils.getMessage(e));
+                        }
                     }
                     redisUtils.hset(Constant.Cache_Person, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    try {
-                        String table = person.getTable();
-                        //记录变更
-                        Person old = mohurdService.selectPersonById(person);
-                        if (null != old) {
-                            person.setTable("tb_person_" + person.getTable());
-                            List<FieldChange> changes = BeanUtils.compare(person, old);
-                            if (!changes.isEmpty()) {
-                                for (FieldChange change : changes) {
-                                    mohurdService.insertFieldChangeRecord(change);
-                                }
-                            }
-                        }
-                        person.setTable(table);
-                        mohurdService.updatePerson(person);// 更新
-                        logger.info(String.format("更新人员 %s", pkid));
-                    } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
-                    }
+                    updatePerson(person);
                 }
                 redisUtils.hset(Constant.Cache_Person, md5, "");
             } else {
@@ -218,20 +188,24 @@ public class MohurdFactory extends AbstractFactory {
                     try {
                         String id = mohurdService.selectPersonChange(change);
                         if (StringUtils.isBlank(id)) {
-                            mohurdService.insertPersonChange(change);//新增
-                            logger.info(String.format("新增人员变更 %s", pkid));
+                            int result = mohurdService.insertPersonChange(change);//新增
+                            if (result > 0) {
+                                logger.info(String.format("新增人员变更 %s", pkid));
+                            }
+                        } else {
+                            change.setPkid(id);
+                            updatePersonChange(change);
                         }
                     } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
+                        if (e instanceof MySQLIntegrityConstraintViolationException) {
+                            //忽略主键冲突异常
+                        } else {
+                            logger.warn(ExceptionUtils.getMessage(e));
+                        }
                     }
                     redisUtils.hset(Constant.Cache_PersonChange, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    try {
-                        mohurdService.updatePersonChange(change);// 更新
-                        logger.info(String.format("更新人员变更 %s", pkid));
-                    } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
-                    }
+                    updatePersonChange(change);
                 }
                 redisUtils.hset(Constant.Cache_PersonChange, md5, "");
             } else {
@@ -248,20 +222,24 @@ public class MohurdFactory extends AbstractFactory {
                     try {
                         String id = mohurdService.selectPersonProject(personProject);
                         if (StringUtils.isBlank(id)) {
-                            mohurdService.insertPersonProject(personProject);//新增
-                            logger.info(String.format("新增人员项目关系 %s", pkid));
+                            int result = mohurdService.insertPersonProject(personProject);//新增
+                            if (result > 0) {
+                                logger.info(String.format("新增人员项目关系 %s", pkid));
+                            }
+                        } else {
+                            personProject.setPkid(id);
+                            updatePersonProject(personProject);
                         }
                     } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
+                        if (e instanceof MySQLIntegrityConstraintViolationException) {
+                            //忽略主键冲突异常
+                        } else {
+                            logger.warn(ExceptionUtils.getMessage(e));
+                        }
                     }
                     redisUtils.hset(Constant.Cache_PersonProject, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    try {
-                        mohurdService.updatePersonProject(personProject);// 更新
-                        logger.info(String.format("更新人员项目关系 %s", pkid));
-                    } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
-                    }
+                    updatePersonProject(personProject);
                 }
                 redisUtils.hset(Constant.Cache_PersonProject, md5, "");
             } else {
@@ -278,20 +256,24 @@ public class MohurdFactory extends AbstractFactory {
                     try {
                         String id = mohurdService.selectProjectCompany(projectCompany);
                         if (StringUtils.isBlank(id)) {
-                            mohurdService.insertProjectCompany(projectCompany);//新增
-                            logger.info(String.format("新增项目企业关系 %s", pkid));
+                            int result = mohurdService.insertProjectCompany(projectCompany);//新增
+                            if (result > 0) {
+                                logger.info(String.format("新增项目企业关系 %s", pkid));
+                            }
+                        } else {
+                            projectCompany.setPkid(pkid);
+                            updateProjectCompany(projectCompany);
                         }
                     } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
+                        if (e instanceof MySQLIntegrityConstraintViolationException) {
+                            //忽略主键冲突异常
+                        } else {
+                            logger.warn(ExceptionUtils.getMessage(e));
+                        }
                     }
                     redisUtils.hset(Constant.Cache_ProjectCompany, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    try {
-                        mohurdService.updateProjectCompany(projectCompany);// 更新
-                        logger.info(String.format("更新项目企业关系 %s", pkid));
-                    } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
-                    }
+                    updateProjectCompany(projectCompany);
                 }
                 redisUtils.hset(Constant.Cache_ProjectCompany, md5, "");
             } else {
@@ -308,30 +290,24 @@ public class MohurdFactory extends AbstractFactory {
                     try {
                         String id = mohurdService.selectZhaoTouBiao(zhaoTouBiao);
                         if (StringUtils.isBlank(id)) {
-                            mohurdService.insertZhaoTouBiao(zhaoTouBiao);//新增
-                            logger.info(String.format("新增招投标 %s", pkid));
+                            int result = mohurdService.insertZhaoTouBiao(zhaoTouBiao);//新增
+                            if (result > 0) {
+                                logger.info(String.format("新增招投标 %s", pkid));
+                            }
+                        } else {
+                            zhaoTouBiao.setPkid(id);
+                            updateZhaoTouBiao(zhaoTouBiao);
                         }
                     } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
+                        if (e instanceof MySQLIntegrityConstraintViolationException) {
+                            //忽略主键冲突异常
+                        } else {
+                            logger.warn(ExceptionUtils.getMessage(e));
+                        }
                     }
                     redisUtils.hset(Constant.Cache_ZhaoTouBiao, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    try {
-                        //记录变更
-                        ZhaoTouBiao old = mohurdService.selectZhaoTouBiaoById(pkid);
-                        if (null != old) {
-                            List<FieldChange> changes = BeanUtils.compare(zhaoTouBiao, old);
-                            if (!changes.isEmpty()) {
-                                for (FieldChange change : changes) {
-                                    mohurdService.insertFieldChangeRecord(change);
-                                }
-                            }
-                        }
-                        mohurdService.updateZhaoTouBiao(zhaoTouBiao);// 更新
-                        logger.info(String.format("更新招投标 %s", pkid));
-                    } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
-                    }
+                    updateZhaoTouBiao(zhaoTouBiao);
                 }
                 redisUtils.hset(Constant.Cache_ZhaoTouBiao, md5, "");
             } else {
@@ -348,30 +324,24 @@ public class MohurdFactory extends AbstractFactory {
                     try {
                         String id = mohurdService.selectShiGongTuShenCha(shiGongTuShenCha);
                         if (StringUtils.isBlank(id)) {
-                            mohurdService.insertShiGongTuShenCha(shiGongTuShenCha);//新增
-                            logger.info(String.format("新增施工图审查 %s", pkid));
+                            int result = mohurdService.insertShiGongTuShenCha(shiGongTuShenCha);//新增
+                            if (result > 0) {
+                                logger.info(String.format("新增施工图审查 %s", pkid));
+                            }
+                        } else {
+                            shiGongTuShenCha.setPkid(id);
+                            updateShiGongTuShenCha(shiGongTuShenCha);
                         }
                     } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
+                        if (e instanceof MySQLIntegrityConstraintViolationException) {
+                            //忽略主键冲突异常
+                        } else {
+                            logger.warn(ExceptionUtils.getMessage(e));
+                        }
                     }
                     redisUtils.hset(Constant.Cache_ShiGongTuShenCha, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    try {
-                        //记录变更
-                        ShiGongTuShenCha old = mohurdService.selectShiGongTuShenChaById(pkid);
-                        if (null != old) {
-                            List<FieldChange> changes = BeanUtils.compare(shiGongTuShenCha, old);
-                            if (!changes.isEmpty()) {
-                                for (FieldChange change : changes) {
-                                    mohurdService.insertFieldChangeRecord(change);
-                                }
-                            }
-                        }
-                        mohurdService.updateShiGongTuShenCha(shiGongTuShenCha);// 更新
-                        logger.info(String.format("更新施工图审查 %s", pkid));
-                    } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
-                    }
+                    updateShiGongTuShenCha(shiGongTuShenCha);
                 }
                 redisUtils.hset(Constant.Cache_ShiGongTuShenCha, md5, "");
             } else {
@@ -388,30 +358,24 @@ public class MohurdFactory extends AbstractFactory {
                     try {
                         String id = mohurdService.selectShiGongXuKe(shiGongXuKe);
                         if (StringUtils.isBlank(id)) {
-                            mohurdService.insertShiGongXuKe(shiGongXuKe);//新增
-                            logger.info(String.format("新增施工许可 %s", pkid));
+                            int result = mohurdService.insertShiGongXuKe(shiGongXuKe);//新增
+                            if (result > 0) {
+                                logger.info(String.format("新增施工许可 %s", pkid));
+                            }
+                        } else {
+                            shiGongXuKe.setPkid(id);
+                            updateShiGongXuKe(shiGongXuKe);
                         }
                     } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
+                        if (e instanceof MySQLIntegrityConstraintViolationException) {
+                            //忽略主键冲突异常
+                        } else {
+                            logger.warn(ExceptionUtils.getMessage(e));
+                        }
                     }
                     redisUtils.hset(Constant.Cache_ShiGongXuKe, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    try {
-                        //记录变更
-                        ShiGongXuKe old = mohurdService.selectShiGongXuKeById(pkid);
-                        if (null != old) {
-                            List<FieldChange> changes = BeanUtils.compare(shiGongXuKe, old);
-                            if (!changes.isEmpty()) {
-                                for (FieldChange change : changes) {
-                                    mohurdService.insertFieldChangeRecord(change);
-                                }
-                            }
-                        }
-                        mohurdService.updateShiGongXuKe(shiGongXuKe);// 更新
-                        logger.info(String.format("更新施工许可 %s", pkid));
-                    } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
-                    }
+                    updateShiGongXuKe(shiGongXuKe);
                 }
                 redisUtils.hset(Constant.Cache_ShiGongXuKe, md5, "");
             } else {
@@ -428,30 +392,24 @@ public class MohurdFactory extends AbstractFactory {
                     try {
                         String id = mohurdService.selectHeTongBeiAn(heTongBeiAn);
                         if (StringUtils.isBlank(id)) {
-                            mohurdService.insertHeTongBeiAn(heTongBeiAn);//新增
-                            logger.info(String.format("新增合同备案 %s", pkid));
+                            int result = mohurdService.insertHeTongBeiAn(heTongBeiAn);//新增
+                            if (result > 0) {
+                                logger.info(String.format("新增合同备案 %s", pkid));
+                            }
+                        } else {
+                            heTongBeiAn.setPkid(id);
+                            updateHeTongBeiAn(heTongBeiAn);
                         }
                     } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
+                        if (e instanceof MySQLIntegrityConstraintViolationException) {
+                            //忽略主键冲突异常
+                        } else {
+                            logger.warn(ExceptionUtils.getMessage(e));
+                        }
                     }
                     redisUtils.hset(Constant.Cache_HeTongBeiAn, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    try {
-                        //记录变更
-                        HeTongBeiAn old = mohurdService.selectHeTongBeiAnById(pkid);
-                        if (null != old) {
-                            List<FieldChange> changes = BeanUtils.compare(heTongBeiAn, old);
-                            if (!changes.isEmpty()) {
-                                for (FieldChange change : changes) {
-                                    mohurdService.insertFieldChangeRecord(change);
-                                }
-                            }
-                        }
-                        mohurdService.updateHeTongBeiAn(heTongBeiAn);// 更新
-                        logger.info(String.format("更新合同备案 %s", pkid));
-                    } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
-                    }
+                    updateHeTongBeiAn(heTongBeiAn);
                 }
                 redisUtils.hset(Constant.Cache_HeTongBeiAn, md5, "");
             } else {
@@ -468,35 +426,257 @@ public class MohurdFactory extends AbstractFactory {
                     try {
                         String id = mohurdService.selectJunGongBeiAn(junGongBeiAn);
                         if (StringUtils.isBlank(id)) {
-                            mohurdService.insertJunGongBeiAn(junGongBeiAn);//新增
-                            logger.info(String.format("新增竣工验收备案 %s", pkid));
+                            int result = mohurdService.insertJunGongBeiAn(junGongBeiAn);//新增
+                            if (result > 0) {
+                                logger.info(String.format("新增竣工验收备案 %s", pkid));
+                            }
+                        } else {
+                            junGongBeiAn.setPkid(id);
+                            updateJunGongBeiAn(junGongBeiAn);
                         }
                     } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
+                        if (e instanceof MySQLIntegrityConstraintViolationException) {
+                            //忽略主键冲突异常
+                        } else {
+                            logger.warn(ExceptionUtils.getMessage(e));
+                        }
                     }
                     redisUtils.hset(Constant.Cache_JunGongBeiAn, pkid, "");
                 } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    try {
-                        //记录变更
-                        JunGongBeiAn old = mohurdService.selectJunGongBeiAnById(pkid);
-                        if (null != old) {
-                            List<FieldChange> changes = BeanUtils.compare(junGongBeiAn, old);
-                            if (!changes.isEmpty()) {
-                                for (FieldChange change : changes) {
-                                    mohurdService.insertFieldChangeRecord(change);
-                                }
-                            }
-                        }
-                        mohurdService.updateJunGongBeiAn(junGongBeiAn);// 更新
-                        logger.info(String.format("更新竣工验收备案 %s", pkid));
-                    } catch (Exception e) {
-                        logger.warn(ExceptionUtils.getMessage(e));
-                    }
+                    updateJunGongBeiAn(junGongBeiAn);
                 }
                 redisUtils.hset(Constant.Cache_JunGongBeiAn, md5, "");
             } else {
                 logger.info(String.format("[查Redis缓存] %s 竣工验收备案实体MD5已存在，不做任何操作", md5));
             }
+        }
+    }
+
+    private void updateCompany(Company company) {
+        try {
+            // 记录变更
+            Company old = mohurdService.selectCompanyById(company.getCom_id());
+            if (null != old) {
+                List<FieldChange> changes = BeanUtils.compare(company, old);
+                if (!changes.isEmpty()) {
+                    for (FieldChange change : changes) {
+                        mohurdService.insertFieldChangeRecord(change);
+                    }
+                }
+            }
+            int result = mohurdService.updateCompany(company);// 更新
+            if (result > 0) {
+                logger.info(String.format("更新企业基本信息 %s", company.getCom_id()));
+            }
+        } catch (Exception e) {
+            logger.warn(ExceptionUtils.getMessage(e));
+        }
+    }
+
+    private void updateCompanyQual(CompanyQualification qualification) {
+        try {
+            // 记录变更
+            CompanyQualification old = mohurdService.selectCompanyQualById(qualification.getPkid());
+            if (null != old) {
+                List<FieldChange> changes = BeanUtils.compare(qualification, old);
+                if (!changes.isEmpty()) {
+                    for (FieldChange change : changes) {
+                        mohurdService.insertFieldChangeRecord(change);
+                    }
+                }
+            }
+            int result = mohurdService.updateCompanyQualification(qualification);// 更新
+            if (result > 0) {
+                logger.info(String.format("更新企业资质 %s", qualification.getPkid()));
+            }
+            //洗资质
+            aptitudeCleanService.splitCompanyAptitudeByCompanyId(qualification.getCom_id());
+            aptitudeCleanService.updateCompanyAptitude(qualification.getCom_id());
+        } catch (Exception e) {
+            logger.warn(ExceptionUtils.getMessage(e));
+        }
+    }
+
+    private void updateProject(Project project) {
+        try {
+            //记录变更
+            Project old = mohurdService.selectProjectById(project.getPro_id());
+            if (null != old) {
+                List<FieldChange> changes = BeanUtils.compare(project, old);
+                if (!changes.isEmpty()) {
+                    for (FieldChange change : changes) {
+                        mohurdService.insertFieldChangeRecord(change);
+                    }
+                }
+            }
+            int result = mohurdService.updateProject(project);// 更新
+            if (result > 0) {
+                logger.info(String.format("更新项目 %s", project.getPro_id()));
+            }
+        } catch (Exception e) {
+            logger.warn(ExceptionUtils.getMessage(e));
+        }
+    }
+
+    public void updateProjectCompany(ProjectCompany projectCompany) {
+        try {
+            int result = mohurdService.updateProjectCompany(projectCompany);// 更新
+            if (result > 0) {
+                logger.info(String.format("更新项目企业关系 %s", projectCompany.getPkid()));
+            }
+        } catch (Exception e) {
+            logger.warn(ExceptionUtils.getMessage(e));
+        }
+    }
+
+    private void updatePerson(Person person) {
+        try {
+            String table = person.getTable();
+            //记录变更
+            Person old = mohurdService.selectPersonById(person);
+            if (null != old) {
+                person.setTable("tb_person_" + person.getTable());
+                List<FieldChange> changes = BeanUtils.compare(person, old);
+                if (!changes.isEmpty()) {
+                    for (FieldChange change : changes) {
+                        mohurdService.insertFieldChangeRecord(change);
+                    }
+                }
+            }
+            person.setTable(table);
+            int result = mohurdService.updatePerson(person);// 更新
+            if (result > 0) {
+                logger.info(String.format("更新人员 %s", person.getPkid()));
+            }
+        } catch (Exception e) {
+            logger.warn(ExceptionUtils.getMessage(e));
+        }
+    }
+
+    public void updatePersonChange(PersonChange change) {
+        try {
+            int result = mohurdService.updatePersonChange(change);// 更新
+            if (result > 0) {
+                logger.info(String.format("更新人员变更 %s", change.getPkid()));
+            }
+        } catch (Exception e) {
+            logger.warn(ExceptionUtils.getMessage(e));
+        }
+    }
+
+    private void updatePersonProject(PersonProject personProject) {
+        try {
+            int result = mohurdService.updatePersonProject(personProject);// 更新
+            if (result > 0) {
+                logger.info(String.format("更新人员项目关系 %s", personProject.getPkid()));
+            }
+        } catch (Exception e) {
+            logger.warn(ExceptionUtils.getMessage(e));
+        }
+    }
+
+    private void updateZhaoTouBiao(ZhaoTouBiao zhaoTouBiao) {
+        try {
+            //记录变更
+            ZhaoTouBiao old = mohurdService.selectZhaoTouBiaoById(zhaoTouBiao.getPkid());
+            if (null != old) {
+                List<FieldChange> changes = BeanUtils.compare(zhaoTouBiao, old);
+                if (!changes.isEmpty()) {
+                    for (FieldChange change : changes) {
+                        mohurdService.insertFieldChangeRecord(change);
+                    }
+                }
+            }
+            int result = mohurdService.updateZhaoTouBiao(zhaoTouBiao);// 更新
+            if (result > 0) {
+                logger.info(String.format("更新招投标 %s", zhaoTouBiao.getPkid()));
+            }
+        } catch (Exception e) {
+            logger.warn(ExceptionUtils.getMessage(e));
+        }
+    }
+
+    private void updateShiGongTuShenCha(ShiGongTuShenCha shiGongTuShenCha) {
+        try {
+            //记录变更
+            ShiGongTuShenCha old = mohurdService.selectShiGongTuShenChaById(shiGongTuShenCha.getPkid());
+            if (null != old) {
+                List<FieldChange> changes = BeanUtils.compare(shiGongTuShenCha, old);
+                if (!changes.isEmpty()) {
+                    for (FieldChange change : changes) {
+                        mohurdService.insertFieldChangeRecord(change);
+                    }
+                }
+            }
+            int result = mohurdService.updateShiGongTuShenCha(shiGongTuShenCha);// 更新
+            if (result > 0) {
+                logger.info(String.format("更新施工图审查 %s", shiGongTuShenCha.getPkid()));
+            }
+        } catch (Exception e) {
+            logger.warn(ExceptionUtils.getMessage(e));
+        }
+    }
+
+    private void updateShiGongXuKe(ShiGongXuKe shiGongXuKe) {
+        try {
+            //记录变更
+            ShiGongXuKe old = mohurdService.selectShiGongXuKeById(shiGongXuKe.getPkid());
+            if (null != old) {
+                List<FieldChange> changes = BeanUtils.compare(shiGongXuKe, old);
+                if (!changes.isEmpty()) {
+                    for (FieldChange change : changes) {
+                        mohurdService.insertFieldChangeRecord(change);
+                    }
+                }
+            }
+            int result = mohurdService.updateShiGongXuKe(shiGongXuKe);// 更新
+            if (result > 0) {
+                logger.info(String.format("更新施工许可 %s", shiGongXuKe.getPkid()));
+            }
+        } catch (Exception e) {
+            logger.warn(ExceptionUtils.getMessage(e));
+        }
+    }
+
+    private void updateHeTongBeiAn(HeTongBeiAn heTongBeiAn) {
+        try {
+            //记录变更
+            HeTongBeiAn old = mohurdService.selectHeTongBeiAnById(heTongBeiAn.getPkid());
+            if (null != old) {
+                List<FieldChange> changes = BeanUtils.compare(heTongBeiAn, old);
+                if (!changes.isEmpty()) {
+                    for (FieldChange change : changes) {
+                        mohurdService.insertFieldChangeRecord(change);
+                    }
+                }
+            }
+            int result = mohurdService.updateHeTongBeiAn(heTongBeiAn);// 更新
+            if (result > 0) {
+                logger.info(String.format("更新合同备案 %s", heTongBeiAn.getPkid()));
+            }
+        } catch (Exception e) {
+            logger.warn(ExceptionUtils.getMessage(e));
+        }
+    }
+
+    private void updateJunGongBeiAn(JunGongBeiAn junGongBeiAn) {
+        try {
+            //记录变更
+            JunGongBeiAn old = mohurdService.selectJunGongBeiAnById(junGongBeiAn.getPkid());
+            if (null != old) {
+                List<FieldChange> changes = BeanUtils.compare(junGongBeiAn, old);
+                if (!changes.isEmpty()) {
+                    for (FieldChange change : changes) {
+                        mohurdService.insertFieldChangeRecord(change);
+                    }
+                }
+            }
+            int result = mohurdService.updateJunGongBeiAn(junGongBeiAn);// 更新
+            if (result > 0) {
+                logger.info(String.format("更新竣工验收备案 %s", junGongBeiAn.getPkid()));
+            }
+        } catch (Exception e) {
+            logger.warn(ExceptionUtils.getMessage(e));
         }
     }
 }

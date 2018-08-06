@@ -1,5 +1,6 @@
 package com.silita.service;
 
+import com.silita.model.Company;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,23 @@ public class DeleteCostCompanyServiceTestCase {
     @Autowired
     private DeleteCostCompanyService deleteCostCompanyService;
 
+    @Autowired
+    private MohurdService mohurdService;
+
     @Test
-    public void test() {
+    public void deleteTask() {
         deleteCostCompanyService.deleteTask();
+    }
+
+    @Test
+    public void updateTest() {
+        Company company = mohurdService.selectCompanyById("0bbe7f678a89346c646faa2f816e5bf2");
+        if (null != company) {
+            company.setCom_name(company.getCom_name() + "_Test");
+            int result = mohurdService.updateCompany(company);
+            System.out.println("修改条数：" + result);
+        }
+        company.setCom_id("2222");
+        System.out.println("插入条数：" + mohurdService.insertCompany(company));
     }
 }*/
