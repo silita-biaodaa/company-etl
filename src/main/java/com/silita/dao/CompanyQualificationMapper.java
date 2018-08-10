@@ -28,4 +28,12 @@ public interface CompanyQualificationMapper {
      * @return
      */
     List<CompanyQualification> getCompanyQualificationByComId(String companyId);
+
+    /**
+     * 根据sql获取获取资质
+     *
+     * @param params
+     * @return
+     */
+    List<CompanyQualification> getCompanyQualificationBySql(Map params);
 }

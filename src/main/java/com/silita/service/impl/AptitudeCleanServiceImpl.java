@@ -213,4 +213,17 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
         }
         logger.info("完成id为" + companyId + "的企业数据更新！");
     }
+
+    @Override
+    public void cleanQualificationBySql(Map params) {
+        List<CompanyQualification> qualifications = companyQualificationMapper.getCompanyQualificationBySql(params);
+        if (null != qualifications && !qualifications.isEmpty()) {
+            for (CompanyQualification qualification : qualifications) {
+                String com_id = qualification.getCom_id();
+                splitCompanyAptitudeByCompanyId(com_id);
+                updateCompanyAptitude(com_id);
+            }
+            logger.info(String.format("按条件更新资质完成！更新数量：%s", qualifications.size()));
+        }
+    }
 }
