@@ -74,6 +74,11 @@ public class ShiGongXuKe implements Serializable {
     private String area;
 
     /**
+     * 发证日期
+     */
+    private String licence_date;
+
+    /**
      * 记录登记时间
      */
     private String record_date;
@@ -180,5 +185,13 @@ public class ShiGongXuKe implements Serializable {
 
     public void setPro_id(String pro_id) {
         this.pro_id = pro_id;
+    }
+
+    public String getLicence_date() {
+        return licence_date;
+    }
+
+    public void setLicence_date(String licence_date) {
+        this.licence_date = licence_date;
     }
 }

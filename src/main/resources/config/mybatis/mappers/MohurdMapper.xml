@@ -322,13 +322,13 @@
 
     <!-- 插入施工许可 -->
     <insert id="insertShiGongXuKe" useGeneratedKeys="true" keyProperty="pkid" parameterType="com.silita.model.ShiGongXuKe">
-        insert into tb_project_build(pkid, md5, bdxh, pro_id, pro_name, pro_type, b_org, b_licence, build_licence, review_number, amount, area, record_date, created)
-        values(#{pkid}, #{md5}, #{bdxh}, #{pro_id}, #{pro_name}, #{pro_type}, #{b_org}, #{b_licence}, #{build_licence}, #{review_number}, #{amount}, #{area}, #{record_date}, NOW())
+        insert into tb_project_build(pkid, md5, bdxh, pro_id, pro_name, pro_type, b_org, b_licence, build_licence, review_number, amount, area, licence_date, record_date, created)
+        values(#{pkid}, #{md5}, #{bdxh}, #{pro_id}, #{pro_name}, #{pro_type}, #{b_org}, #{b_licence}, #{build_licence}, #{review_number}, #{amount}, #{area}, #{licence_date}, #{record_date}, NOW())
     </insert>
 
     <!-- 更新施工许可 -->
     <update id="updateShiGongXuKe" parameterType="com.silita.model.ShiGongXuKe">
-        update tb_project_build set md5=#{md5}, bdxh=#{bdxh}, pro_name=#{pro_name}, pro_type=#{pro_type}, b_org=#{b_org}, b_licence=#{b_licence}, review_number=#{review_number}, amount=#{amount}, area=#{area}, record_date=#{record_date}, updated=NOW()
+        update tb_project_build set md5=#{md5}, bdxh=#{bdxh}, pro_name=#{pro_name}, pro_type=#{pro_type}, b_org=#{b_org}, b_licence=#{b_licence}, review_number=#{review_number}, amount=#{amount}, area=#{area}, licence_date=#{licence_date}, record_date=#{record_date}, updated=NOW()
         where pkid=#{pkid}
     </update>
 
