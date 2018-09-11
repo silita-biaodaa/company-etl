@@ -1,6 +1,6 @@
 package com.silita.dao;
 
-import com.silita.model.CompanyQualification;
+import com.silita.spider.common.model.CompanyQualification;
 
 import java.util.List;
 import java.util.Map;

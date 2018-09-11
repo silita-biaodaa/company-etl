@@ -1,4 +1,4 @@
-package com.silita.model;
+package com.silita.spider.common.model;
 
 import com.silita.annotations.FieldChangeRecord;
 

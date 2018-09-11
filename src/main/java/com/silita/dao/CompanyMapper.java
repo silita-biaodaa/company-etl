@@ -1,7 +1,7 @@
 package com.silita.dao;
 
 
-import com.silita.model.Company;
+import com.silita.spider.common.model.Company;
 
 public interface CompanyMapper{
     /**

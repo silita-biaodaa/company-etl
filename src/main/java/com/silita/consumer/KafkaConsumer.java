@@ -1,7 +1,7 @@
 package com.silita.consumer;
 
 import com.silita.factory.MohurdFactory;
-import com.silita.model.Document;
+import com.silita.spider.common.serializable.Document;
 import com.silita.utils.DocumentDecoder;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -30,7 +30,7 @@ import java.util.Map;
 @EnableKafka
 public class KafkaConsumer {
     @Autowired
-    private MohurdFactory factory;
+    private MohurdFactory mohurdFactory;
 
     @Value("${kafka.bootstrap.servers}")
     private String servers;
@@ -71,14 +71,15 @@ public class KafkaConsumer {
 
     /**
      * 监听器获取消息
+     * 全国四库一站点
      *
      * @param record
      */
     @KafkaListener(topics = {"com_etl_queue"})
-    public void getSpiderMessage(ConsumerRecord<?, ?> record) {
+    public void getSiKuYiSpiderMessage(ConsumerRecord<?, ?> record) {
         Document document = (Document) record.value();
         if (null != document && null != document.getObject()) {
-            factory.process(document.getObject());
+            mohurdFactory.process(document.getObject());
         }
     }
 }

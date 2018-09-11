@@ -1,9 +1,5 @@
 package com.silita.service;
 
-import com.silita.model.CompanyQualification;
-
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public interface IAptitudeCleanService {

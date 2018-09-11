@@ -3,8 +3,8 @@ package com.silita.service.impl;
 import com.google.common.base.Splitter;
 import com.silita.dao.*;
 import com.silita.model.AllZh;
-import com.silita.model.Company;
-import com.silita.model.CompanyQualification;
+import com.silita.spider.common.model.Company;
+import com.silita.spider.common.model.CompanyQualification;
 import com.silita.model.TbCompanyAptitude;
 import com.silita.service.IAptitudeCleanService;
 import org.slf4j.Logger;
@@ -59,7 +59,7 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
                         AllZh allZh;
                         TbCompanyAptitude companyAptitude;
                         List<TbCompanyAptitude> companyQualifications = new ArrayList<>();
-                        Iterator<String> iterator = Splitter.onPattern("\\||,|，").omitEmptyStrings().trimResults().split(qualRange).iterator();
+                        Iterator<String> iterator = Splitter.onPattern("\\||,|，|;|；").omitEmptyStrings().trimResults().split(qualRange).iterator();
                         while (iterator.hasNext()) {
                             String qual = iterator.next();
                             allZh = allZhMapper.getAllZhByName(qual);
@@ -156,7 +156,7 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
                 AllZh allZh;
                 TbCompanyAptitude companyAptitude;
                 List<TbCompanyAptitude> companyQualifications = new ArrayList<>();
-                Iterator<String> iterator = Splitter.onPattern("\\||,|，").omitEmptyStrings().trimResults().split(qualRange).iterator();
+                Iterator<String> iterator = Splitter.onPattern("\\||,|，|;|；").omitEmptyStrings().trimResults().split(qualRange).iterator();
                 while (iterator.hasNext()) {
                     String qual = iterator.next();
                     allZh = allZhMapper.getAllZhByName(qual);

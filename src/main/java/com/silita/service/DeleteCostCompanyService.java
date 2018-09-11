@@ -4,7 +4,7 @@ package com.silita.service;
 import com.google.common.collect.ImmutableMap;
 import com.silita.consumer.RedisUtils;
 import com.silita.dao.DeleteCostCompanyMapper;
-import com.silita.model.Person;
+import com.silita.spider.common.model.Person;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

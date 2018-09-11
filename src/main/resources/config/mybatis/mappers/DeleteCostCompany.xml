@@ -41,12 +41,12 @@
     </delete>
 
     <!-- 删除人员信息 -->
-    <select id="selectPerson__Cost" parameterType="com.silita.model.Person" resultType="java.util.Map">
+    <select id="selectPerson__Cost" parameterType="com.silita.spider.common.model.Person" resultType="java.util.Map">
         select * from tb_person_${table} where com_id=#{com_id}
     </select>
 
     <!-- 删除人员信息 -->
-    <delete id="deletePersonById" parameterType="com.silita.model.Person">
+    <delete id="deletePersonById" parameterType="com.silita.spider.common.model.Person">
         delete from tb_person_${table} where com_id=#{com_id}
     </delete>
 </mapper>

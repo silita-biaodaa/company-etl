@@ -1,6 +1,6 @@
 package com.silita.dao;
 
-import com.silita.model.*;
+import com.silita.spider.common.model.*;
 
 import java.util.List;
 import java.util.Map;

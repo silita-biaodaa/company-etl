@@ -8,19 +8,19 @@
     </select>
 
     <select id="listCompanyQualification" parameterType="Map"
-            resultType="com.silita.model.CompanyQualification">
+            resultType="com.silita.spider.common.model.CompanyQualification">
         SELECT *
         FROM tb_company_qualification
         LIMIT #{start}, #{pageSize}
     </select>
 
     <select id="getCompanyQualificationByComId" parameterType="String"
-            resultType="com.silita.model.CompanyQualification">
+            resultType="com.silita.spider.common.model.CompanyQualification">
          SELECT * FROM tb_company_qualification WHERE com_id = #{companyId}
     </select>
 
     <select id="getCompanyQualificationBySql" parameterType="Map"
-            resultType="com.silita.model.CompanyQualification">
+            resultType="com.silita.spider.common.model.CompanyQualification">
          SELECT * FROM tb_company_qualification WHERE channel=3 and com_id is not null
     </select>
 </mapper>

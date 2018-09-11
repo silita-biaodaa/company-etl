@@ -1,7 +1,6 @@
 package com.silita;
 
 import com.silita.dao.CompanyQualificationMapper;
-import com.silita.model.CompanyQualification;
 import com.silita.service.DeleteCostCompanyService;
 import com.silita.service.IAptitudeCleanService;
 import org.slf4j.Logger;
@@ -11,9 +10,6 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-
-import java.util.HashMap;
-import java.util.List;
 
 @Component
 public class Bootstrap implements ApplicationListener<ApplicationEvent> {

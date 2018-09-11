@@ -1,6 +1,6 @@
 package com.silita.utils;
 
-import com.silita.model.Document;
+import com.silita.spider.common.serializable.Document;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import java.util.Map;

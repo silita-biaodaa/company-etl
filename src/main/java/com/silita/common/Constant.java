@@ -60,4 +60,14 @@ public class Constant {
      * 竣工验收备案缓存
      */
     public static final String Cache_JunGongBeiAn = "Cache_JunGongBeiAn";
+
+    /**
+     * 法律文书
+     */
+    public static final String Cache_Law = "Cache_Law";
+
+    /**
+     * 法律文书相关信息
+     */
+    public static final String Cache_Law_Relation = "Cache_Law_Relation";
 }

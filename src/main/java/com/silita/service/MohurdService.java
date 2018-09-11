@@ -1,7 +1,7 @@
 package com.silita.service;
 
 import com.silita.dao.MohurdMapper;
-import com.silita.model.*;
+import com.silita.spider.common.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

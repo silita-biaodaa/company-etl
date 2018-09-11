@@ -1,7 +1,7 @@
 package com.silita.dao;
 
 
-import com.silita.model.Person;
+import com.silita.spider.common.model.Person;
 
 import java.util.List;
 

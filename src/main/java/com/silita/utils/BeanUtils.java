@@ -3,7 +3,7 @@ package com.silita.utils;
 
 import com.google.common.base.Preconditions;
 import com.silita.annotations.FieldChangeRecord;
-import com.silita.model.FieldChange;
+import com.silita.spider.common.model.FieldChange;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
