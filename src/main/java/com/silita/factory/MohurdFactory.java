@@ -182,32 +182,23 @@ public class MohurdFactory extends AbstractFactory {
             String pkid = change.getPkid();
             String md5 = change.getMd5();
             boolean exists = redisUtils.hexists(Constant.Cache_PersonChange, md5);
-            if (!exists) {//实体MD5不存在
-                exists = redisUtils.hexists(Constant.Cache_PersonChange, pkid);
-                if (!exists) {//主键md5不存在，新增
-                    try {
-                        String id = mohurdService.selectPersonChange(change);
-                        if (StringUtils.isBlank(id)) {
-                            int result = mohurdService.insertPersonChange(change);//新增
-                            if (result > 0) {
-                                logger.info(String.format("新增人员变更 %s", pkid));
-                            }
-                        } else {
-                            change.setPkid(id);
-                            updatePersonChange(change);
-                        }
-                    } catch (Exception e) {
-                        if (e instanceof MySQLIntegrityConstraintViolationException) {
-                            //忽略主键冲突异常
-                        } else {
-                            logger.warn(ExceptionUtils.getMessage(e));
+            if (!exists) {//实体MD5不存在，新增，人员变更不涉及到更新操作
+                try {
+                    String id = mohurdService.selectPersonChange(change);
+                    if (StringUtils.isBlank(id)) {
+                        int result = mohurdService.insertPersonChange(change);//新增
+                        if (result > 0) {
+                            logger.info(String.format("新增人员变更 %s", pkid));
+                            redisUtils.hset(Constant.Cache_PersonChange, md5, "");
                         }
                     }
-                    redisUtils.hset(Constant.Cache_PersonChange, pkid, "");
-                } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    updatePersonChange(change);
+                } catch (Exception e) {
+                    if (e instanceof MySQLIntegrityConstraintViolationException) {
+                        //忽略主键冲突异常
+                    } else {
+                        logger.warn(ExceptionUtils.getMessage(e));
+                    }
                 }
-                redisUtils.hset(Constant.Cache_PersonChange, md5, "");
             } else {
                 logger.info(String.format("[查Redis缓存] %s 人员变更实体MD5已存在，不做任何操作", md5));
             }

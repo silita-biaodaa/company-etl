@@ -130,15 +130,7 @@
 
     <!-- 查询人员变更记录 -->
     <select id="selectPersonChange" parameterType="com.silita.spider.common.model.PersonChange" resultType="String">
-        select pkid from tb_person_change
-        where 1=1
-        <if test="com_name !=null and com_name != ''">
-            and com_name=#{com_name}
-        </if>
-        <if test="flag !=null and flag != ''">
-            and flag=#{flag}
-        </if>
-        limit 1
+        select pkid from tb_person_change where md5=#{md5} limit 1
     </select>
 
     <!-- 更新人员变更记录 -->
