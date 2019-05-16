@@ -185,7 +185,7 @@ public class MohurdFactory extends AbstractFactory {
             } else {
                 logger.info(String.format("[查Redis缓存] %s 人员实体MD5已存在，不做任何操作", md5));
                 //企业注册人员信息更新updated，擦亮一下，证明更新过 --张夏晖2019-05-16
-                mohurdService.updatePersonForUpdated(pkid);
+                mohurdService.updatePersonForUpdated(person);
             }
         } else if (object instanceof PersonChange) {
             PersonChange change = (PersonChange) object;

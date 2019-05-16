@@ -199,11 +199,11 @@ public class MohurdService {
     /**
      * 更新人员信息的时间戳
      *
-     * @param pkid
+     * @param person
      */
-    public int updatePersonForUpdated(String pkid){
-        if (StringUtils.isNotBlank(pkid)) {
-            return mohurdMapper.updatePersonForUpdated(pkid);
+    public int updatePersonForUpdated(Person person){
+        if (StringUtils.isNotBlank(person.getPkid())) {
+            return mohurdMapper.updatePersonForUpdated(person);
         }
         return 0;
     }

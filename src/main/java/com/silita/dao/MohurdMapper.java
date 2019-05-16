@@ -128,9 +128,9 @@ public interface MohurdMapper {
     /**
      * 更新人员信息的时间戳
      *
-     * @param pkid
+     * @param person
      */
-    public int updatePersonForUpdated(String pkid);
+    public int updatePersonForUpdated(Person person);
 
     /**
      * 查询人员变更记录

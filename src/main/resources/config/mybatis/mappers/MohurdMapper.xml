@@ -133,7 +133,7 @@
     </update>
 
     <!-- 更新人员信息的时间戳 -->
-    <update id="updatePersonForUpdated" parameterType="String">
+    <update id="updatePersonForUpdated" parameterType="com.silita.spider.common.model.Person">
         update tb_person_${table} set  updated=NOW() where pkid=#{pkid}
     </update>
 
