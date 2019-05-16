@@ -73,4 +73,9 @@ public class RedisUtilsAlone {
         }
         return result;
     }
+
+    public static void main(String[] args) {
+        RedisUtilsAlone redisUtilsAlone = new RedisUtilsAlone();
+        redisUtilsAlone.hset("test","silita","123");
+    }
 }

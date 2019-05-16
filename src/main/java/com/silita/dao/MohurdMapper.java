@@ -52,6 +52,13 @@ public interface MohurdMapper {
     public int updateCompany(Company company);
 
     /**
+     * 更新企业时间戳
+     *
+     * @param comId
+     */
+    public int updateCompanyForUpdated(String comId);
+
+    /**
      * 插入企业资质
      *
      * @param qualification
@@ -82,6 +89,13 @@ public interface MohurdMapper {
     public int updateCompanyQualification(CompanyQualification companyQualification);
 
     /**
+     * 更新企业资质的时间戳
+     *
+     * @param pkid
+     */
+    public int updateCompanyQualificationForUpdated(String pkid);
+
+    /**
      * 查询人员信息
      *
      * @param person
@@ -110,6 +124,13 @@ public interface MohurdMapper {
      * @param person
      */
     public int updatePerson(Person person);
+
+    /**
+     * 更新人员信息的时间戳
+     *
+     * @param pkid
+     */
+    public int updatePersonForUpdated(String pkid);
 
     /**
      * 查询人员变更记录

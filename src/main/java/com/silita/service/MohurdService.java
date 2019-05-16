@@ -99,6 +99,15 @@ public class MohurdService {
     }
 
     /**
+     * 更新企业的时间戳
+     *
+     * @param comId
+     */
+    public int updateCompanyForUpdated(String comId){
+        return mohurdMapper.updateCompanyForUpdated(comId);
+    }
+
+    /**
      * 插入企业资质
      *
      * @param qualification
@@ -135,6 +144,13 @@ public class MohurdService {
     public int updateCompanyQualification(CompanyQualification companyQualification) {
         if (StringUtils.isNotBlank(companyQualification.getPkid())) {
             return mohurdMapper.updateCompanyQualification(companyQualification);
+        }
+        return 0;
+    }
+
+    public int updateCompanyQualificationForUpdated(String pkid){
+        if (StringUtils.isNotBlank(pkid)) {
+            return mohurdMapper.updateCompanyQualificationForUpdated(pkid);
         }
         return 0;
     }
@@ -176,6 +192,18 @@ public class MohurdService {
     public int updatePerson(Person person) {
         if (StringUtils.isNotBlank(person.getPkid())) {
             return mohurdMapper.updatePerson(person);
+        }
+        return 0;
+    }
+
+    /**
+     * 更新人员信息的时间戳
+     *
+     * @param pkid
+     */
+    public int updatePersonForUpdated(String pkid){
+        if (StringUtils.isNotBlank(pkid)) {
+            return mohurdMapper.updatePersonForUpdated(pkid);
         }
         return 0;
     }

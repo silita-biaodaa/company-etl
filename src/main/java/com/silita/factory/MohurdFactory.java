@@ -3,6 +3,7 @@ package com.silita.factory;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import com.silita.common.Constant;
 import com.silita.consumer.RedisUtils;
+import com.silita.consumer.RedisUtilsAlone;
 import com.silita.service.IAptitudeCleanService;
 import com.silita.service.MohurdService;
 import com.silita.spider.common.model.*;
@@ -74,6 +75,8 @@ public class MohurdFactory extends AbstractFactory {
                 redisUtils.hset(Constant.Cache_Company, md5, "");
             } else {
                 logger.info(String.format("[查Redis缓存] %s 企业基本信息实体MD5已存在，不做任何操作", md5));
+                //企业信息更新updated，擦亮一下，证明更新过 --张夏晖2019-05-16
+                mohurdService.updateCompanyForUpdated(com_id);
             }
         } else if (object instanceof CompanyQualification) {
             CompanyQualification qualification = (CompanyQualification) object;
@@ -89,6 +92,9 @@ public class MohurdFactory extends AbstractFactory {
                             int result = mohurdService.insertCompanyQualification(qualification);//新增
                             if (result > 0) {
                                 logger.info(String.format("新增企业资质 %s", pkid));
+                                //洗资质
+                                aptitudeCleanService.splitCompanyAptitudeByCompanyId(qualification.getCom_id());
+                                aptitudeCleanService.updateCompanyAptitude(qualification.getCom_id());
                             }
                         } else {
                             qualification.setPkid(id);
@@ -108,6 +114,8 @@ public class MohurdFactory extends AbstractFactory {
                 redisUtils.hset(Constant.Cache_CompanyQual, md5, "");
             } else {
                 logger.info(String.format("[查Redis缓存] %s 企业资质实体MD5已存在，不做任何操作", md5));
+                //企业资质信息更新updated，擦亮一下，证明更新过 --张夏晖2019-05-16
+                mohurdService.updateCompanyQualificationForUpdated(pkid);
             }
         } else if (object instanceof Project) {
             Project project = (Project) object;
@@ -176,6 +184,8 @@ public class MohurdFactory extends AbstractFactory {
                 redisUtils.hset(Constant.Cache_Person, md5, "");
             } else {
                 logger.info(String.format("[查Redis缓存] %s 人员实体MD5已存在，不做任何操作", md5));
+                //企业注册人员信息更新updated，擦亮一下，证明更新过 --张夏晖2019-05-16
+                mohurdService.updatePersonForUpdated(pkid);
             }
         } else if (object instanceof PersonChange) {
             PersonChange change = (PersonChange) object;
@@ -448,6 +458,8 @@ public class MohurdFactory extends AbstractFactory {
             // 记录变更
             Company old = mohurdService.selectCompanyById(company.getCom_id());
             if (null != old) {
+                //注册资本不记录变更--张夏晖2019-05-16
+                company.setRegis_capital(old.getRegis_capital());
                 List<FieldChange> changes = BeanUtils.compare(company, old);
                 if (!changes.isEmpty()) {
                     for (FieldChange change : changes) {
