@@ -12,9 +12,19 @@ public class Constant {
     public static final String Cache_CompanyQual = "Cache_CompanyQual";
 
     /**
+     * 企业资质数量缓存
+     */
+    public static final String Cache_CompanyQual_Num = "Cache_CompanyQual_Num";
+
+    /**
      * 人员基本信息和资质缓存
      */
     public static final String Cache_Person = "Cache_Person";
+
+    /**
+     *  注册人员数量缓存
+     */
+    public static final String Cache_Person_Num = "Cache_Person_Num";
 
     /**
      * 人员变更缓存

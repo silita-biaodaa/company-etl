@@ -99,6 +99,11 @@ public class Person implements Serializable {
 
     private int type = 1;
 
+    /**
+     * 页面总条数
+     */
+    private int total = 0;
+
 
     public String getName() {
         return name;
@@ -266,5 +271,13 @@ public class Person implements Serializable {
                 ", com_name='" + com_name + '\'' +
                 ", type=" + type +
                 '}';
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
     }
 }

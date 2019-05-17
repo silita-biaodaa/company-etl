@@ -88,6 +88,11 @@ public class CompanyQualification implements Serializable {
      */
     private String com_name;
 
+    /**
+     * 页面总条数
+     */
+    private int total = 0;
+
     public String getPkid() {
         return pkid;
     }
@@ -206,5 +211,13 @@ public class CompanyQualification implements Serializable {
 
     public void setMd5(String md5) {
         this.md5 = md5;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
     }
 }

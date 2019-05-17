@@ -8,6 +8,7 @@ import com.silita.service.IAptitudeCleanService;
 import com.silita.service.MohurdService;
 import com.silita.spider.common.model.*;
 import com.silita.utils.BeanUtils;
+import com.silita.utils.DateTimeUtils;
 import com.silita.utils.Pinyin;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -82,6 +83,8 @@ public class MohurdFactory extends AbstractFactory {
             CompanyQualification qualification = (CompanyQualification) object;
             String pkid = qualification.getPkid();
             String md5 = qualification.getMd5();
+            logger.info("====企业资质ETL=【"+qualification.getCom_name()+"】更新资质【"+qualification.getTotal()+"】条======");
+            redisUtils.hset(Constant.Cache_CompanyQual_Num, qualification.getCom_name(), qualification.getTotal()+"|"+DateTimeUtils.current());
             boolean exists = redisUtils.hexists(Constant.Cache_CompanyQual, md5);
             if (!exists) {//实体MD5不存在
                 exists = redisUtils.hexists(Constant.Cache_CompanyQual, pkid);
@@ -155,6 +158,8 @@ public class MohurdFactory extends AbstractFactory {
             Person person = (Person) object;
             String pkid = person.getPkid();
             String md5 = person.getMd5();
+            logger.info("====企业注册人员ETL=【"+person.getCom_name()+"】更新人员【"+person.getTotal()+"】条======");
+            redisUtils.hset(Constant.Cache_Person_Num, person.getCom_name(), person.getTotal()+"|"+DateTimeUtils.current());
             boolean exists = redisUtils.hexists(Constant.Cache_Person, md5);
             if (!exists) {//实体MD5不存在
                 exists = redisUtils.hexists(Constant.Cache_Person, pkid);
