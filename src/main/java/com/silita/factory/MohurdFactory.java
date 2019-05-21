@@ -82,7 +82,7 @@ public class MohurdFactory extends AbstractFactory {
                 }
                 redisUtils.hset(Constant.Cache_Company, md5, DateTimeUtils.current());
             } else {
-                logger.info(String.format("[查Redis缓存] %s 企业基本信息实体MD5已存在，不做任何操作", md5));
+                logger.info(String.format("[查Redis缓存]【%s】【%s】企业基本信息实体MD5已存在，不做任何操作", md5,com_name));
                 //企业信息更新updated，擦亮一下，证明更新过 --张夏晖2019-05-16
                 mohurdService.updateCompanyForUpdated(com_id);
             }
