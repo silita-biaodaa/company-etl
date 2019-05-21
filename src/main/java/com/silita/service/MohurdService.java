@@ -28,39 +28,27 @@ public class MohurdService {
     private MohurdMapper mohurdMapper;
 
     /**
-     * 查询企业
-     * 条件中不带公司名称查
+     * 通过企业抓取URL获取企业数量
      *
-     * @param company
+     * @param url
      * @return 企业id
      */
-    public String selectCompany(Company company) {
-        String id = mohurdMapper.selectCompanyByName(company.getCom_name());//先通过公司名称查
-        if (StringUtils.isBlank(id)) {
-            id = mohurdMapper.selectCompany(company);//如果企业名称未查到再通过三证查
-        }
-        return id;
+    public Integer countCompanyByUrl(String url){
+        return mohurdMapper.countCompanyByUrl(url);
+    }
+
+    public void deleteCompanyForUrl(String url){
+        mohurdMapper.deleteCompanyForUrl(url);
     }
 
     /**
-     * 查询企业
-     * 条件中必须带公司名称查
+     * 通过URL查询企业
      *
-     * @param companyName
-     * @return 企业id
-     */
-    public String selectCompanyByName(String companyName) {
-        return mohurdMapper.selectCompanyByName(companyName);
-    }
-
-    /**
-     * 通过id查询企业
-     *
-     * @param id
+     * @param url
      * @return
      */
-    public Company selectCompanyById(String id) {
-        return mohurdMapper.selectCompanyById(id);
+    public Company selectCompanyByUrl(String url) {
+        return mohurdMapper.selectCompanyByUrl(url);
     }
 
     /**
@@ -78,22 +66,21 @@ public class MohurdService {
      *
      * @param company
      */
-    public int updateCompany(Company company) {
+    public int updateCompany(Company company,Company old) {
         int result = 0;
         if (StringUtils.isNotBlank(company.getType())) {//造价企业
-            Company com = mohurdMapper.selectCompanyById(company.getCom_id());
-            if (StringUtils.isBlank(com.getBusiness_num())) {
-                com.setBusiness_num(company.getBusiness_num());
+            if (StringUtils.isBlank(old.getBusiness_num())) {
+                old.setBusiness_num(company.getBusiness_num());
             }
-            if (StringUtils.isBlank(com.getCredit_code())) {
-                com.setCredit_code(company.getCredit_code());
+            if (StringUtils.isBlank(old.getCredit_code())) {
+                old.setCredit_code(company.getCredit_code());
             }
-            if (StringUtils.isBlank(com.getOrg_code())) {
-                com.setOrg_code(company.getOrg_code());
+            if (StringUtils.isBlank(old.getOrg_code())) {
+                old.setOrg_code(company.getOrg_code());
             }
-            result = mohurdMapper.updateCompany(com);
+            result = mohurdMapper.updateCompanyForUrl(old);
         } else {//非造价企业
-            result = mohurdMapper.updateCompany(company);
+            result = mohurdMapper.updateCompanyForUrl(company);
         }
         return result;
     }

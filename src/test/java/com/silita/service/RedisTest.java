@@ -56,4 +56,26 @@ public class RedisTest extends ConfigTest {
         }
     }
 
+    @Test
+    public void deleteEntityMD5One() {
+        ShardedJedis jedis = null;
+        try {
+            String md5 = "04e72b4554f516ffeb4900ad56778073";
+            jedis = shardedJedisPool.getResource();
+            boolean exists = jedis.hexists(Constant.Cache_Company, md5);
+            if(exists){
+                long result = jedis.hdel("Cache_Company", md5);
+                if (result > 0) {
+                    System.out.println(String.format("%s 删除成功", md5));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            if (null != jedis) {
+                jedis.close();
+            }
+        }
+    }
+
 }

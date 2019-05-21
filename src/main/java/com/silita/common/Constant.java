@@ -7,6 +7,11 @@ public class Constant {
     public static final String Cache_Company = "Cache_Company";
 
     /**
+     * 企业URL缓存
+     */
+    public static final String Cache_Company_Url = "Cache_Company_Url";
+
+    /**
      * 企业资质缓存
      */
     public static final String Cache_CompanyQual = "Cache_CompanyQual";

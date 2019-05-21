@@ -20,22 +20,16 @@ public interface MohurdMapper {
      */
     public String selectCompany(Company company);
 
-    /**
-     * 查询企业
-     * 条件中必须带公司名称查
-     *
-     * @param companyName
-     * @return 企业id
-     */
-    public String selectCompanyByName(String companyName);
 
     /**
-     * 通过id查询企业
+     * 通过企业抓取URL获取企业数量
      *
-     * @param id
+     * @param url
      * @return
      */
-    public Company selectCompanyById(String id);
+    Integer countCompanyByUrl(String url);
+    Company selectCompanyByUrl(String url);
+    void deleteCompanyForUrl(String url);
 
     /**
      * 插入企业
@@ -44,12 +38,7 @@ public interface MohurdMapper {
      */
     public int insertCompany(Company company);
 
-    /**
-     * 更新企业
-     *
-     * @param company
-     */
-    public int updateCompany(Company company);
+    int updateCompanyForUrl(Company company);
 
     /**
      * 更新企业时间戳

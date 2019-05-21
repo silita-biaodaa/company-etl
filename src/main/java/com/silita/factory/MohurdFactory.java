@@ -49,18 +49,27 @@ public class MohurdFactory extends AbstractFactory {
             company.setCom_name_py(Pinyin.getPinYinFirstChar(com_name));//得到拼音首字母
             boolean exists = redisUtils.hexists(Constant.Cache_Company, md5);
             if (!exists) {//实体MD5不存在
-                exists = redisUtils.hexists(Constant.Cache_Company, com_id);
-                if (!exists) {//主键md5不存在，新增
+                String url = company.getUrl();
+                if(url!=null){
                     try {
-                        String id = mohurdService.selectCompany(company);
-                        if (StringUtils.isBlank(id)) {
+                        Integer count = mohurdService.countCompanyByUrl(url);
+                        if(count==0){
                             int result = mohurdService.insertCompany(company);//新增
                             if (result > 0) {
-                                logger.info(String.format("新增企业基本信息 %s", com_id));
+                                logger.info(String.format("新增企业基本信息【%s】【%s】成功！", com_id,com_name));
+                            }else{
+                                logger.info(String.format("新增企业基本信息【%s】【%s】失败！", com_id,com_name));
                             }
-                        } else {
-                            company.setCom_id(id);
-                            updateCompany(company);
+                        }else if(count==1){
+                            updateCompanyToUrl(company);
+                        }else if(count>1){
+                            mohurdService.deleteCompanyForUrl(url);
+                            int result = mohurdService.insertCompany(company);//新增
+                            if (result > 0) {
+                                logger.info(String.format("新增企业基本信息【%s】【%s】成功！", com_id,com_name));
+                            }else{
+                                logger.info(String.format("新增企业基本信息【%s】【%s】失败！", com_id,com_name));
+                            }
                         }
                     } catch (Exception e) {
                         if (e instanceof MySQLIntegrityConstraintViolationException) {
@@ -69,11 +78,9 @@ public class MohurdFactory extends AbstractFactory {
                             logger.warn(ExceptionUtils.getMessage(e));
                         }
                     }
-                    redisUtils.hset(Constant.Cache_Company, com_id, "");
-                } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    updateCompany(company);
+                    redisUtils.hset(Constant.Cache_Company_Url, url, DateTimeUtils.current());
                 }
-                redisUtils.hset(Constant.Cache_Company, md5, "");
+                redisUtils.hset(Constant.Cache_Company, md5, DateTimeUtils.current());
             } else {
                 logger.info(String.format("[查Redis缓存] %s 企业基本信息实体MD5已存在，不做任何操作", md5));
                 //企业信息更新updated，擦亮一下，证明更新过 --张夏晖2019-05-16
@@ -458,10 +465,10 @@ public class MohurdFactory extends AbstractFactory {
         }
     }
 
-    private void updateCompany(Company company) {
+    private void updateCompanyToUrl(Company company) {
         try {
             // 记录变更
-            Company old = mohurdService.selectCompanyById(company.getCom_id());
+            Company old = mohurdService.selectCompanyByUrl(company.getUrl());
             if (null != old) {
                 //注册资本不记录变更--张夏晖2019-05-16
                 company.setRegis_capital(old.getRegis_capital());
@@ -472,9 +479,9 @@ public class MohurdFactory extends AbstractFactory {
                     }
                 }
             }
-            int result = mohurdService.updateCompany(company);// 更新
+            int result = mohurdService.updateCompany(company,old);// 更新
             if (result > 0) {
-                logger.info(String.format("更新企业基本信息 %s", company.getCom_id()));
+                logger.info(String.format("更新企业基本信息【%s】【%s】", company.getCom_id(),company.getCom_name()));
             }
         } catch (Exception e) {
             logger.warn(ExceptionUtils.getMessage(e));
