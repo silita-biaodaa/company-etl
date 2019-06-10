@@ -16,7 +16,7 @@
 
     <select id="getCompanyQualificationByComId" parameterType="String"
             resultType="com.silita.spider.common.model.CompanyQualification">
-         SELECT * FROM tb_company_qualification WHERE com_id = #{companyId}
+         SELECT * FROM tb_company_qualification WHERE com_id = #{companyId} and is_valid = 1
     </select>
 
     <select id="getCompanyQualificationBySql" parameterType="Map"

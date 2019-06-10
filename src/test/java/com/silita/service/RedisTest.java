@@ -60,7 +60,7 @@ public class RedisTest extends ConfigTest {
     public void deleteEntityMD5One() {
         ShardedJedis jedis = null;
         try {
-            String md5 = "04e72b4554f516ffeb4900ad56778073";
+            String md5 = "d875a5bea20e43f556c4bb9cbb0d8776";
             jedis = shardedJedisPool.getResource();
             boolean exists = jedis.hexists(Constant.Cache_Company, md5);
             if(exists){
