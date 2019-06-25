@@ -76,19 +76,19 @@
 
     <!-- 更新企业资质 -->
     <update id="updateCompanyQualification" parameterType="com.silita.spider.common.model.CompanyQualification">
-        update tb_company_qualification set md5=#{md5}, corpid=#{corpid}, qual_type=#{qual_type}, cert_org=#{cert_org}, cert_date=#{cert_date}, valid_date=#{valid_date}, qual_name=#{qual_name}, `range`=#{range}, url=#{url}, com_id=#{com_id}, com_name=#{com_name}, updated=NOW()
+        update tb_company_qualification set md5=#{md5}, corpid=#{corpid}, qual_type=#{qual_type}, cert_org=#{cert_org}, cert_date=#{cert_date}, valid_date=#{valid_date}, qual_name=#{qual_name}, `range`=#{range}, url=#{url}, com_id=#{com_id}, com_name=#{com_name}, updated=NOW(),is_valid=1
         where pkid=#{pkid}
     </update>
 
     <!-- 更新企业资质的时间戳 -->
     <update id="updateCompanyQualificationForUpdated" parameterType="String">
-        update tb_company_qualification set  updated=NOW() where pkid=#{pkid}
+        update tb_company_qualification set  updated=NOW(),is_valid=1  where pkid=#{pkid}
     </update>
 
     <!-- 插入人员信息 -->
     <insert id="insertPerson" useGeneratedKeys="true" keyProperty="pkid" parameterType="com.silita.spider.common.model.Person">
-        insert into tb_person_${table}(pkid, md5, `name`, sex, id_card, innerid, category, cert_no, seal_no, major, cert_date, valid_date, url, com_id, com_name, type, created)
-        values(#{pkid}, #{md5}, #{name}, #{sex}, #{id_card}, #{innerid}, #{category}, #{cert_no}, #{seal_no}, #{major}, #{cert_date}, #{valid_date}, #{url}, #{com_id}, #{com_name}, #{type}, NOW())
+        insert into tb_person_${table}(pkid, md5, `name`, sex, id_card, innerid, category, cert_no, seal_no, major, cert_date, valid_date, url, com_id, com_name, type, created,updated)
+        values(#{pkid}, #{md5}, #{name}, #{sex}, #{id_card}, #{innerid}, #{category}, #{cert_no}, #{seal_no}, #{major}, #{cert_date}, #{valid_date}, #{url}, #{com_id}, #{com_name}, #{type}, NOW(),NOW())
     </insert>
 
     <!-- 查询人员信息 -->
@@ -123,13 +123,13 @@
 
     <!-- 更新人员信息 -->
     <update id="updatePerson" parameterType="com.silita.spider.common.model.Person">
-        update tb_person_${table} set md5=#{md5}, `name`=#{name}, sex=#{sex}, id_card=#{id_card}, innerid=#{innerid}, category=#{category}, cert_no=#{cert_no}, seal_no=#{seal_no}, major=#{major}, cert_date=#{cert_date}, valid_date=#{valid_date}, url=#{url}, com_id=#{com_id}, com_name=#{com_name}, updated=NOW()
+        update tb_person_${table} set md5=#{md5}, `name`=#{name}, sex=#{sex}, id_card=#{id_card}, innerid=#{innerid}, category=#{category}, cert_no=#{cert_no}, seal_no=#{seal_no}, major=#{major}, cert_date=#{cert_date}, valid_date=#{valid_date}, url=#{url}, com_id=#{com_id}, com_name=#{com_name}, updated=NOW(),is_valid=1
         where pkid=#{pkid}
     </update>
 
     <!-- 更新人员信息的时间戳 -->
     <update id="updatePersonForUpdated" parameterType="com.silita.spider.common.model.Person">
-        update tb_person_${table} set  updated=NOW() where pkid=#{pkid}
+        update tb_person_${table} set  updated=NOW(),is_valid=1 where pkid=#{pkid}
     </update>
 
     <!-- 插入人员变更记录 -->
