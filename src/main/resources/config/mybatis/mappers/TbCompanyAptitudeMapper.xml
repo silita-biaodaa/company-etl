@@ -27,7 +27,7 @@
     </delete>
 
     <select id="listCompanyAptitudeByComPanyId" parameterType="String" resultType="com.silita.model.TbCompanyAptitude">
-        SELECT com_id AS `comId`, group_concat(`type`) AS `type`, group_concat(`aptitude_uuid`) AS `aptitudeUuid`
+        SELECT com_id AS `comId`,  type,aptitude_uuid AS `aptitudeUuid`
         FROM tb_company_aptitude
         WHERE com_id = #{companyId}
     </select>

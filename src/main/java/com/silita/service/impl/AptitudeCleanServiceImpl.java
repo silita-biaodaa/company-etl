@@ -228,7 +228,7 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
         Collections.sort(rangs);
         StringBuilder sb = new StringBuilder();
         for (String str : rangs) {
-            sb.append(str);
+            sb.append(str+",");
         }
         Company company = new Company();
         company.setCom_id(companyId);
