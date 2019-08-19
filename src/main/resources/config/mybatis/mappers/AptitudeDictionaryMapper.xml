@@ -9,4 +9,33 @@
         ORDER BY id DESC
         limit 1
     </select>
+
+    <!--根据别名查询code-->
+    <select id="queryCodeByAlias" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        t.`std_code`
+        from
+        biaodaa_admin.`dic_alias` t
+        where t.`name` = #{name}
+    </select>
+
+    <!--查询资质等级主键id-->
+    <select id="queryPkidByParam" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT
+        t.`id`
+        FROM
+        biaodaa_admin.`rel_qua_grade` t
+        WHERE t.`grade_code` = #{grade}
+        AND t.`qua_code` = #{qual}
+    </select>
+
+    <!--根据code查询名称-->
+    <select id="queryQualNameByCode" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        t.`bench_name`
+        from
+        biaodaa_admin.`dic_qua` t
+        where t.`qua_code` = #{qualCode}
+        and t.`bench_name` is not null
+    </select>
 </mapper>

@@ -143,31 +143,64 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
 
     @Override
     public void splitCompanyAptitudeByCompanyId(String companyId) {
+        Map<String, Object> param = new HashMap<>();
         //拆之前删除旧资质
         tbCompanyAptitudeMapper.deleteCompanyAptitudeByCompanyId(companyId);
         List<CompanyQualification> companyQualificationList = companyQualificationMapper.getCompanyQualificationByComId(companyId);
         //遍历证书
         for (int i = 0; i < companyQualificationList.size(); i++) {
             String qualId = companyQualificationList.get(i).getPkid();
-            String qualRange = companyQualificationList.get(i).getRange();
-            String comId = companyQualificationList.get(i).getCom_id();
+            String qualRange = companyQualificationList.get(i).getQual_name();
+            if (StringUtils.isEmpty(qualRange)) {
+                qualRange = companyQualificationList.get(i).getRange();
+            }
+            String comId = companyId;
             //有资质
             if (!StringUtils.isEmpty(qualRange)) {
-                AllZh allZh;
                 TbCompanyAptitude companyAptitude;
                 List<TbCompanyAptitude> companyQualifications = new ArrayList<>();
                 Iterator<String> iterator = Splitter.onPattern("\\||,|，|;|；").omitEmptyStrings().trimResults().split(qualRange).iterator();
+                StringBuffer subQual;
+                StringBuffer subGrade;
+                StringBuffer paramGrade;
                 while (iterator.hasNext()) {
+                    companyAptitude = new TbCompanyAptitude();
                     String qual = iterator.next();
-                    allZh = allZhMapper.getAllZhByName(qual);
-                    if (allZh != null) {
-                        companyAptitude = new TbCompanyAptitude();
-                        companyAptitude.setQualId(qualId);
+                    if (qual.contains("不分等级")) {
+                        subQual = new StringBuffer((qual.replace("不分等级", "")));
+                        subGrade = new StringBuffer("0");
+                    } else if (qual.contains("级")) {
+                        subQual = new StringBuffer(qual.substring(0, qual.indexOf("级") - 1));
+                        subGrade = new StringBuffer(qual.substring(qual.indexOf("级") - 1, qual.indexOf("级") + 1));
+                    } else {
+                        subQual = new StringBuffer(qual);
+                        subGrade = new StringBuffer("0");
+                    }
+                    String resCode = aptitudeDictionaryMapper.queryCodeByAlias(subQual.toString());
+                    if (null != resCode) {
                         companyAptitude.setComId(comId);
-                        companyAptitude.setAptitudeName(aptitudeDictionaryMapper.getMajorNameBymajorUuid(allZh.getMainuuid()));
-                        companyAptitude.setAptitudeUuid(allZh.getFinaluuid());
-                        companyAptitude.setMainuuid(allZh.getMainuuid());
-                        companyAptitude.setType(allZh.getType());
+                        companyAptitude.setQualId(qualId);
+                        companyAptitude.setMainuuid(resCode);
+                        companyAptitude.setAptitudeName(aptitudeDictionaryMapper.queryQualNameByCode(resCode));
+                        param.put("qual", resCode);
+                        if ("0".equals(subGrade.toString())) {
+                            param.put("grade", "0");
+                            StringBuffer pkid = new StringBuffer(aptitudeDictionaryMapper.queryPkidByParam(param));
+                            if (null != pkid) {
+                                companyAptitude.setAptitudeUuid(pkid.toString());
+                            }
+                        } else {
+                            String resGrade = aptitudeDictionaryMapper.queryCodeByAlias(subGrade.toString());
+                            if (null == resGrade) {
+                                resGrade = "0";
+                            }
+                            paramGrade = new StringBuffer(resGrade);
+                            param.put("grade", paramGrade.toString());
+                            StringBuffer pkid = new StringBuffer(aptitudeDictionaryMapper.queryPkidByParam(param));
+                            if (null != pkid) {
+                                companyAptitude.setAptitudeUuid(pkid.toString());
+                            }
+                        }
                         companyQualifications.add(companyAptitude);
                     }
                 }
@@ -181,37 +214,26 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
     @Override
     public void updateCompanyAptitude(String companyId) {
         List<TbCompanyAptitude> tbCompanyAptitudes = tbCompanyAptitudeMapper.listCompanyAptitudeByComPanyId(companyId);
-        StringBuilder sb;
-        Company company;
         TbCompanyAptitude tbCompanyAptitude;
+        List<String> rangs = new ArrayList<>();
         //遍历
         for (int i = 0; i < tbCompanyAptitudes.size(); i++) {
             tbCompanyAptitude = tbCompanyAptitudes.get(i);
             if (null != tbCompanyAptitude) {
-                String comId = tbCompanyAptitude.getComId();
-                String allType = tbCompanyAptitude.getType();
-                String allAptitudeUuid = tbCompanyAptitude.getAptitudeUuid();
-                if (!StringUtils.isEmpty(allType) && !StringUtils.isEmpty(allAptitudeUuid)) {
-                    sb = new StringBuilder();
-                    String[] typeArr = allType.split(",");
-                    String[] aptitudeUuidArr = allAptitudeUuid.split(",");
-                    if (typeArr.length > 0 && aptitudeUuidArr.length > 0 && typeArr.length == aptitudeUuidArr.length) {
-                        for (int j = 0; j < typeArr.length; j++) {
-                            if (j == typeArr.length - 1) {
-                                sb.append(typeArr[j]).append("/").append(aptitudeUuidArr[j]);
-                            } else {
-                                sb.append(typeArr[j]).append("/").append(aptitudeUuidArr[j]).append(",");
-                            }
-                        }
-                    }
-                    company = new Company();
-                    company.setCom_id(comId);
-                    company.setRange(sb.toString());
-                    companyMapper.updateCompanyRangeByComId(company);
-                }
+                rangs.add(tbCompanyAptitude.getAptitudeUuid());
             }
         }
-        logger.info("完成id为" + companyId + "的企业数据更新！");
+
+
+        Collections.sort(rangs);
+        StringBuilder sb = new StringBuilder();
+        for (String str : rangs) {
+            sb.append(str);
+        }
+        Company company = new Company();
+        company.setCom_id(companyId);
+        company.setRange(sb.toString());
+        companyMapper.updateCompanyRangeByComId(company);
     }
 
     @Override
