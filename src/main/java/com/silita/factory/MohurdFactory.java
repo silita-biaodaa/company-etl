@@ -94,9 +94,8 @@ public class MohurdFactory extends AbstractFactory {
             redisUtils.hset(Constant.Cache_CompanyQual_Num, qualification.getCom_name(), qualification.getTotal()+"|"+DateTimeUtils.current());
             boolean exists = redisUtils.hexists(Constant.Cache_CompanyQual, md5);
             if (!exists) {//实体MD5不存在
-                exists = redisUtils.hexists(Constant.Cache_CompanyQual, pkid);
-                if (!exists) {//主键md5不存在，新增
-                    try {
+                try {
+                    if(qualification.getCom_id()!=null&&qualification.getCert_no()!=null){
                         String id = mohurdService.selectCompanyQualification(qualification);
                         if (StringUtils.isBlank(id)) {
                             int result = mohurdService.insertCompanyQualification(qualification);//新增
@@ -110,16 +109,16 @@ public class MohurdFactory extends AbstractFactory {
                             qualification.setPkid(id);
                             updateCompanyQual(qualification);
                         }
-                    } catch (Exception e) {
-                        if (e instanceof MySQLIntegrityConstraintViolationException) {
-                            //忽略主键冲突异常
-                        } else {
-                            logger.warn(ExceptionUtils.getMessage(e));
-                        }
+                    }else{
+                        logger.info(String.format("企业资质更新 [%s][%s] 缺失企业ID或资质编号", qualification.getCom_name(),qualification.getQual_name()));
                     }
-                    redisUtils.hset(Constant.Cache_CompanyQual, pkid, "");
-                } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    updateCompanyQual(qualification);
+
+                } catch (Exception e) {
+                    if (e instanceof MySQLIntegrityConstraintViolationException) {
+                        //忽略主键冲突异常
+                    } else {
+                        logger.warn(ExceptionUtils.getMessage(e));
+                    }
                 }
                 redisUtils.hset(Constant.Cache_CompanyQual, md5, "");
             } else {
@@ -129,37 +128,33 @@ public class MohurdFactory extends AbstractFactory {
             }
         } else if (object instanceof Project) {
             Project project = (Project) object;
-            String pkid = project.getPro_id();
+            String proId = project.getPro_id();
             String md5 = project.getMd5();
             boolean exists = redisUtils.hexists(Constant.Cache_Project, md5);
             if (!exists) {//实体MD5不存在
-                exists = redisUtils.hexists(Constant.Cache_Project, pkid);
-                if (!exists) {//主键md5不存在，新增
-                    try {
-                        String id = mohurdService.selectProject(project);
-                        if (StringUtils.isBlank(id)) {
-                            int result = mohurdService.insertProject(project);//新增
-                            if (result > 0) {
-                                logger.info(String.format("新增项目 %s", pkid));
-                            }
-                        } else {
-                            project.setPro_id(id);
-                            updateProject(project);
+                try {
+                    String id = mohurdService.selectProject(project);
+                    if (StringUtils.isBlank(id)) {
+                        int result = mohurdService.insertProject(project);//新增
+                        if (result > 0) {
+                            logger.info(String.format("新增项目 %s", proId));
                         }
-                    } catch (Exception e) {
-                        if (e instanceof MySQLIntegrityConstraintViolationException) {
-                            //忽略主键冲突异常
-                        } else {
-                            logger.warn(ExceptionUtils.getMessage(e));
-                        }
+                    } else {
+                        project.setPro_id(id);
+                        updateProject(project);
                     }
-                    redisUtils.hset(Constant.Cache_Project, pkid, "");
-                } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    updateProject(project);
+                } catch (Exception e) {
+                    if (e instanceof MySQLIntegrityConstraintViolationException) {
+                        //忽略主键冲突异常
+                    } else {
+                        logger.warn(ExceptionUtils.getMessage(e));
+                    }
                 }
                 redisUtils.hset(Constant.Cache_Project, md5, "");
             } else {
                 logger.info(String.format("[查Redis缓存] %s 项目实体MD5已存在，不做任何操作", md5));
+                //企业业绩信息更新updated，擦亮一下，证明更新过 --张夏晖2019-08-20
+                mohurdService.updateProjectForUpdated(proId);
             }
         } else if (object instanceof Person) {
             Person person = (Person) object;
@@ -169,29 +164,23 @@ public class MohurdFactory extends AbstractFactory {
             redisUtils.hset(Constant.Cache_Person_Num, person.getCom_name(), person.getTotal()+"|"+DateTimeUtils.current());
             boolean exists = redisUtils.hexists(Constant.Cache_Person, md5);
             if (!exists) {//实体MD5不存在
-                exists = redisUtils.hexists(Constant.Cache_Person, pkid);
-                if (!exists) {//主键md5不存在，新增
-                    try {
-                        String id = mohurdService.selectPerson(person);
-                        if (StringUtils.isBlank(id)) {
-                            String result = mohurdService.insertPerson(person);//新增
-                            if (StringUtils.isNotBlank(result)) {
-                                logger.info(String.format("新增人员 %s", pkid));
-                            }
-                        } else {
-                            person.setPkid(id);
-                            updatePerson(person);
+                try {
+                    String id = mohurdService.selectPerson(person);
+                    if (StringUtils.isBlank(id)) {
+                        String result = mohurdService.insertPerson(person);//新增
+                        if (StringUtils.isNotBlank(result)) {
+                            logger.info(String.format("新增人员 %s", pkid));
                         }
-                    } catch (Exception e) {
-                        if (e instanceof MySQLIntegrityConstraintViolationException) {
-                            //忽略主键冲突异常
-                        } else {
-                            logger.warn(ExceptionUtils.getMessage(e));
-                        }
+                    } else {
+                        person.setPkid(id);
+                        updatePerson(person);
                     }
-                    redisUtils.hset(Constant.Cache_Person, pkid, "");
-                } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
-                    updatePerson(person);
+                } catch (Exception e) {
+                    if (e instanceof MySQLIntegrityConstraintViolationException) {
+                        //忽略主键冲突异常
+                    } else {
+                        logger.warn(ExceptionUtils.getMessage(e));
+                    }
                 }
                 redisUtils.hset(Constant.Cache_Person, md5, "");
             } else {
@@ -295,172 +284,112 @@ public class MohurdFactory extends AbstractFactory {
         } else if (object instanceof ZhaoTouBiao) {
             ZhaoTouBiao zhaoTouBiao = (ZhaoTouBiao) object;
             String pkid = zhaoTouBiao.getPkid();
-            String md5 = zhaoTouBiao.getMd5();
-            boolean exists = redisUtils.hexists(Constant.Cache_ZhaoTouBiao, md5);
-            if (!exists) {//实体MD5不存在
-                exists = redisUtils.hexists(Constant.Cache_ZhaoTouBiao, pkid);
-                if (!exists) {//主键md5不存在，新增
-                    try {
-                        String id = mohurdService.selectZhaoTouBiao(zhaoTouBiao);
-                        if (StringUtils.isBlank(id)) {
-                            int result = mohurdService.insertZhaoTouBiao(zhaoTouBiao);//新增
-                            if (result > 0) {
-                                logger.info(String.format("新增招投标 %s", pkid));
-                            }
-                        } else {
-                            zhaoTouBiao.setPkid(id);
-                            updateZhaoTouBiao(zhaoTouBiao);
-                        }
-                    } catch (Exception e) {
-                        if (e instanceof MySQLIntegrityConstraintViolationException) {
-                            //忽略主键冲突异常
-                        } else {
-                            logger.warn(ExceptionUtils.getMessage(e));
-                        }
+            //String md5 = zhaoTouBiao.getMd5();
+            try {
+                String id = mohurdService.selectZhaoTouBiao(zhaoTouBiao);
+                if (StringUtils.isBlank(id)) {
+                    int result = mohurdService.insertZhaoTouBiao(zhaoTouBiao);//新增
+                    if (result > 0) {
+                        logger.info(String.format("新增招投标 %s", pkid));
                     }
-                    redisUtils.hset(Constant.Cache_ZhaoTouBiao, pkid, "");
-                } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
+                } else {
+                    zhaoTouBiao.setPkid(id);
                     updateZhaoTouBiao(zhaoTouBiao);
                 }
-                redisUtils.hset(Constant.Cache_ZhaoTouBiao, md5, "");
-            } else {
-                logger.info(String.format("[查Redis缓存] %s 招投标实体MD5已存在，不做任何操作", md5));
+            } catch (Exception e) {
+                if (e instanceof MySQLIntegrityConstraintViolationException) {
+                    //忽略主键冲突异常
+                } else {
+                    logger.warn(ExceptionUtils.getMessage(e));
+                }
             }
         } else if (object instanceof ShiGongTuShenCha) {
             ShiGongTuShenCha shiGongTuShenCha = (ShiGongTuShenCha) object;
             String pkid = shiGongTuShenCha.getPkid();
-            String md5 = shiGongTuShenCha.getMd5();
-            boolean exists = redisUtils.hexists(Constant.Cache_ShiGongTuShenCha, md5);
-            if (!exists) {//实体MD5不存在
-                exists = redisUtils.hexists(Constant.Cache_ShiGongTuShenCha, pkid);
-                if (!exists) {//主键md5不存在，新增
-                    try {
-                        String id = mohurdService.selectShiGongTuShenCha(shiGongTuShenCha);
-                        if (StringUtils.isBlank(id)) {
-                            int result = mohurdService.insertShiGongTuShenCha(shiGongTuShenCha);//新增
-                            if (result > 0) {
-                                logger.info(String.format("新增施工图审查 %s", pkid));
-                            }
-                        } else {
-                            shiGongTuShenCha.setPkid(id);
-                            updateShiGongTuShenCha(shiGongTuShenCha);
-                        }
-                    } catch (Exception e) {
-                        if (e instanceof MySQLIntegrityConstraintViolationException) {
-                            //忽略主键冲突异常
-                        } else {
-                            logger.warn(ExceptionUtils.getMessage(e));
-                        }
+            //String md5 = shiGongTuShenCha.getMd5();
+            try {
+                String id = mohurdService.selectShiGongTuShenCha(shiGongTuShenCha);
+                if (StringUtils.isBlank(id)) {
+                    int result = mohurdService.insertShiGongTuShenCha(shiGongTuShenCha);//新增
+                    if (result > 0) {
+                        logger.info(String.format("新增施工图审查 %s", pkid));
                     }
-                    redisUtils.hset(Constant.Cache_ShiGongTuShenCha, pkid, "");
-                } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
+                } else {
+                    shiGongTuShenCha.setPkid(id);
                     updateShiGongTuShenCha(shiGongTuShenCha);
                 }
-                redisUtils.hset(Constant.Cache_ShiGongTuShenCha, md5, "");
-            } else {
-                logger.info(String.format("[查Redis缓存] %s 施工图审查实体MD5已存在，不做任何操作", md5));
+            } catch (Exception e) {
+                if (e instanceof MySQLIntegrityConstraintViolationException) {
+                    //忽略主键冲突异常
+                } else {
+                    logger.warn(ExceptionUtils.getMessage(e));
+                }
             }
         } else if (object instanceof ShiGongXuKe) {
             ShiGongXuKe shiGongXuKe = (ShiGongXuKe) object;
             String pkid = shiGongXuKe.getPkid();
-            String md5 = shiGongXuKe.getMd5();
-            boolean exists = redisUtils.hexists(Constant.Cache_ShiGongXuKe, md5);
-            if (!exists) {//实体MD5不存在
-                exists = redisUtils.hexists(Constant.Cache_ShiGongXuKe, pkid);
-                if (!exists) {//主键md5不存在，新增
-                    try {
-                        String id = mohurdService.selectShiGongXuKe(shiGongXuKe);
-                        if (StringUtils.isBlank(id)) {
-                            int result = mohurdService.insertShiGongXuKe(shiGongXuKe);//新增
-                            if (result > 0) {
-                                logger.info(String.format("新增施工许可 %s", pkid));
-                            }
-                        } else {
-                            shiGongXuKe.setPkid(id);
-                            updateShiGongXuKe(shiGongXuKe);
-                        }
-                    } catch (Exception e) {
-                        if (e instanceof MySQLIntegrityConstraintViolationException) {
-                            //忽略主键冲突异常
-                        } else {
-                            logger.warn(ExceptionUtils.getMessage(e));
-                        }
+            //String md5 = shiGongXuKe.getMd5();
+            try {
+                String id = mohurdService.selectShiGongXuKe(shiGongXuKe);
+                if (StringUtils.isBlank(id)) {
+                    int result = mohurdService.insertShiGongXuKe(shiGongXuKe);//新增
+                    if (result > 0) {
+                        logger.info(String.format("新增施工许可 %s", pkid));
                     }
-                    redisUtils.hset(Constant.Cache_ShiGongXuKe, pkid, "");
-                } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
+                } else {
+                    shiGongXuKe.setPkid(id);
                     updateShiGongXuKe(shiGongXuKe);
                 }
-                redisUtils.hset(Constant.Cache_ShiGongXuKe, md5, "");
-            } else {
-                logger.info(String.format("[查Redis缓存] %s 施工许可实体MD5已存在，不做任何操作", md5));
+            } catch (Exception e) {
+                if (e instanceof MySQLIntegrityConstraintViolationException) {
+                    //忽略主键冲突异常
+                } else {
+                    logger.warn(ExceptionUtils.getMessage(e));
+                }
             }
         } else if (object instanceof HeTongBeiAn) {
             HeTongBeiAn heTongBeiAn = (HeTongBeiAn) object;
             String pkid = heTongBeiAn.getPkid();
-            String md5 = heTongBeiAn.getMd5();
-            boolean exists = redisUtils.hexists(Constant.Cache_HeTongBeiAn, md5);
-            if (!exists) {//实体MD5不存在
-                exists = redisUtils.hexists(Constant.Cache_HeTongBeiAn, pkid);
-                if (!exists) {//主键md5不存在，新增
-                    try {
-                        String id = mohurdService.selectHeTongBeiAn(heTongBeiAn);
-                        if (StringUtils.isBlank(id)) {
-                            int result = mohurdService.insertHeTongBeiAn(heTongBeiAn);//新增
-                            if (result > 0) {
-                                logger.info(String.format("新增合同备案 %s", pkid));
-                            }
-                        } else {
-                            heTongBeiAn.setPkid(id);
-                            updateHeTongBeiAn(heTongBeiAn);
-                        }
-                    } catch (Exception e) {
-                        if (e instanceof MySQLIntegrityConstraintViolationException) {
-                            //忽略主键冲突异常
-                        } else {
-                            logger.warn(ExceptionUtils.getMessage(e));
-                        }
+            //String md5 = heTongBeiAn.getMd5();
+            try {
+                String id = mohurdService.selectHeTongBeiAn(heTongBeiAn);
+                if (StringUtils.isBlank(id)) {
+                    int result = mohurdService.insertHeTongBeiAn(heTongBeiAn);//新增
+                    if (result > 0) {
+                        logger.info(String.format("新增合同备案 %s", pkid));
                     }
-                    redisUtils.hset(Constant.Cache_HeTongBeiAn, pkid, "");
-                } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
+                } else {
+                    heTongBeiAn.setPkid(id);
                     updateHeTongBeiAn(heTongBeiAn);
                 }
-                redisUtils.hset(Constant.Cache_HeTongBeiAn, md5, "");
-            } else {
-                logger.info(String.format("[查Redis缓存] %s 合同备案实体MD5已存在，不做任何操作", md5));
+            } catch (Exception e) {
+                if (e instanceof MySQLIntegrityConstraintViolationException) {
+                    //忽略主键冲突异常
+                } else {
+                    logger.warn(ExceptionUtils.getMessage(e));
+                }
             }
         } else if (object instanceof JunGongBeiAn) {
             JunGongBeiAn junGongBeiAn = (JunGongBeiAn) object;
             String pkid = junGongBeiAn.getPkid();
-            String md5 = junGongBeiAn.getMd5();
-            boolean exists = redisUtils.hexists(Constant.Cache_JunGongBeiAn, md5);
-            if (!exists) {//实体MD5不存在
-                exists = redisUtils.hexists(Constant.Cache_JunGongBeiAn, pkid);
-                if (!exists) {//主键md5不存在，新增
-                    try {
-                        String id = mohurdService.selectJunGongBeiAn(junGongBeiAn);
-                        if (StringUtils.isBlank(id)) {
-                            int result = mohurdService.insertJunGongBeiAn(junGongBeiAn);//新增
-                            if (result > 0) {
-                                logger.info(String.format("新增竣工验收备案 %s", pkid));
-                            }
-                        } else {
-                            junGongBeiAn.setPkid(id);
-                            updateJunGongBeiAn(junGongBeiAn);
-                        }
-                    } catch (Exception e) {
-                        if (e instanceof MySQLIntegrityConstraintViolationException) {
-                            //忽略主键冲突异常
-                        } else {
-                            logger.warn(ExceptionUtils.getMessage(e));
-                        }
+            //String md5 = junGongBeiAn.getMd5();
+            try {
+                String id = mohurdService.selectJunGongBeiAn(junGongBeiAn);
+                if (StringUtils.isBlank(id)) {
+                    int result = mohurdService.insertJunGongBeiAn(junGongBeiAn);//新增
+                    if (result > 0) {
+                        logger.info(String.format("新增竣工验收备案 %s", pkid));
                     }
-                    redisUtils.hset(Constant.Cache_JunGongBeiAn, pkid, "");
-                } else {//主键MD5存在，实体MD5不存在，则说明是更新操作
+                } else {
+                    junGongBeiAn.setPkid(id);
                     updateJunGongBeiAn(junGongBeiAn);
                 }
-                redisUtils.hset(Constant.Cache_JunGongBeiAn, md5, "");
-            } else {
-                logger.info(String.format("[查Redis缓存] %s 竣工验收备案实体MD5已存在，不做任何操作", md5));
+            } catch (Exception e) {
+                if (e instanceof MySQLIntegrityConstraintViolationException) {
+                    //忽略主键冲突异常
+                } else {
+                    logger.warn(ExceptionUtils.getMessage(e));
+                }
             }
         }
     }

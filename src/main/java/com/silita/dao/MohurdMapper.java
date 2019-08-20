@@ -381,4 +381,6 @@ public interface MohurdMapper {
      * @param change
      */
     public int insertFieldChangeRecord(FieldChange change);
+
+    int updateProjectForUpdated(String proId);
 }

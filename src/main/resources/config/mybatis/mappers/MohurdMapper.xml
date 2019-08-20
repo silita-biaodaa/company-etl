@@ -58,20 +58,7 @@
     <!-- 查询企业资质 -->
     <select id="selectCompanyQualification" parameterType="com.silita.spider.common.model.CompanyQualification" resultType="String">
         select pkid from tb_company_qualification
-        where 1=1 and channel=1
-        <if test="cert_no !=null and cert_no != ''">
-            and cert_no=#{cert_no}
-        </if>
-        <if test="com_id !=null">
-            and com_id=#{com_id}
-        </if>
-        <if test="qual_type !=null and qual_type != ''">
-            and qual_type=#{qual_type}
-        </if>
-        <if test="valid_date !=null and valid_date != ''">
-            and valid_date=#{valid_date}
-        </if>
-        limit 1
+        where 1=1 and channel=1 and cert_no=#{cert_no} and com_id=#{com_id} limit 1
     </select>
 
     <!-- 更新企业资质 -->
@@ -130,6 +117,11 @@
     <!-- 更新人员信息的时间戳 -->
     <update id="updatePersonForUpdated" parameterType="com.silita.spider.common.model.Person">
         update tb_person_${table} set  updated=NOW(),is_valid=1 where pkid=#{pkid}
+    </update>
+
+    <!-- 更新企业项目的时间戳 -->
+    <update id="updateProjectForUpdated" parameterType="String">
+        update tb_project set  updated=NOW(),is_valid=1  where pro_id=#{proId}
     </update>
 
     <!-- 插入人员变更记录 -->

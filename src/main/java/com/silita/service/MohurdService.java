@@ -142,6 +142,13 @@ public class MohurdService {
         return 0;
     }
 
+    public int updateProjectForUpdated(String proId){
+        if (StringUtils.isNotBlank(proId)) {
+            return mohurdMapper.updateProjectForUpdated(proId);
+        }
+        return 0;
+    }
+
     /**
      * 通过id查询人员
      *
