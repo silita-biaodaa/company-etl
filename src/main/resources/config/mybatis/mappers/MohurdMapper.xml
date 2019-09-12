@@ -110,7 +110,7 @@
 
     <!-- 更新人员信息 -->
     <update id="updatePerson" parameterType="com.silita.spider.common.model.Person">
-        update tb_person_${table} set md5=#{md5}, `name`=#{name}, sex=#{sex}, id_card=#{id_card}, innerid=#{innerid}, category=#{category}, cert_no=#{cert_no}, seal_no=#{seal_no}, major=#{major}, cert_date=#{cert_date}, valid_date=#{valid_date}, url=#{url}, com_id=#{com_id}, com_name=#{com_name}, updated=NOW(),is_valid=1
+        update tb_person_${table} set md5=#{md5}, `name`=#{name}, id_card=#{id_card}, innerid=#{innerid}, category=#{category}, seal_no=#{seal_no}, major=#{major}, cert_date=#{cert_date},  url=#{url}, com_id=#{com_id}, com_name=#{com_name}, updated=NOW(),is_valid=1
         where pkid=#{pkid}
     </update>
 
