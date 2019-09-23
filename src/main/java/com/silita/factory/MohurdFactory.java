@@ -425,7 +425,9 @@ public class MohurdFactory extends AbstractFactory {
                 List<FieldChange> changes = BeanUtils.compare(qualification, old);
                 if (!changes.isEmpty()) {
                     for (FieldChange change : changes) {
-                        mohurdService.insertFieldChangeRecord(change);
+                        if(change.getColumn_name()!=null&&!"range".equals(change.getColumn_name())){
+                            mohurdService.insertFieldChangeRecord(change);
+                        }
                     }
                 }
             }
@@ -483,7 +485,9 @@ public class MohurdFactory extends AbstractFactory {
                 List<FieldChange> changes = BeanUtils.compare(person, old);
                 if (!changes.isEmpty()) {
                     for (FieldChange change : changes) {
-                        mohurdService.insertFieldChangeRecord(change);
+                        if(change.getColumn_name()!=null&&!"valid_date".equals(change.getColumn_name())){
+                            mohurdService.insertFieldChangeRecord(change);
+                        }
                     }
                 }
             }
