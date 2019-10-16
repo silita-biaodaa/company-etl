@@ -50,7 +50,6 @@ public class MohurdFactory extends AbstractFactory {
             boolean exists = redisUtils.hexists(Constant.Cache_Company, md5);
             if (!exists) {//实体MD5不存在
                 String url = company.getUrl();
-                url = url.replace("jzsc2016.mohurd.gov.cn","jzsc.mohurd.gov.cn");
                 if(url!=null){
                     try {
                         Integer count = mohurdService.countCompanyByUrl(url);
