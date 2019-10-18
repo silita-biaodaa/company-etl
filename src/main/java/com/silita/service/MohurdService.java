@@ -393,16 +393,7 @@ public class MohurdService {
      * @return
      */
     public String selectProjectCompany(ProjectCompany projectCompany) {
-        String innerId = projectCompany.getInnerId();
-        String companyName = projectCompany.getCom_name();
-        if (StringUtils.isNotBlank(innerId)) {
-            // 如果innerId不为空，就把公司名清空，这种做法是是避免公司名变了导致存多条数据
-            projectCompany.setCom_name(null);
-        }
-        String id = mohurdMapper.selectProjectCompany(projectCompany);
-        //查询之前去掉了，查询之后要补上
-        projectCompany.setCom_name(companyName);
-        return id;
+        return mohurdMapper.selectProjectCompany(projectCompany);
     }
 
     /**

@@ -26,8 +26,8 @@
 
     <!-- 插入企业 -->
     <insert id="insertCompany" useGeneratedKeys="true" keyProperty="com_id" parameterType="com.silita.spider.common.model.Company">
-        insert into tb_company(com_id, md5, com_name, org_code, credit_code, business_num, regis_address, com_address, legal_person, economic_type, regis_capital, url, com_name_py, created)
-        values(#{com_id}, #{md5},#{com_name}, #{org_code}, #{credit_code}, #{business_num}, #{regis_address}, #{com_address}, #{legal_person}, #{economic_type}, #{regis_capital}, #{url}, #{com_name_py}, NOW())
+        insert into tb_company(com_id, md5, com_name, org_code, credit_code, business_num, regis_address, com_address, legal_person, economic_type, regis_capital, url, com_name_py, created,updated)
+        values(#{com_id}, #{md5},#{com_name}, #{org_code}, #{credit_code}, #{business_num}, #{regis_address}, #{com_address}, #{legal_person}, #{economic_type}, #{regis_capital}, #{url}, #{com_name_py}, NOW(), NOW())
     </insert>
 
     <update id="updateCompanyForUrl" parameterType="com.silita.spider.common.model.Company">
@@ -126,8 +126,8 @@
 
     <!-- 插入人员变更记录 -->
     <insert id="insertPersonChange" useGeneratedKeys="true" keyProperty="pkid" parameterType="com.silita.spider.common.model.PersonChange">
-        insert into tb_person_change(pkid, md5, com_name, major, change_date, remark, flag, created)
-        values(#{pkid}, #{md5}, #{com_name}, #{major}, #{change_date}, #{remark}, #{flag}, NOW())
+        insert into tb_person_change(pkid, md5, com_name, major, change_date, remark, flag, created,updated)
+        values(#{pkid}, #{md5}, #{com_name}, #{major}, #{change_date}, #{remark}, #{flag}, NOW(), NOW())
     </insert>
 
     <!-- 查询人员变更记录 -->
@@ -158,8 +158,8 @@
 
     <!-- 插入项目基本信息 -->
     <insert id="insertProject" useGeneratedKeys="true" keyProperty="pro_id" parameterType="com.silita.spider.common.model.Project">
-        insert into tb_project(pro_id, md5, xmid, pro_name, pro_no, project_no, pro_org, pro_org_code, pro_where, invest_amount, approval_num, pro_type, build_type, acreage, pro_scope, pro_level, pro_use, url, created)
-        values(#{pro_id}, #{md5}, #{xmid}, #{pro_name}, #{pro_no}, #{project_no}, #{pro_org}, #{pro_org_code}, #{pro_where}, #{invest_amount}, #{approval_num}, #{pro_type}, #{build_type}, #{acreage}, #{pro_scope}, #{pro_level}, #{pro_use}, #{url}, NOW())
+        insert into tb_project(pro_id, md5, xmid, pro_name, pro_no, project_no, pro_org, pro_org_code, pro_where, invest_amount, approval_num, pro_type, build_type, acreage, pro_scope, pro_level, pro_use, url, created,updated)
+        values(#{pro_id}, #{md5}, #{xmid}, #{pro_name}, #{pro_no}, #{project_no}, #{pro_org}, #{pro_org_code}, #{pro_where}, #{invest_amount}, #{approval_num}, #{pro_type}, #{build_type}, #{acreage}, #{pro_scope}, #{pro_level}, #{pro_use}, #{url}, NOW(),NOW())
     </insert>
 
     <!-- 更新项目基本信息 -->
@@ -192,8 +192,8 @@
 
     <!-- 插入人员和项目关系 -->
     <insert id="insertPersonProject" useGeneratedKeys="true" keyProperty="pkid" parameterType="com.silita.spider.common.model.PersonProject">
-        insert into tb_person_project(pkid, md5, innerid, pid, pro_id, com_name, name, id_card, major, category, cert_no, type, role, remark, created)
-        values(#{pkid}, #{md5}, #{innerid}, #{pid}, #{pro_id}, #{com_name}, #{name}, #{id_card}, #{major}, #{category}, #{cert_no}, #{type}, #{role}, #{remark}, NOW())
+        insert into tb_person_project(pkid, md5, innerid, pid, pro_id, com_name, name, id_card, major, category, cert_no, type, role, remark, created,updated)
+        values(#{pkid}, #{md5}, #{innerid}, #{pid}, #{pro_id}, #{com_name}, #{name}, #{id_card}, #{major}, #{category}, #{cert_no}, #{type}, #{role}, #{remark}, NOW(), NOW())
     </insert>
 
     <!-- 更新人员和项目的关系 -->
@@ -204,30 +204,13 @@
 
     <!-- 查询项目和公司的关系 -->
     <select id="selectProjectCompany" parameterType="com.silita.spider.common.model.ProjectCompany" resultType="String">
-        select pkid from tb_project_company
-        where 1=1
-        <if test="pid !=null">
-            and pid=#{pid}
-        </if>
-        <if test="innerId !=null and innerId != ''">
-            and innerId=#{innerId}
-        </if>
-        <if test="role !=null and role != ''">
-            and role=#{role}
-        </if>
-        <if test="com_name !=null and com_name != ''">
-            and com_name=#{com_name}
-        </if>
-        <if test="type !=null and type != ''">
-            and type=#{type}
-        </if>
-        limit 1
+        select pkid from tb_project_company where pkid = #{pkid}
     </select>
 
     <!-- 插入项目和公司的关系 -->
     <insert id="insertProjectCompany" useGeneratedKeys="true" keyProperty="pkid" parameterType="com.silita.spider.common.model.ProjectCompany">
-        insert into tb_project_company(pkid, md5, innerId, pro_id, pid, role, com_name, org_code, province, type, remark, created)
-        values(#{pkid}, #{md5}, #{innerId}, #{pro_id}, #{pid}, #{role}, #{com_name}, #{org_code}, #{province}, #{type}, #{remark}, NOW())
+        insert into tb_project_company(pkid, md5, innerId, pro_id, pid, role, com_name, org_code, province, type, remark, created,updated)
+        values(#{pkid}, #{md5}, #{innerId}, #{pro_id}, #{pid}, #{role}, #{com_name}, #{org_code}, #{province}, #{type}, #{remark}, NOW(), NOW())
     </insert>
 
     <!-- 更新项目和公司关系 -->
@@ -256,8 +239,8 @@
 
     <!-- 插入招投标 -->
     <insert id="insertZhaoTouBiao" useGeneratedKeys="true" keyProperty="pkid" parameterType="com.silita.spider.common.model.ZhaoTouBiao">
-        insert into tb_project_zhaotoubiao(pkid, md5, pro_id, zhongbiao_code, prov_zhongbiao_code, zhaobiao_type, zhaobiao_way, zhongbiao_date, zhongbiao_amount, build_scale, area, zhaobiao_agency_company, zhaobiao_company_code, zhongbiao_company, zhongbiao_company_code, record_date, created)
-        values(#{pkid}, #{md5}, #{pro_id}, #{zhongbiao_code}, #{prov_zhongbiao_code}, #{zhaobiao_type}, #{zhaobiao_way}, #{zhongbiao_date}, #{zhongbiao_amount}, #{build_scale}, #{area}, #{zhaobiao_agency_company}, #{zhaobiao_company_code}, #{zhongbiao_company}, #{zhongbiao_company_code}, #{record_date}, NOW())
+        insert into tb_project_zhaotoubiao(pkid, md5, pro_id, zhongbiao_code, prov_zhongbiao_code, zhaobiao_type, zhaobiao_way, zhongbiao_date, zhongbiao_amount, build_scale, area, zhaobiao_agency_company, zhaobiao_company_code, zhongbiao_company, zhongbiao_company_code, record_date, created,updated)
+        values(#{pkid}, #{md5}, #{pro_id}, #{zhongbiao_code}, #{prov_zhongbiao_code}, #{zhaobiao_type}, #{zhaobiao_way}, #{zhongbiao_date}, #{zhongbiao_amount}, #{build_scale}, #{area}, #{zhaobiao_agency_company}, #{zhaobiao_company_code}, #{zhongbiao_company}, #{zhongbiao_company_code}, #{record_date}, NOW(), NOW())
     </insert>
 
     <!-- 更新招投标 -->
@@ -286,8 +269,8 @@
 
     <!-- 插入施工图审查 -->
     <insert id="insertShiGongTuShenCha" useGeneratedKeys="true" keyProperty="pkid" parameterType="com.silita.spider.common.model.ShiGongTuShenCha">
-        insert into tb_project_design(pkid, md5, sgtxh, pro_id, pro_name, pro_type, pro_scope, explore_org, design_org, check_org, check_org_code, check_no, check_number, check_finish_date, created)
-        values(#{pkid}, #{md5}, #{sgtxh}, #{pro_id}, #{pro_name}, #{pro_type}, #{pro_scope}, #{explore_org}, #{design_org}, #{check_org}, #{check_org_code}, #{check_no}, #{check_number}, #{check_finish_date}, NOW())
+        insert into tb_project_design(pkid, md5, sgtxh, pro_id, pro_name, pro_type, pro_scope, explore_org, design_org, check_org, check_org_code, check_no, check_number, check_finish_date, created,updated)
+        values(#{pkid}, #{md5}, #{sgtxh}, #{pro_id}, #{pro_name}, #{pro_type}, #{pro_scope}, #{explore_org}, #{design_org}, #{check_org}, #{check_org_code}, #{check_no}, #{check_number}, #{check_finish_date}, NOW(), NOW())
     </insert>
 
     <!-- 更新施工图审查 -->
@@ -316,8 +299,8 @@
 
     <!-- 插入施工许可 -->
     <insert id="insertShiGongXuKe" useGeneratedKeys="true" keyProperty="pkid" parameterType="com.silita.spider.common.model.ShiGongXuKe">
-        insert into tb_project_build(pkid, md5, bdxh, pro_id, pro_name, pro_type, b_org, b_licence, build_licence, review_number, amount, area, licence_date, record_date, created)
-        values(#{pkid}, #{md5}, #{bdxh}, #{pro_id}, #{pro_name}, #{pro_type}, #{b_org}, #{b_licence}, #{build_licence}, #{review_number}, #{amount}, #{area}, #{licence_date}, #{record_date}, NOW())
+        insert into tb_project_build(pkid, md5, bdxh, pro_id, pro_name, pro_type, b_org, b_licence, build_licence, review_number, amount, area, licence_date, record_date, created,updated)
+        values(#{pkid}, #{md5}, #{bdxh}, #{pro_id}, #{pro_name}, #{pro_type}, #{b_org}, #{b_licence}, #{build_licence}, #{review_number}, #{amount}, #{area}, #{licence_date}, #{record_date}, NOW(), NOW())
     </insert>
 
     <!-- 更新施工许可 -->
@@ -346,8 +329,8 @@
 
     <!-- 插入合同备案 -->
     <insert id="insertHeTongBeiAn" useGeneratedKeys="true" keyProperty="pkid" parameterType="com.silita.spider.common.model.HeTongBeiAn">
-        insert into tb_project_contract(pkid, md5, pro_id, record_code, prov_record_code, code, category, type, amount, build_scale, sign_date, record_date, created)
-        values(#{pkid}, #{md5}, #{pro_id}, #{record_code}, #{prov_record_code}, #{code}, #{category}, #{type}, #{amount}, #{build_scale}, #{sign_date}, #{record_date}, NOW())
+        insert into tb_project_contract(pkid, md5, pro_id, record_code, prov_record_code, code, category, type, amount, build_scale, sign_date, record_date, created,updated)
+        values(#{pkid}, #{md5}, #{pro_id}, #{record_code}, #{prov_record_code}, #{code}, #{category}, #{type}, #{amount}, #{build_scale}, #{sign_date}, #{record_date}, NOW(),NOW())
     </insert>
 
     <!-- 更新合同备案 -->
@@ -376,8 +359,8 @@
 
     <!-- 插入竣工验收备案 -->
     <insert id="insertJunGongBeiAn" useGeneratedKeys="true" keyProperty="pkid" parameterType="com.silita.spider.common.model.JunGongBeiAn">
-        insert into tb_project_completion(pkid, md5, pro_id, code, prov_code, cost, area, build_scale, struct, build_start, build_end, record_date, remark, created)
-        values(#{pkid}, #{md5}, #{pro_id}, #{code}, #{prov_code}, #{cost}, #{area}, #{build_scale}, #{struct}, #{build_start}, #{build_end}, #{record_date}, #{remark}, NOW())
+        insert into tb_project_completion(pkid, md5, pro_id, code, prov_code, cost, area, build_scale, struct, build_start, build_end, record_date, remark, created,updated)
+        values(#{pkid}, #{md5}, #{pro_id}, #{code}, #{prov_code}, #{cost}, #{area}, #{build_scale}, #{struct}, #{build_start}, #{build_end}, #{record_date}, #{remark}, NOW(),NOW())
     </insert>
 
     <!-- 更新竣工验收备案 -->

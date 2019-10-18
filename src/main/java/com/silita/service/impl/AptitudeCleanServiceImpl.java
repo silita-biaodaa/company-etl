@@ -166,42 +166,52 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
                 while (iterator.hasNext()) {
                     companyAptitude = new TbCompanyAptitude();
                     String qual = iterator.next();
-                    if (qual.contains("不分等级")) {
-                        subQual = new StringBuffer((qual.replace("不分等级", "")));
-                        subGrade = new StringBuffer("0");
-                    } else if (qual.contains("级")) {
-                        subQual = new StringBuffer(qual.substring(0, qual.indexOf("级") - 1));
-                        subGrade = new StringBuffer(qual.substring(qual.indexOf("级") - 1, qual.indexOf("级") + 1));
-                    } else {
-                        subQual = new StringBuffer(qual);
-                        subGrade = new StringBuffer("0");
-                    }
-                    String resCode = aptitudeDictionaryMapper.queryCodeByAlias(subQual.toString());
-                    if (null != resCode) {
+                    String quaInfoId = aptitudeDictionaryMapper.getQulId(qual);
+                    //如果资质表有数据直接赋值
+                    if(quaInfoId!=null){
                         companyAptitude.setComId(comId);
                         companyAptitude.setQualId(qualId);
-                        companyAptitude.setMainuuid(resCode);
-                        companyAptitude.setAptitudeName(aptitudeDictionaryMapper.queryQualNameByCode(resCode));
-                        param.put("qual", resCode);
-                        if ("0".equals(subGrade.toString())) {
-                            param.put("grade", "0");
-                            StringBuffer pkid = new StringBuffer(aptitudeDictionaryMapper.queryPkidByParam(param));
-                            if (null != pkid) {
-                                companyAptitude.setAptitudeUuid(pkid.toString());
-                            }
-                        } else {
-                            String resGrade = aptitudeDictionaryMapper.queryCodeByAlias(subGrade.toString());
-                            if (null == resGrade) {
-                                resGrade = "0";
-                            }
-                            paramGrade = new StringBuffer(resGrade);
-                            param.put("grade", paramGrade.toString());
-                            StringBuffer pkid = new StringBuffer(aptitudeDictionaryMapper.queryPkidByParam(param));
-                            if (null != pkid) {
-                                companyAptitude.setAptitudeUuid(pkid.toString());
-                            }
-                        }
+                        companyAptitude.setAptitudeName(qual);
+                        companyAptitude.setAptitudeUuid(quaInfoId);
                         companyQualifications.add(companyAptitude);
+                    }else{
+                        if (qual.contains("不分等级")) {
+                            subQual = new StringBuffer((qual.replace("不分等级", "")));
+                            subGrade = new StringBuffer("0");
+                        } else if (qual.contains("级")) {
+                            subQual = new StringBuffer(qual.substring(0, qual.indexOf("级") - 1));
+                            subGrade = new StringBuffer(qual.substring(qual.indexOf("级") - 1, qual.indexOf("级") + 1));
+                        } else {
+                            subQual = new StringBuffer(qual);
+                            subGrade = new StringBuffer("0");
+                        }
+                        String resCode = aptitudeDictionaryMapper.queryCodeByAlias(subQual.toString());
+                        if (null != resCode) {
+                            companyAptitude.setComId(comId);
+                            companyAptitude.setQualId(qualId);
+                            companyAptitude.setMainuuid(resCode);
+                            companyAptitude.setAptitudeName(aptitudeDictionaryMapper.queryQualNameByCode(resCode));
+                            param.put("qual", resCode);
+                            if ("0".equals(subGrade.toString())) {
+                                param.put("grade", "0");
+                                StringBuffer pkid = new StringBuffer(aptitudeDictionaryMapper.queryPkidByParam(param));
+                                if (null != pkid) {
+                                    companyAptitude.setAptitudeUuid(pkid.toString());
+                                }
+                            } else {
+                                String resGrade = aptitudeDictionaryMapper.queryCodeByAlias(subGrade.toString());
+                                if (null == resGrade) {
+                                    resGrade = "0";
+                                }
+                                paramGrade = new StringBuffer(resGrade);
+                                param.put("grade", paramGrade.toString());
+                                StringBuffer pkid = new StringBuffer(aptitudeDictionaryMapper.queryPkidByParam(param));
+                                if (null != pkid) {
+                                    companyAptitude.setAptitudeUuid(pkid.toString());
+                                }
+                            }
+                            companyQualifications.add(companyAptitude);
+                        }
                     }
                 }
                 if (companyQualifications.size() > 0) {

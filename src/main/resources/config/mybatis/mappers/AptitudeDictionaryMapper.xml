@@ -38,4 +38,8 @@
         where t.`qua_code` = #{qualCode}
         and t.`bench_name` is not null
     </select>
+
+    <select id="getQulId" parameterType="String" resultType="String">
+        select id from biaodaa_admin.`dic_qua_info` where name =#{name}
+    </select>
 </mapper>

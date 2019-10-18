@@ -31,4 +31,6 @@ public interface AptitudeDictionaryMapper {
      * @return
      */
     String queryQualNameByCode(String qualCode);
+
+    String getQulId(String name);
 }
