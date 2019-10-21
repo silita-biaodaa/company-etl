@@ -170,24 +170,7 @@
 
     <!-- 查询人员和项目的关系 -->
     <select id="selectPersonProject" parameterType="com.silita.spider.common.model.PersonProject" resultType="String">
-        select pkid from tb_person_project
-        where 1=1
-        <if test="pid !=null">
-            and pid=#{pid}
-        </if>
-        <if test="name !=null and name != ''">
-            and name=#{name}
-        </if>
-        <if test="com_name !=null and com_name != ''">
-            and com_name=#{com_name}
-        </if>
-        <if test="role !=null and role != ''">
-            and role=#{role}
-        </if>
-        <if test="remark !=null and remark != ''">
-            and remark=#{remark}
-        </if>
-        limit 1
+        select pkid from tb_person_project  where pkid = #{pkid}
     </select>
 
     <!-- 插入人员和项目关系 -->
