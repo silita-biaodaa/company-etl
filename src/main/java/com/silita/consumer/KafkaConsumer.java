@@ -6,6 +6,8 @@ import com.silita.utils.DocumentDecoder;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +18,13 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.listener.AbstractMessageListenerContainer;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.kafka.listener.config.ContainerProperties;
+import org.springframework.kafka.support.Acknowledgment;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,6 +35,9 @@ import java.util.Map;
 @Configuration
 @EnableKafka
 public class KafkaConsumer {
+
+    private static Logger logger = LoggerFactory.getLogger(KafkaConsumer.class);
+
     @Autowired
     private MohurdFactory mohurdFactory;
 
@@ -44,6 +53,7 @@ public class KafkaConsumer {
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "100");
         props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "15000");
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG,100);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, DocumentDecoder.class);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "groupA");
@@ -64,8 +74,10 @@ public class KafkaConsumer {
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
-        factory.setConcurrency(1);//设置并发数
-        factory.getContainerProperties().setPollTimeout(3000);
+        factory.setConcurrency(2);//设置并发数
+        factory.getContainerProperties().setPollTimeout(6000);
+        factory.setBatchListener(true);
+        factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL_IMMEDIATE);
         return factory;
     }
 
@@ -73,13 +85,20 @@ public class KafkaConsumer {
      * 监听器获取消息
      * 全国四库一站点
      *
-     * @param record
+     * @param records
      */
     @KafkaListener(topics = {"com_etl_queue"})
-    public void getSiKuYiSpiderMessage(ConsumerRecord<?, ?> record) {
-        Document document = (Document) record.value();
-        if (null != document && null != document.getObject()) {
-            mohurdFactory.process(document.getObject());
+    public void getSiKuYiSpiderMessage(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
+        try {
+            for (ConsumerRecord<?, ?> record : records) {
+                Document document = (Document) record.value();
+                if (null != document && null != document.getObject()) {
+                    mohurdFactory.process(document.getObject());
+                    acknowledgment.acknowledge();
+                }
+            }
+        } catch (Exception e) {
+            logger.warn("消费sky数据失败！！！", e);
         }
     }
 }
