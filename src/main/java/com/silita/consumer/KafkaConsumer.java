@@ -1,5 +1,7 @@
 package com.silita.consumer;
 
+import com.alibaba.fastjson.JSONObject;
+import com.silita.factory.HighwayFactory;
 import com.silita.factory.MohurdFactory;
 import com.silita.spider.common.serializable.Document;
 import com.silita.utils.DocumentDecoder;
@@ -40,6 +42,8 @@ public class KafkaConsumer {
 
     @Autowired
     private MohurdFactory mohurdFactory;
+    @Autowired
+    private HighwayFactory highwayFactory;
 
     @Value("${kafka.bootstrap.servers}")
     private String servers;
@@ -53,10 +57,26 @@ public class KafkaConsumer {
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "100");
         props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "15000");
-        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG,100);
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 100);
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, DocumentDecoder.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "groupA");
+        return props;
+    }
+
+    /**
+     * 获取配置
+     */
+    public Map<String, Object> consumerStringConfigs() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "100");
+        props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "15000");
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 100);
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         return props;
     }
 
@@ -65,6 +85,13 @@ public class KafkaConsumer {
      */
     public ConsumerFactory<String, String> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
+    }
+
+    /**
+     * 获取工厂
+     */
+    public ConsumerFactory<String, String> consumerStrFactory() {
+        return new DefaultKafkaConsumerFactory<>(consumerStringConfigs());
     }
 
     /**
@@ -82,12 +109,26 @@ public class KafkaConsumer {
     }
 
     /**
+     * 获取实例
+     */
+    @Bean
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerStrFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerStrFactory());
+        factory.setConcurrency(2);//设置并发数
+        factory.getContainerProperties().setPollTimeout(6000);
+        factory.setBatchListener(true);
+        factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL_IMMEDIATE);
+        return factory;
+    }
+
+    /**
      * 监听器获取消息
      * 全国四库一站点
      *
      * @param records
      */
-    @KafkaListener(topics = {"com_etl_queue"})
+    @KafkaListener(topics = "com_etl_queue",containerFactory = "kafkaListenerContainerFactory",groupId = "groupA")
     public void getSiKuYiSpiderMessage(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
         try {
             for (ConsumerRecord<?, ?> record : records) {
@@ -99,6 +140,29 @@ public class KafkaConsumer {
             }
         } catch (Exception e) {
             logger.warn("消费sky数据失败！！！", e);
+        }
+    }
+
+    /**
+     * 监听器获取消息
+     * 公路
+     *
+     * @param records
+     */
+    @KafkaListener(topics = "highway", containerFactory = "kafkaListenerContainerStrFactory",groupId = "test-consumer-group")
+    public void getHighwayRecords(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
+        try {
+            for (ConsumerRecord<?, ?> record : records) {
+                if (null != record.value()){
+                    JSONObject jsonObject = JSONObject.parseObject(record.value().toString());
+                    if (null != jsonObject ) {
+                        highwayFactory.process(jsonObject);
+                        acknowledgment.acknowledge();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.warn("消费公路数据失败！！！", e);
         }
     }
 }

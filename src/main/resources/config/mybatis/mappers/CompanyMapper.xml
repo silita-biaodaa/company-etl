@@ -1,11 +1,103 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.silita.dao.CompanyMapper" >
+<mapper namespace="com.silita.dao.CompanyMapper">
 
-  <update id="updateCompanyRangeByComId" parameterType="com.silita.spider.common.model.Company">
-    UPDATE tb_company
-        SET `range` = #{range}
-        WHERE `com_id` = #{com_id}
-  </update>
+    <update id="updateCompanyRangeByComId" parameterType="com.silita.spider.common.model.Company">
+        UPDATE tb_company
+            SET `range` = #{range}
+            WHERE `com_id` = #{com_id}
+    </update>
 
+    <!--添加企业-->
+    <insert id="insertCompany" parameterType="com.silita.model.TbCompany">
+        INSERT INTO `tb_company` (
+          `com_id`,
+          `md5`,
+          `com_name_py`,
+          `com_name`,
+          `credit_code`,
+          `regis_address`,
+          `legal_person`,
+          `economic_type`,
+          `skill_leader`,
+          `created`,
+          `channel`
+        )
+        VALUES
+          (
+            #{comId},
+            #{md5},
+            #{comNamePy},
+            #{comName},
+            #{creditCode},
+            #{regisAddress},
+            #{legalPerson},
+            #{economicType},
+            #{skillLeader},
+            now(),
+            #{channel}
+          )
+    </insert>
+
+    <!--添加关联表数据-->
+    <insert id="insertCompanyRel" parameterType="java.util.Map">
+        insert into `tb_company_rel` (
+        `com_id`,
+        <if test="com_id_highway != null and com_id_highway != ''">
+            `com_id_highway`,
+        </if>
+        <if test="com_id_shuili != null and com_id_shuili != ''">
+            `com_id_shuili`,
+        </if>
+        `com_name`
+        )
+        values
+        (
+        #{com_id},
+        <if test="com_id_highway != null and com_id_highway != ''">
+            #{com_id_highway},
+        </if>
+        <if test="com_id_shuili != null and com_id_shuili != ''">
+            #{com_id_shuili},
+        </if>
+        #{com_name}
+        )
+    </insert>
+
+    <!--修改关联表数据-->
+    <update id="updateCompanyRel" parameterType="java.util.Map">
+        update
+          `tb_company_rel`
+        set
+        <if test="com_id_highway != null and com_id_highway != ''">
+            `com_id_highway` = #{com_id_highway},
+        </if>
+        <if test="com_id_shuili != null and com_id_shuili != ''">
+            `com_id_shuili` = #{com_id_shuili}
+        </if>
+
+        where `pkid` = #{pkid}
+
+
+    </update>
+
+    <!--企业是否存在-->
+    <select id="queryCompanyExist" parameterType="java.lang.String" resultType="java.util.Map">
+        select
+          t1.com_id,
+          t1.channel,
+          t.`pkid`,
+          t.`com_id_highway`,
+          t.`com_id_shuili`
+        from
+          tb_company t1
+        left join tb_company_rel t on t1.`com_id` = t.`com_id`
+        where t1.com_name = #{comName}
+        limit 1
+    </select>
+
+    <!--修改企业来源-->
+    <update id="updateCompanyChannel" parameterType="java.util.Map">
+        update tb_company set channel = #{channel},updated = now() where com_id = #{com_id}
+    </update>
 </mapper>
