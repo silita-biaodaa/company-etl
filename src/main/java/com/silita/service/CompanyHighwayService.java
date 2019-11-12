@@ -2,13 +2,8 @@ package com.silita.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.silita.common.RegionCommon;
-import com.silita.dao.CompanyMapper;
-import com.silita.dao.TbPersonMapper;
-import com.silita.dao.TbProjectTrafficMapper;
-import com.silita.model.TbCompany;
-import com.silita.model.TbPerson;
-import com.silita.model.TbProjectTraffic;
-import com.silita.model.TbTrafficPerson;
+import com.silita.dao.*;
+import com.silita.model.*;
 import com.silita.utils.CommonUtil;
 import com.silita.utils.Pinyin;
 import org.apache.commons.collections.MapUtils;
@@ -38,6 +33,14 @@ public class CompanyHighwayService {
     private TbPersonMapper tbPersonMapper;
     @Autowired
     private TbProjectTrafficMapper tbProjectTrafficMapper;
+    @Autowired
+    private AptitudeDictionaryMapper aptitudeDictionaryMapper;
+    @Autowired
+    private CompanyQualificationMapper companyQualificationMapper;
+    @Autowired
+    private TbCompanyAptitudeMapper tbCompanyAptitudeMapper;
+    @Autowired
+    private IAptitudeCleanService aptitudeCleanService;
 
     /**
      * 解析基本信息
@@ -167,7 +170,7 @@ public class CompanyHighwayService {
      */
     public void analysisCompanyProject(JSONObject object) {
         TbProjectTraffic projectTraffic = new TbProjectTraffic(object);
-        if (StringUtils.isEmpty(projectTraffic.getProWhere())) {
+        if (StringUtils.isEmpty(projectTraffic.getProWhere()) || StringUtils.isEmpty(projectTraffic.getComName())) {
             return;
         }
         Integer pkid = tbProjectTrafficMapper.queryProjectExits(projectTraffic);
@@ -191,5 +194,93 @@ public class CompanyHighwayService {
 
         }
         logger.info("--------------解析企业业绩完成-----------------------------");
+    }
+
+    /**
+     * 解析企业人员证书
+     *
+     * @param object
+     */
+    public void analysisCompanyQuals(JSONObject object) {
+        Map<String, Object> company = this.analysisCompanyInfo(object);
+        if (MapUtils.isEmpty(company)) {
+            return;
+        }
+        String comId = MapUtils.getString(company, "com_id");
+        List<Map<String, Object>> quals = (List<Map<String, Object>>) object.get("quals");
+        String qualType;
+        List<TbCompanyAptitude> aptitudes = new ArrayList<>();
+        for (int i = 0, j = quals.size(); i < j; i++) {
+            qualType = quals.get(i).get("isMain").toString();
+            if ("监理资质".equals(qualType)) {
+                continue;
+            }
+            //保存企业资质 tb_company_qualification 表
+            TbCompanyQualification tbCompanyQualification = new TbCompanyQualification();
+            tbCompanyQualification.setPkid(CommonUtil.getUUID());
+            tbCompanyQualification.setTab("企业资质资格");
+            tbCompanyQualification.setQualType("监理资质");
+            tbCompanyQualification.setCertNo(quals.get(i).get("caCode").toString());
+            tbCompanyQualification.setComId(comId);
+            tbCompanyQualification.setComName(quals.get(i).get("corpName").toString());
+            tbCompanyQualification.setCertOrg(quals.get(i).get("issueDepartment").toString());
+            tbCompanyQualification.setCertDate(quals.get(i).get("validBeginDate").toString());
+            tbCompanyQualification.setValidDate(quals.get(i).get("validEndDate").toString());
+            tbCompanyQualification.setUrl("https://glxy.mot.gov.cn/company/getCompanyAptitudeList.do?comId=" + comId);
+            tbCompanyQualification.setChannel(4);
+            //判断是否是等级 如是等级需要取catype字段一起解析
+            String grade = quals.get(i).get("grade").toString();
+            String gradeCode = aptitudeDictionaryMapper.queryGradeCode(grade);
+            String quaId;
+            String qualCode;
+            if (null != gradeCode && gradeCode.indexOf("级") > -1) {
+                String catype = quals.get(i).get("catype").toString();
+                StringBuffer str = new StringBuffer(catype);
+                str.append(grade);
+                tbCompanyQualification.setQualName(str.toString());
+                tbCompanyQualification.setRange(str.toString());
+                qualCode = aptitudeDictionaryMapper.queryCodeByAlias(catype);
+                quaId = aptitudeDictionaryMapper.queryPkidByParam(new HashedMap(2) {{
+                    put("grade", gradeCode);
+                    put("qual", qualCode);
+                }});
+            } else {
+                //非等级资质
+                qualCode = aptitudeDictionaryMapper.queryCodeByAlias(grade);
+                quaId = aptitudeDictionaryMapper.queryPkidByParam(new HashedMap(2) {{
+                    put("grade", "0");
+                    put("qual", qualCode);
+                }});
+            }
+            if (null != quaId) {
+                TbCompanyAptitude aptitude = new TbCompanyAptitude();
+                String pkid = companyQualificationMapper.queryCompanyQualficationExist(tbCompanyQualification);
+                if (null != pkid){
+                    companyQualificationMapper.updateCompanyQualfication(pkid);
+                    aptitude.setQualId(pkid);
+                }else {
+                    companyQualificationMapper.inertCompanyQualfication(tbCompanyQualification);
+                    aptitude.setQualId(tbCompanyQualification.getPkid());
+                }
+                aptitude.setType("公路");
+                aptitude.setComId(comId);
+                aptitude.setAptitudeName(tbCompanyQualification.getQualName());
+                aptitude.setAptitudeUuid(quaId);
+                aptitude.setMainuuid(qualCode);
+                aptitudes.add(aptitude);
+            }
+        }
+
+        if (null != aptitudes && aptitudes.size() > 0){
+            //删除之前旧资质
+            tbCompanyAptitudeMapper.deleteCompanyAptiudeByType(new HashedMap(2){{
+                put("comId",comId);
+                put("type","gonglu");
+            }});
+            //新增资质
+            tbCompanyAptitudeMapper.batchInsertCompanyAptitude(aptitudes);
+            //更新企业range字段
+            aptitudeCleanService.updateCompanyAptitude(comId);
+        }
     }
 }

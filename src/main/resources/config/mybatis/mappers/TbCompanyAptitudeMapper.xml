@@ -34,6 +34,12 @@
 
     <delete id="deleteCompanyAptitudeByCompanyId" parameterType="String">
         DELETE FROM tb_company_aptitude
-        WHERE com_id = #{companyId}
+        WHERE com_id = #{companyId} AND `type` = 'zhujian'
+    </delete>
+
+    <!--删除公路/水利企业的旧资质-->
+    <delete id="deleteCompanyAptiudeByType" parameterType="java.util.Map">
+        DELETE FROM tb_company_aptitude
+        WHERE com_id = #{comId} AND `type` = #{type}
     </delete>
 </mapper>

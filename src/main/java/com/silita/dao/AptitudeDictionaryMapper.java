@@ -33,4 +33,11 @@ public interface AptitudeDictionaryMapper {
     String queryQualNameByCode(String qualCode);
 
     String getQulId(String name);
+
+    /**
+     * 根据等级别名查询等级code
+     * @param grade
+     * @return
+     */
+    String queryGradeCode(String grade);
 }

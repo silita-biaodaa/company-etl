@@ -42,4 +42,14 @@
     <select id="getQulId" parameterType="String" resultType="String">
         select id from biaodaa_admin.`dic_qua_info` where name =#{name}
     </select>
+
+    <!--根据等级别名查询等级code-->
+    <select id="queryGradeCode" parameterType="java.lang.String" resultType="java.lang.String">
+        select
+        t.`std_code`
+        from
+        biaodaa_admin.`dic_alias` t
+        where t.`name` = #{name}
+        t.`std_type` = 3
+    </select>
 </mapper>

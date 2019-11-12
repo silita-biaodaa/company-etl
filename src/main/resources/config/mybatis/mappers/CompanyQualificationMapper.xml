@@ -23,4 +23,38 @@
             resultType="com.silita.spider.common.model.CompanyQualification">
          SELECT * FROM tb_company_qualification WHERE channel=3 and com_id is not null
     </select>
+
+    <!--查询资质是否存在-->
+    <select id="queryCompanyQualficationExist" parameterType="com.silita.model.TbCompanyQualification">
+        SELECT
+          t.`pkid`
+        FROM
+          tb_company_qualification t
+        WHERE t.`tab` = #{tab}
+        AND t.`qual_type` = #{qualType}
+        AND t.`cert_no` = #{certNo}
+        AND t.`cert_org` = #{certOrg}
+        AND t.`cert_date` = #{certDate}
+        AND t.`valid_date` = #{validDate}
+        AND t.`qual_name` = #{qualName}
+        AND t.`com_id` = #{comId}
+        AND t.`channel` = #{channel}
+        AND t.`is_valid` = 1
+        LIMIT 1
+    </select>
+
+    <!--添加企业资质-->
+    <insert id="inertCompanyQualfication" parameterType="com.silita.model.TbCompanyQualification">
+        INSERT INTO `tb_company_qualification` (
+          `pkid`,`tab`,`qual_type`,`cert_no`,`cert_org`,`cert_date`,`valid_date`,`qual_name`,`range`,`url`,
+          `com_id`,`com_name`,`qual_id`,`created`,`channel`,`is_valid`
+        )
+        VALUES(#{pkid},#{tab},#{qualType},#{certNo},#{certOrg},#{certDate},#{validDate},#{qualName},#{range},#{url},
+        #{comId},#{comName},#{qualId},now(),#{channel},#{isValid})
+    </insert>
+
+    <!--修改企业资质更新时间-->
+    <update id="updateCompanyQualfication" parameterType="java.lang.String">
+        UPDATE tb_company_qualification SET updated = now() where pkid = #{pkid}
+    </update>
 </mapper>

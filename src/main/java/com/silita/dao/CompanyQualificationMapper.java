@@ -1,5 +1,6 @@
 package com.silita.dao;
 
+import com.silita.model.TbCompanyQualification;
 import com.silita.spider.common.model.CompanyQualification;
 
 import java.util.List;
@@ -36,4 +37,25 @@ public interface CompanyQualificationMapper {
      * @return
      */
     List<CompanyQualification> getCompanyQualificationBySql(Map params);
+
+    /**
+     * 查询资质是否存在
+     * @param qualification
+     * @return
+     */
+    String queryCompanyQualficationExist(TbCompanyQualification qualification);
+
+    /**
+     * 添加企业资质
+     * @param companyQualification
+     * @return
+     */
+    int inertCompanyQualfication(TbCompanyQualification companyQualification);
+
+    /**
+     * 修改企业资质更新时间
+     * @param pkid
+     * @return
+     */
+    int updateCompanyQualfication(String pkid);
 }

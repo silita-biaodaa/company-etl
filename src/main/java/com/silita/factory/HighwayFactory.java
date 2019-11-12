@@ -26,6 +26,9 @@ public class HighwayFactory {
             case "project_person":
                 companyHighwayService.analysisCompanyProject(object);
                 return;
+            case "company_quals":
+                companyHighwayService.analysisCompanyQuals(object);
+                return;
         }
     }
 }

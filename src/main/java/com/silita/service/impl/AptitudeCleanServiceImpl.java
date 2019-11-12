@@ -210,6 +210,7 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
                                     companyAptitude.setAptitudeUuid(pkid.toString());
                                 }
                             }
+                            companyAptitude.setType("zhujian");
                             companyQualifications.add(companyAptitude);
                         }
                     }

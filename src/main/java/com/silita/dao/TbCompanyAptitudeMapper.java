@@ -47,4 +47,10 @@ public interface TbCompanyAptitudeMapper {
      * @param companyId
      */
     void deleteCompanyAptitudeByCompanyId(String companyId);
+
+    /**
+     * 删除公路/水利企业的旧资质
+     * @param param
+     */
+    void deleteCompanyAptiudeByType(Map<String,Object> param);
 }
