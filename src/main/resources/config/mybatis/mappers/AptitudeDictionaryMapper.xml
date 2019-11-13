@@ -50,6 +50,6 @@
         from
         biaodaa_admin.`dic_alias` t
         where t.`name` = #{name}
-        t.`std_type` = 3
+        and t.`std_type` = 3
     </select>
 </mapper>

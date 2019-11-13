@@ -49,8 +49,34 @@ public class CompanyHighwayService {
      */
     public Map<String, Object> analysisCompanyInfo(JSONObject object) {
         String comName = object.getString("corpName");
+        if (comName.indexOf("监理") > -1) {
+            System.out.println("---------------------------");
+        }
         String md5 = object.getString("md5");
         String regisAddress = object.getString("regProvinceCode");
+        String newRegisAddress = null;
+        if ("兵团站".equals(regisAddress)) {
+            newRegisAddress = "新疆维吾尔自治区";
+        } else {
+            for (Map.Entry<String, String> key : RegionCommon.regionSourcePinYin.entrySet()) {
+                int index = regisAddress.indexOf(key.getKey());
+                if (index > -1) {
+                    newRegisAddress = getRegisAddress(regisAddress, key.getKey(), index);
+                    break;
+                }
+            }
+            if (null == newRegisAddress) {
+                for (Map.Entry<String, String> key : RegionCommon.regionSourceShort.entrySet()) {
+                    int index = regisAddress.indexOf(key.getKey());
+                    if (index > -1) {
+                        newRegisAddress = getRegisAddress(regisAddress, key.getKey(), index);
+                        break;
+                    }
+                }
+                newRegisAddress = RegionCommon.regionSourceShortName.get(newRegisAddress);
+            }
+        }
+
         String id;
         if (object.containsKey("comId")) {
             id = object.getString("comId");
@@ -70,7 +96,7 @@ public class CompanyHighwayService {
             comMap.put("channel", channel.toString());
             companyMapper.updateCompanyChannel(comMap);
             comMap.put("com_name", comName);
-            comMap.put("regisAddress", regisAddress);
+            comMap.put("regisAddress", newRegisAddress);
             if (comMap.containsKey("pkid") && !comMap.containsKey("com_id_highway")) {
                 companyMapper.updateCompanyRel(comMap);
             } else {
@@ -89,7 +115,7 @@ public class CompanyHighwayService {
             company.setLegalPerson(object.getString("enterpriseLeader"));
             company.setSkillLeader(object.getString("technicalLeader"));
             company.setEconomicType(object.getString("natureType"));
-            company.setRegisAddress(regisAddress);
+            company.setRegisAddress(newRegisAddress);
             company.setChannel("010");
             company.setMd5(md5);
             companyMapper.insertCompany(company);
@@ -97,7 +123,7 @@ public class CompanyHighwayService {
             comMap.put("com_id", id);
             comMap.put("com_name", comName);
             comMap.put("com_id_highway", id);
-            comMap.put("regisAddress", regisAddress);
+            comMap.put("regisAddress", newRegisAddress);
             companyMapper.insertCompanyRel(comMap);
             logger.info("----------------解析【" + comName + "】的基本信息完成--------------------------------");
         } catch (Exception e) {
@@ -119,6 +145,16 @@ public class CompanyHighwayService {
         String comId = MapUtils.getString(company, "com_id");
         String regisAddress = MapUtils.getString(company, "regisAddress");
         String tabCode = RegionCommon.regionSourcePinYin.get(regisAddress);
+        if (null == tabCode) {
+            String province = object.getString("province");
+            if (null == province) {
+                return;
+            }
+            tabCode = RegionCommon.regionSourceShort.get(province);
+            if (null == tabCode) {
+                tabCode = RegionCommon.regionSourcePinYin.get(province);
+            }
+        }
         if (null == tabCode) {
             return;
         }
@@ -175,6 +211,7 @@ public class CompanyHighwayService {
         }
         Integer pkid = tbProjectTrafficMapper.queryProjectExits(projectTraffic);
         if (null != pkid && pkid > 0) {
+            projectTraffic.setPkid(pkid);
             tbProjectTrafficMapper.updateProjectTraffic(projectTraffic);
         } else {
             tbProjectTrafficMapper.insertProjectTraffic(projectTraffic);
@@ -212,7 +249,7 @@ public class CompanyHighwayService {
         List<TbCompanyAptitude> aptitudes = new ArrayList<>();
         for (int i = 0, j = quals.size(); i < j; i++) {
             qualType = quals.get(i).get("isMain").toString();
-            if ("监理资质".equals(qualType)) {
+            if (!"监理资质".equals(qualType)) {
                 continue;
             }
             //保存企业资质 tb_company_qualification 表
@@ -255,10 +292,10 @@ public class CompanyHighwayService {
             if (null != quaId) {
                 TbCompanyAptitude aptitude = new TbCompanyAptitude();
                 String pkid = companyQualificationMapper.queryCompanyQualficationExist(tbCompanyQualification);
-                if (null != pkid){
+                if (null != pkid) {
                     companyQualificationMapper.updateCompanyQualfication(pkid);
                     aptitude.setQualId(pkid);
-                }else {
+                } else {
                     companyQualificationMapper.inertCompanyQualfication(tbCompanyQualification);
                     aptitude.setQualId(tbCompanyQualification.getPkid());
                 }
@@ -271,16 +308,35 @@ public class CompanyHighwayService {
             }
         }
 
-        if (null != aptitudes && aptitudes.size() > 0){
+        if (null != aptitudes && aptitudes.size() > 0) {
             //删除之前旧资质
-            tbCompanyAptitudeMapper.deleteCompanyAptiudeByType(new HashedMap(2){{
-                put("comId",comId);
-                put("type","gonglu");
+            tbCompanyAptitudeMapper.deleteCompanyAptiudeByType(new HashedMap(2) {{
+                put("comId", comId);
+                put("type", "gonglu");
             }});
             //新增资质
             tbCompanyAptitudeMapper.batchInsertCompanyAptitude(aptitudes);
             //更新企业range字段
             aptitudeCleanService.updateCompanyAptitude(comId);
         }
+    }
+
+    /**
+     * 获取新的注册地
+     *
+     * @param oldRegisAddress 不规范的注册地
+     * @param key
+     * @return
+     */
+    private String getRegisAddress(String oldRegisAddress, String key, int index) {
+        String newRegisAddress;
+        int regisLeg = oldRegisAddress.length();
+        int keyLeg = key.length();
+        if (regisLeg > keyLeg) {
+            newRegisAddress = oldRegisAddress.substring(index, keyLeg + index);
+        } else {
+            newRegisAddress = oldRegisAddress;
+        }
+        return newRegisAddress;
     }
 }
