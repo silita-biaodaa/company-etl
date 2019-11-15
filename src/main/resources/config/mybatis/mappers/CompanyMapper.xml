@@ -8,6 +8,14 @@
             WHERE `com_id` = #{com_id}
     </update>
 
+    <!--删除安许证号-->
+    <delete id="deleteSafetyCertificate" parameterType="java.lang.String">
+        DELETE
+        FROM
+          `mishu`.`tb_safety_certificate`
+        WHERE `com_name` = #{comName}
+    </delete>
+
     <!--添加企业-->
     <insert id="insertCompany" parameterType="com.silita.model.TbCompany">
         INSERT INTO `tb_company` (
@@ -67,7 +75,7 @@
     <!--修改关联表数据-->
     <update id="updateCompanyRel" parameterType="java.util.Map">
         update
-          `tb_company_rel`
+        `tb_company_rel`
         set
         <if test="com_id_highway != null and com_id_highway != ''">
             `com_id_highway` = #{com_id_highway},
@@ -75,16 +83,31 @@
         <if test="com_id_shuili != null and com_id_shuili != ''">
             `com_id_shuili` = #{com_id_shuili}
         </if>
-
         where `pkid` = #{pkid}
-
-
     </update>
+
+    <!--添加企业安许证号-->
+    <insert id="insertSafetyCertificate" parameterType="java.util.Map">
+          insert into `tb_safety_certificate` (
+          `com_name`,
+          `cert_no`,
+          `valid_date`,
+          `created`
+        )
+        values
+          (
+            #{com_name},
+            #{safeProdLicese},
+            #{safeValidDate},
+            now()
+          )
+    </insert>
 
     <!--企业是否存在-->
     <select id="queryCompanyExist" parameterType="java.lang.String" resultType="java.util.Map">
         select
           t1.com_id,
+          t1.regis_address,
           t1.channel,
           t.`pkid`,
           t.`com_id_highway`,
@@ -100,4 +123,19 @@
     <update id="updateCompanyChannel" parameterType="java.util.Map">
         update tb_company set channel = #{channel},updated = now() where com_id = #{com_id}
     </update>
+
+    <!--根据市查询省份-->
+    <select id="queryProvinceCity" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+          pro.`area_name`
+        FROM
+          biaodaa_admin.sys_area t
+          JOIN biaodaa_admin.sys_area pro
+            ON t.`area_parent_id` = pro.`pkid`
+            AND pro.`area_level` = 1
+        WHERE t.`area_name` LIKE CONCAT('%',#{city},'%')
+          AND t.`area_level` = 2
+        LIMIT 1
+    </select>
+
 </mapper>

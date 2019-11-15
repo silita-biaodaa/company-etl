@@ -49,9 +49,6 @@ public class CompanyHighwayService {
      */
     public Map<String, Object> analysisCompanyInfo(JSONObject object) {
         String comName = object.getString("corpName");
-        if (comName.indexOf("监理") > -1) {
-            System.out.println("---------------------------");
-        }
         String md5 = object.getString("md5");
         String regisAddress = object.getString("regProvinceCode");
         String newRegisAddress = null;
@@ -84,7 +81,6 @@ public class CompanyHighwayService {
             id = object.getString("id");
         }
         String creditCode = object.getString("creditCode");
-        logger.info("----------------解析【" + comName + "】的基本信息--------------------------------");
         Map<String, Object> param = new HashedMap(2) {{
             put("comName", comName);
             put("creditCode", creditCode);
@@ -206,7 +202,7 @@ public class CompanyHighwayService {
      */
     public void analysisCompanyProject(JSONObject object) {
         TbProjectTraffic projectTraffic = new TbProjectTraffic(object);
-        if (StringUtils.isEmpty(projectTraffic.getProWhere()) || StringUtils.isEmpty(projectTraffic.getComName())) {
+        if (StringUtils.isEmpty(projectTraffic.getComName())) {
             return;
         }
         Integer pkid = tbProjectTrafficMapper.queryProjectExits(projectTraffic);
@@ -318,6 +314,7 @@ public class CompanyHighwayService {
             tbCompanyAptitudeMapper.batchInsertCompanyAptitude(aptitudes);
             //更新企业range字段
             aptitudeCleanService.updateCompanyAptitude(comId);
+            logger.info("----------------解析企业资质完成--------------------");
         }
     }
 

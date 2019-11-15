@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbProjectShuiliMapper" >
+
+    <!--添加-->
+    <insert id="insertProjectTraffic" parameterType="com.silita.model.TbProjectShuili" useGeneratedKeys="true"
+            keyProperty="pkid" keyColumn="pkid">
+        INSERT INTO `tb_project_shuili` (
+        <if test="comName != null and comName != ''">
+            `com_name`,
+        </if>
+        <if test="proName != null and proName != ''">
+            `pro_name`,
+        </if>
+        <if test="proType != null and proType != ''">
+            `pro_type`,
+        </if>
+        <if test="proOrg != null and proOrg != ''">
+            `pro_org`,
+        </if>
+        <if test="proWhere != null and proWhere != ''">
+            `pro_where`,
+        </if>
+        <if test="proStatus != null and proStatus != ''">
+            `pro_status`,
+        </if>
+        <if test="contractAmount != null and contractAmount != ''">
+            `contract_amount`,
+        </if>
+        <if test="clearingAmount != null and clearingAmount != ''">
+            `clearing_amount`,
+        </if>
+        <if test="worked != null and worked != ''">
+            `worked`,
+        </if>
+        <if test="finished != null and finished != ''">
+            `finished`,
+        </if>
+        <if test="duration != null and duration != ''">
+            `duration`,
+        </if>
+        <if test="majorTarget != null and majorTarget != ''">
+            `major_target`,
+        </if>
+        <if test="contractContent != null and contractContent != ''">
+            `contract_content`,
+        </if>
+        <if test="persons != null and persons != ''">
+            `persons`,
+        </if>
+        <if test="prizes != null and prizes != ''">
+            `prizes`,
+        </if>
+          `created`
+        )
+        VALUES
+          (
+        <if test="comName != null and comName != ''">
+            #{comName},
+        </if>
+        <if test="proName != null and proName != ''">
+            #{proName},
+        </if>
+        <if test="proType != null and proType != ''">
+            #{proType},
+        </if>
+        <if test="proOrg != null and proOrg != ''">
+            #{proOrg},
+        </if>
+        <if test="proWhere != null and proWhere != ''">
+            #{proWhere},
+        </if>
+        <if test="proStatus != null and proStatus != ''">
+            #proStatus},
+        </if>
+        <if test="contractAmount != null and contractAmount != ''">
+            #{contractAmount},
+        </if>
+        <if test="clearingAmount != null and clearingAmount != ''">
+            #{clearingAmount},
+        </if>
+        <if test="worked != null and worked != ''">
+            #{worked},
+        </if>
+        <if test="finished != null and finished != ''">
+            #{finished},
+        </if>
+        <if test="duration != null and duration != ''">
+            #{duration},
+        </if>
+        <if test="majorTarget != null and majorTarget != ''">
+            #{majorTarget},
+        </if>
+        <if test="contractContent != null and contractContent != ''">
+            #{contractContent},
+        </if>
+        <if test="persons != null and persons != ''">
+            #{persons},
+        </if>
+        <if test="prizes != null and prizes != ''">
+            #{prizes},
+        </if>
+        `created`
+          ) ;
+    </insert>
+
+    <!--修改-->
+    <update id="updateProjectTraffic" parameterType="com.silita.model.TbProjectShuili">\
+        UPDATE
+          `tb_project_shuili`
+        SET
+          `com_name` = #{comName},
+          `pro_name` = #{proName},
+          `pro_type` = #{proType},
+          `pro_org` = #{proOrg},
+          `pro_where` = #{proWhere},
+          `pro_status` = #{proStatus},
+          `contract_amount` = #{contractAmount},
+          `clearing_amount` = #{clearingAmount},
+          `worked` = #{worked},
+          `finished` = #{finished},
+          `duration` = #{duration},
+          `major_target` = #majorTarget},
+          `contract_content` = #{contractContent},
+          `persons` = #{persons},
+          `prizes` = #{prizes},
+          `updated` = now()
+        WHERE `pkid` = #{pkid}
+    </update>
+
+    <!--判断是否存在-->
+    <select id="queryProjectExits" parameterType="com.silita.model.TbProjectShuili" resultType="java.lang.Integer">
+        SELECT t.`pkid`
+        FROM tb_project_shuili t
+        WHERE t.`com_name` = #{comName}
+        AND t.`pro_name` = #{proName}
+        AND t.`pro_type` = #{proType}
+        AND t.`pro_where` = #{proWhere}
+        limit 1
+    </select>
+</mapper>

@@ -3,6 +3,7 @@ package com.silita.consumer;
 import com.alibaba.fastjson.JSONObject;
 import com.silita.factory.HighwayFactory;
 import com.silita.factory.MohurdFactory;
+import com.silita.factory.ShuiliFactory;
 import com.silita.spider.common.serializable.Document;
 import com.silita.utils.DocumentDecoder;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -44,6 +45,8 @@ public class KafkaConsumer {
     private MohurdFactory mohurdFactory;
     @Autowired
     private HighwayFactory highwayFactory;
+    @Autowired
+    private ShuiliFactory shuiliFactory;
 
     @Value("${kafka.bootstrap.servers}")
     private String servers;
@@ -128,7 +131,7 @@ public class KafkaConsumer {
      *
      * @param records
      */
-    @KafkaListener(topics = "com_etl_queue",containerFactory = "kafkaListenerContainerFactory",groupId = "groupA")
+    @KafkaListener(topics = "com_etl_queue", containerFactory = "kafkaListenerContainerFactory", groupId = "groupA")
     public void getSiKuYiSpiderMessage(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
         try {
             for (ConsumerRecord<?, ?> record : records) {
@@ -149,20 +152,48 @@ public class KafkaConsumer {
      *
      * @param records
      */
-    @KafkaListener(topics = "highway", containerFactory = "kafkaListenerContainerStrFactory",groupId = "test-consumer-group")
+    @KafkaListener(topics = "highway", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
     public void getHighwayRecords(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
         try {
             for (ConsumerRecord<?, ?> record : records) {
-                if (null != record.value()){
-                    JSONObject jsonObject = JSONObject.parseObject(record.value().toString());
-                    if (null != jsonObject ) {
-                        highwayFactory.process(jsonObject);
-                        acknowledgment.acknowledge();
-                    }
-                }
+                process(record, highwayFactory,acknowledgment);
             }
         } catch (Exception e) {
             logger.warn("消费公路数据失败！！！", e);
         }
     }
+
+    /**
+     * 监听器获取消息
+     * 水利
+     *
+     * @param records
+     */
+    @KafkaListener(topics = "shuili", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
+    public void getShuiliRecords(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
+        try {
+            for (ConsumerRecord<?, ?> record : records) {
+                process(record, shuiliFactory,acknowledgment);
+            }
+        } catch (Exception e) {
+            logger.warn("消费公路数据失败！！！", e);
+        }
+    }
+
+    private void process(ConsumerRecord<?, ?> record, Object object, Acknowledgment acknowledgment) {
+        if (null != record.value()) {
+            JSONObject jsonObject = JSONObject.parseObject(record.value().toString());
+            if (null != jsonObject) {
+                if (object instanceof HighwayFactory) {
+                    highwayFactory.process(jsonObject);
+                    acknowledgment.acknowledge();
+                } else if (object instanceof ShuiliFactory) {
+                    shuiliFactory.process(jsonObject);
+                    acknowledgment.acknowledge();
+                }
+            }
+        }
+
+    }
+
 }
