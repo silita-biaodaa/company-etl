@@ -101,16 +101,38 @@ public class TbProjectShuili {
 
     public TbProjectShuili(Map<String,Object> proMap) {
         this.proName = proMap.get("proName").toString();
-        this.proType = proMap.get("proType").toString();
-        this.proOrg = proMap.get("proOrg").toString();
-        this.proWhere = proMap.get("proWhere").toString();
-        this.proStatus = proMap.get("proStatus").toString();
-        this.contractAmount = proMap.get("contractAmount").toString();
-        this.clearingAmount = proMap.get("clearingAmount").toString();
-        this.worked = proMap.get("worked").toString();
-        this.finished = proMap.get("finished").toString();
-        this.duration = proMap.get("duration").toString();
-        this.majorTarget = proMap.get("majorTarget").toString();
-        this.contractContent = proMap.get("contractContent").toString();
+        if (null != proMap.get("proType")){
+            this.proType = proMap.get("proType").toString();
+        }
+        if (null !=  proMap.get("proOrg")){
+            this.proOrg = proMap.get("proOrg").toString();
+        }
+        if (null != proMap.get("proWhere")){
+            this.proWhere = proMap.get("proWhere").toString();
+        }
+        if (null !=  proMap.get("proStatus")){
+            this.proStatus = proMap.get("proStatus").toString();
+        }
+        if (null != proMap.get("contractAmount")){
+            this.contractAmount = proMap.get("contractAmount").toString();
+        }
+        if (null != proMap.get("clearingAmount")){
+            this.clearingAmount = proMap.get("clearingAmount").toString();
+        }
+        if (null != proMap.get("worked")){
+            this.worked = proMap.get("worked").toString();
+        }
+        if (null != proMap.get("finished")){
+            this.finished = proMap.get("finished").toString();
+        }
+        if(null != proMap.get("duration")){
+            this.duration = proMap.get("duration").toString();
+        }
+        if(null != proMap.get("majorTarget")){
+            this.majorTarget = proMap.get("majorTarget").toString();
+        }
+        if(null != proMap.get("contractContent")){
+            this.contractContent = proMap.get("contractContent").toString();
+        }
     }
 }

@@ -120,8 +120,9 @@ public class CompanyShuiliService {
             }
             //人员解析
             if (null != object.get("perosonInfo")) {
+                logger.info("personInfo"+object.get("perosonInfo"));
                 Map<String, Object> person = (Map<String, Object>) object.get("perosonInfo");
-                this.analysisCompanyPersonCert(person, id, comName, comMap.get("regisAddress").toString());
+                this.analysisCompanyPersonCert(person, id, comName, MapUtils.getString(comMap,"regisAddress"));
             }
             //业绩解析
             if (null != object.get("projectPerformances")) {
@@ -147,6 +148,9 @@ public class CompanyShuiliService {
             return;
         }
         List<Map<String, Object>> certs = (List<Map<String, Object>>) person.get("threeTypes");
+        if (null == certs || certs.size() <= 0){
+            return;
+        }
         for (int i = 0, j = certs.size(); i < j; i++) {
             TbPerson personCert = new TbPerson();
             personCert.setTabCode(tabCode);
