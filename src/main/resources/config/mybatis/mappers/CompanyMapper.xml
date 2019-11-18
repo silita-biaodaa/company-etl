@@ -19,32 +19,40 @@
     <!--添加企业-->
     <insert id="insertCompany" parameterType="com.silita.model.TbCompany">
         INSERT INTO `tb_company` (
-          `com_id`,
-          `md5`,
-          `com_name_py`,
-          `com_name`,
-          `credit_code`,
-          `regis_address`,
-          `legal_person`,
-          `economic_type`,
-          `skill_leader`,
-          `created`,
-          `channel`
+        `com_id`,
+        `md5`,
+        `com_name_py`,
+        `com_name`,
+        `credit_code`,
+        `regis_address`,
+        `legal_person`,
+        `economic_type`,
+        `skill_leader`,
+        `regis_capital`,
+        <if test="comAddress != null and comAddress != ''">
+            `com_address`,
+        </if>
+        `created`,
+        `channel`
         )
         VALUES
-          (
-            #{comId},
-            #{md5},
-            #{comNamePy},
-            #{comName},
-            #{creditCode},
-            #{regisAddress},
-            #{legalPerson},
-            #{economicType},
-            #{skillLeader},
-            now(),
-            #{channel}
-          )
+        (
+        #{comId},
+        #{md5},
+        #{comNamePy},
+        #{comName},
+        #{creditCode},
+        #{regisAddress},
+        #{legalPerson},
+        #{economicType},
+        #{skillLeader},
+        #{regisCapital},
+        <if test="comAddress != null and comAddress != ''">
+            #{comAddress},
+        </if>
+        now(),
+        #{channel}
+        )
     </insert>
 
     <!--添加关联表数据-->
@@ -81,8 +89,9 @@
             `com_id_highway` = #{com_id_highway},
         </if>
         <if test="com_id_shuili != null and com_id_shuili != ''">
-            `com_id_shuili` = #{com_id_shuili}
+            `com_id_shuili` = #{com_id_shuili},
         </if>
+        updated = now()
         where `pkid` = #{pkid}
     </update>
 

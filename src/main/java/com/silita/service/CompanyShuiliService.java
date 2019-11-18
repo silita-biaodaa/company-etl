@@ -72,6 +72,7 @@ public class CompanyShuiliService {
             put("creditCode", creditCode);
         }};
         try {
+            Map<String, Object> baseInfo = (Map<String, Object>) object.get("baseInfo");
             Map<String, Object> comMap = companyMapper.queryCompanyExist(param);
             if (MapUtils.isNotEmpty(comMap)) {
                 StringBuffer channel = new StringBuffer(MapUtils.getString(comMap, "channel"));
@@ -97,6 +98,9 @@ public class CompanyShuiliService {
                 company.setEconomicType(object.getString("regisType"));
                 company.setRegisAddress(newRegisAddress);
                 company.setRegisCapital(object.getString("regisCapital"));
+                if (null != baseInfo && null != baseInfo.get("regisAddress")) {
+                    company.setComAddress(baseInfo.get("regisAddress").toString());
+                }
                 company.setChannel("001");
                 companyMapper.insertCompany(company);
                 comMap = new HashedMap(3);
@@ -107,7 +111,6 @@ public class CompanyShuiliService {
                 companyMapper.insertCompanyRel(comMap);
             }
             //安许证保存
-            Map<String, Object> baseInfo = (Map<String, Object>) object.get("baseInfo");
             if (null != baseInfo && null != baseInfo.get("safeProdLicese") && (!"无".equals(baseInfo.get("safeProdLicese")))) {
                 //删除之前的安许证信息
                 companyMapper.deleteSafetyCertificate(comName);
@@ -120,7 +123,6 @@ public class CompanyShuiliService {
             }
             //人员解析
             if (null != object.get("perosonInfo")) {
-                logger.info("personInfo" + object.get("perosonInfo"));
                 Map<String, Object> person = (Map<String, Object>) object.get("perosonInfo");
                 this.analysisCompanyPersonCert(person, id, comName, MapUtils.getString(comMap, "regisAddress"));
             }

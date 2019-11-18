@@ -15,6 +15,7 @@
         </if>
         and com_id =#{comId}
         and com_name =#{comName}
+        and is_valid = '1'
     </select>
 
     <!--修改更新时间-->
@@ -27,7 +28,9 @@
         INSERT INTO `tb_person_${tabCode}` (
         `pkid`,
         `name`,
-        `sex`,
+        <if test="sex != null and sex != ''">
+            `sex`,
+        </if>
         `id_card`,
         `category`,
         `cert_no`,
@@ -47,7 +50,9 @@
         (
         #{pkid},
         #{name},
-        #{sex},
+        <if test="sex != null and sex != ''">
+            #{sex},
+        </if>
         #{idCard},
         #{category},
         #{certNo},
