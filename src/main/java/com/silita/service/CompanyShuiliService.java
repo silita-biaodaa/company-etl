@@ -47,7 +47,7 @@ public class CompanyShuiliService {
      *
      * @param object
      */
-    public Map<String, Object> analysisCompanyInfo(JSONObject object) {
+    public void analysisCompanyInfo(JSONObject object) {
         String comName = object.getString("companyName");
         String regisAddress = object.getString("provinceCity");
         String newRegisAddress = null;
@@ -71,41 +71,41 @@ public class CompanyShuiliService {
             put("comName", comName);
             put("creditCode", creditCode);
         }};
-        Map<String, Object> comMap = companyMapper.queryCompanyExist(param);
-        if (MapUtils.isNotEmpty(comMap)) {
-            StringBuffer channel = new StringBuffer(MapUtils.getString(comMap, "channel"));
-            channel.setCharAt(2, '1');
-            comMap.put("channel", channel.toString());
-            companyMapper.updateCompanyChannel(comMap);
-            comMap.put("com_name", comName);
-            if (comMap.containsKey("pkid") && !comMap.containsKey("com_id_highway")) {
-                companyMapper.updateCompanyRel(comMap);
+        try {
+            Map<String, Object> comMap = companyMapper.queryCompanyExist(param);
+            if (MapUtils.isNotEmpty(comMap)) {
+                StringBuffer channel = new StringBuffer(MapUtils.getString(comMap, "channel"));
+                channel.setCharAt(2, '1');
+                comMap.put("channel", channel.toString());
+                companyMapper.updateCompanyChannel(comMap);
+                comMap.put("com_name", comName);
+                if (comMap.containsKey("pkid") && !comMap.containsKey("com_id_shuili")) {
+                    companyMapper.updateCompanyRel(comMap);
+                } else {
+                    comMap.put("com_id_shuili", id);
+                    companyMapper.insertCompanyRel(comMap);
+                }
+                logger.info("----------------解析【" + comName + "】的基本信息:企业已存在，修改企业的[channel]字段--------------------------------");
             } else {
+                TbCompany company = new TbCompany();
+                company.setComName(comName);
+                company.setComId(id);
+                company.setComNamePy(Pinyin.getPinYinFirstChar(comName));
+                company.setCreditCode(creditCode);
+                company.setLegalPerson(object.getString("legalPerson"));
+                company.setSkillLeader(object.getString("technicalLeader"));
+                company.setEconomicType(object.getString("regisType"));
+                company.setRegisAddress(newRegisAddress);
+                company.setRegisCapital(object.getString("regisCapital"));
+                company.setChannel("001");
+                companyMapper.insertCompany(company);
+                comMap = new HashedMap(3);
+                comMap.put("com_id", id);
+                comMap.put("com_name", comName);
                 comMap.put("com_id_shuili", id);
+                comMap.put("regisAddress", newRegisAddress);
                 companyMapper.insertCompanyRel(comMap);
             }
-            logger.info("----------------解析【" + comName + "】的基本信息:企业已存在，修改企业的[channel]字段--------------------------------");
-            return comMap;
-        }
-        try {
-            TbCompany company = new TbCompany();
-            company.setComName(comName);
-            company.setComId(id);
-            company.setComNamePy(Pinyin.getPinYinFirstChar(comName));
-            company.setCreditCode(creditCode);
-            company.setLegalPerson(object.getString("legalPerson"));
-            company.setSkillLeader(object.getString("technicalLeader"));
-            company.setEconomicType(object.getString("regisType"));
-            company.setRegisAddress(newRegisAddress);
-            company.setRegisCapital(object.getString("regisCapital"));
-            company.setChannel("001");
-            companyMapper.insertCompany(company);
-            comMap = new HashedMap(3);
-            comMap.put("com_id", id);
-            comMap.put("com_name", comName);
-            comMap.put("com_id_shuili", id);
-            comMap.put("regisAddress", newRegisAddress);
-            companyMapper.insertCompanyRel(comMap);
             //安许证保存
             Map<String, Object> baseInfo = (Map<String, Object>) object.get("baseInfo");
             if (null != baseInfo && null != baseInfo.get("safeProdLicese") && (!"无".equals(baseInfo.get("safeProdLicese")))) {
@@ -120,9 +120,9 @@ public class CompanyShuiliService {
             }
             //人员解析
             if (null != object.get("perosonInfo")) {
-                logger.info("personInfo"+object.get("perosonInfo"));
+                logger.info("personInfo" + object.get("perosonInfo"));
                 Map<String, Object> person = (Map<String, Object>) object.get("perosonInfo");
-                this.analysisCompanyPersonCert(person, id, comName, MapUtils.getString(comMap,"regisAddress"));
+                this.analysisCompanyPersonCert(person, id, comName, MapUtils.getString(comMap, "regisAddress"));
             }
             //业绩解析
             if (null != object.get("projectPerformances")) {
@@ -133,7 +133,6 @@ public class CompanyShuiliService {
         } catch (Exception e) {
             logger.error("解析企业" + comName + "失败！！！", e);
         }
-        return comMap;
     }
 
     /**
@@ -148,7 +147,7 @@ public class CompanyShuiliService {
             return;
         }
         List<Map<String, Object>> certs = (List<Map<String, Object>>) person.get("threeTypes");
-        if (null == certs || certs.size() <= 0){
+        if (null == certs || certs.size() <= 0) {
             return;
         }
         for (int i = 0, j = certs.size(); i < j; i++) {
@@ -291,7 +290,7 @@ public class CompanyShuiliService {
                     companyQualificationMapper.inertCompanyQualfication(tbCompanyQualification);
                     aptitude.setQualId(tbCompanyQualification.getPkid());
                 }
-                aptitude.setType("水利");
+                aptitude.setType("shuili");
                 aptitude.setComId(comId);
                 aptitude.setAptitudeName(tbCompanyQualification.getQualName());
                 aptitude.setAptitudeUuid(quaId);

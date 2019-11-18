@@ -295,7 +295,7 @@ public class CompanyHighwayService {
                     companyQualificationMapper.inertCompanyQualfication(tbCompanyQualification);
                     aptitude.setQualId(tbCompanyQualification.getPkid());
                 }
-                aptitude.setType("公路");
+                aptitude.setType("gonglu");
                 aptitude.setComId(comId);
                 aptitude.setAptitudeName(tbCompanyQualification.getQualName());
                 aptitude.setAptitudeUuid(quaId);
