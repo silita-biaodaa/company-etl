@@ -87,7 +87,6 @@ public class CompanyShuiliService {
                     comMap.put("com_id_shuili", id);
                     companyMapper.insertCompanyRel(comMap);
                 }
-                logger.info("----------------解析【" + comName + "】的基本信息:企业已存在，修改企业的[channel]字段--------------------------------");
             } else {
                 TbCompany company = new TbCompany();
                 company.setComName(comName);
@@ -112,10 +111,13 @@ public class CompanyShuiliService {
                 companyMapper.insertCompanyRel(comMap);
             }
             //安许证保存
-            if (null != baseInfo && null != baseInfo.get("safeProdLicese") && (!"无".equals(baseInfo.get("safeProdLicese")))) {
-                //删除之前的安许证信息
-                companyMapper.deleteSafetyCertificate(comName);
-                companyMapper.insertSafetyCertificate(baseInfo);
+            if (null != baseInfo && null != baseInfo.get("safeProdLicese")) {
+                if (!"有".equals(baseInfo.get("safeProdLicese")) || (!"无".equals(baseInfo.get("safeProdLicese")))) {
+                    //删除之前的安许证信息
+                    companyMapper.deleteSafetyCertificate(comName);
+                    companyMapper.insertSafetyCertificate(baseInfo);
+                    logger.info("-----------------企业安许证号解析完成--------------------");
+                }
             }
             //资质解析
             if (null != object.get("qualiInfos")) {

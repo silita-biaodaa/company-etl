@@ -17,9 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 公路公司解析
@@ -102,7 +99,7 @@ public class CompanyHighwayService {
                 comMap.put("com_id_highway", id);
                 companyMapper.insertCompanyRel(comMap);
             }
-            logger.info("----------------解析【" + comName + "】的基本信息:企业已存在，修改企业的[channel]字段--------------------------------");
+            logger.info("----------------解析【" + comName + "】的基本信息完成--------------------------------");
             return comMap;
         }
         try {
@@ -338,17 +335,5 @@ public class CompanyHighwayService {
             newRegisAddress = oldRegisAddress;
         }
         return newRegisAddress;
-    }
-
-    public static void main(String[] args) {
-        ScheduledExecutorService commonExecutor = Executors.newSingleThreadScheduledExecutor();
-        //企业列表抓取
-        commonExecutor.scheduleWithFixedDelay(() -> {
-            try {
-                System.out.println("--------------开始执行-----------------------------");
-            } catch (Exception e) {
-                logger.error("爬取人员证书和项目人员失败列表失败！！！", e);
-            }
-        }, 0, 1000 * 5, TimeUnit.MILLISECONDS);
     }
 }
