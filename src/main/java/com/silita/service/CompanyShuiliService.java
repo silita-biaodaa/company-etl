@@ -48,7 +48,7 @@ public class CompanyShuiliService {
      * @param object
      */
     public void analysisCompanyInfo(JSONObject object) {
-        String comName = object.getString("companyName");
+        String comName = object.getString("companyName").replace(")", "）").replace("(", "）").replaceAll(" ","");
         String regisAddress = object.getString("provinceCity");
         String newRegisAddress = null;
         for (Map.Entry<String, String> key : RegionCommon.regionSourcePinYin.entrySet()) {
@@ -111,8 +111,10 @@ public class CompanyShuiliService {
                 companyMapper.insertCompanyRel(comMap);
             }
             //安许证保存
-            if (null != baseInfo && null != baseInfo.get("safeProdLicese")) {
-                if (!"有".equals(baseInfo.get("safeProdLicese")) || (!"无".equals(baseInfo.get("safeProdLicese")))) {
+            if (null != baseInfo && null != baseInfo.get("safeProdLicese") && StringUtils.isNotEmpty(baseInfo.get("safeProdLicese").toString())) {
+                String safeProdLicese = baseInfo.get("safeProdLicese").toString();
+                if (safeProdLicese.toLowerCase().indexOf("j") > -1 || safeProdLicese.indexOf("安许证") > -1) {
+                    baseInfo.put("com_name", comName);
                     //删除之前的安许证信息
                     companyMapper.deleteSafetyCertificate(comName);
                     companyMapper.insertSafetyCertificate(baseInfo);

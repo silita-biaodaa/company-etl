@@ -12,7 +12,7 @@
     <delete id="deleteSafetyCertificate" parameterType="java.lang.String">
         DELETE
         FROM
-          `mishu`.`tb_safety_certificate`
+          `tb_safety_certificate`
         WHERE `com_name` = #{comName}
     </delete>
 
@@ -29,6 +29,9 @@
         `economic_type`,
         `skill_leader`,
         `regis_capital`,
+        <if test="businessNum != null and businessNum != ''">
+            `business_num`,
+        </if>
         <if test="comAddress != null and comAddress != ''">
             `com_address`,
         </if>
@@ -47,6 +50,9 @@
         #{economicType},
         #{skillLeader},
         #{regisCapital},
+        <if test="businessNum != null and businessNum != ''">
+            #{businessNum},
+        </if>
         <if test="comAddress != null and comAddress != ''">
             #{comAddress},
         </if>

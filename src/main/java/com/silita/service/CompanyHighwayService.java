@@ -48,7 +48,7 @@ public class CompanyHighwayService {
      * @param object
      */
     public Map<String, Object> analysisCompanyInfo(JSONObject object) {
-        String comName = object.getString("corpName");
+        String comName = object.getString("corpName").replace(")", "）").replace("(", "）").replaceAll(" ", "");
         String md5 = object.getString("md5");
         String regisAddress = object.getString("regProvinceCode");
         String newRegisAddress = null;
@@ -83,7 +83,6 @@ public class CompanyHighwayService {
         String creditCode = object.getString("creditCode");
         Map<String, Object> param = new HashedMap(2) {{
             put("comName", comName);
-            put("creditCode", creditCode);
         }};
         Map<String, Object> comMap = companyMapper.queryCompanyExist(param);
         if (MapUtils.isNotEmpty(comMap)) {
@@ -108,10 +107,15 @@ public class CompanyHighwayService {
             company.setComId(id);
             company.setComNamePy(Pinyin.getPinYinFirstChar(comName));
             company.setCreditCode(creditCode);
-            company.setLegalPerson(object.getString("enterpriseLeader"));
+            company.setLegalPerson(object.getString("legalRepresentative"));
             company.setSkillLeader(object.getString("technicalLeader"));
             company.setEconomicType(object.getString("natureType"));
             company.setRegisAddress(newRegisAddress);
+            company.setRegisCapital(object.getString("regFund"));
+            if (null != object.get("address") && StringUtils.isNotEmpty(object.getString("address"))) {
+                company.setComAddress(object.getString("address"));
+            }
+            company.setBusinessNum(object.getString("businessLicence"));
             company.setChannel("010");
             company.setMd5(md5);
             companyMapper.insertCompany(company);
