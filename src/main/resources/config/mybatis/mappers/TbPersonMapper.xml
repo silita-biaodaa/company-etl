@@ -16,6 +16,7 @@
         and com_id =#{comId}
         and com_name =#{comName}
         and is_valid = '1'
+        limit 1
     </select>
 
     <!--修改更新时间-->

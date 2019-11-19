@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 公路公司解析
@@ -185,7 +188,7 @@ public class CompanyHighwayService {
                 person.setCategory(certs.get(i).get("regTypeName").toString());
             }
             String pkid = tbPersonMapper.queryPersonCertExist(person);
-            if (null != pkid) {
+            if (StringUtils.isNotEmpty(pkid)) {
                 tbPersonMapper.updateDate(person);
             } else {
                 person.setPkid(CommonUtil.getUUID());
@@ -230,7 +233,7 @@ public class CompanyHighwayService {
     }
 
     /**
-     * 解析企业人员证书
+     * 解析企业资质
      *
      * @param object
      */
@@ -335,5 +338,17 @@ public class CompanyHighwayService {
             newRegisAddress = oldRegisAddress;
         }
         return newRegisAddress;
+    }
+
+    public static void main(String[] args) {
+        ScheduledExecutorService commonExecutor = Executors.newSingleThreadScheduledExecutor();
+        //企业列表抓取
+        commonExecutor.scheduleWithFixedDelay(() -> {
+            try {
+                System.out.println("--------------开始执行-----------------------------");
+            } catch (Exception e) {
+                logger.error("爬取人员证书和项目人员失败列表失败！！！", e);
+            }
+        }, 0, 1000 * 5, TimeUnit.MILLISECONDS);
     }
 }
