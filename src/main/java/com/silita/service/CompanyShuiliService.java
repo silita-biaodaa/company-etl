@@ -288,16 +288,16 @@ public class CompanyShuiliService {
                 }
                 tbCompanyQualification.setQualName(str.toString());
                 tbCompanyQualification.setRange(str.toString());
+                String pkid = companyQualificationMapper.queryCompanyQualficationExist(tbCompanyQualification);
+                if (null != pkid) {
+                    companyQualificationMapper.updateCompanyQualfication(pkid);
+                } else {
+                    companyQualificationMapper.inertCompanyQualfication(tbCompanyQualification);
+                    pkid = tbCompanyQualification.getPkid();
+                }
                 if (null != quaId) {
                     TbCompanyAptitude aptitude = new TbCompanyAptitude();
-                    String pkid = companyQualificationMapper.queryCompanyQualficationExist(tbCompanyQualification);
-                    if (null != pkid) {
-                        companyQualificationMapper.updateCompanyQualfication(pkid);
-                        aptitude.setQualId(pkid);
-                    } else {
-                        companyQualificationMapper.inertCompanyQualfication(tbCompanyQualification);
-                        aptitude.setQualId(tbCompanyQualification.getPkid());
-                    }
+                    aptitude.setQualId(pkid);
                     aptitude.setType("shuili");
                     aptitude.setComId(comId);
                     aptitude.setAptitudeName(tbCompanyQualification.getQualName());

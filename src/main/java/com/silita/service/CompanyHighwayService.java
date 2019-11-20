@@ -258,7 +258,7 @@ public class CompanyHighwayService {
             tbCompanyQualification.setPkid(CommonUtil.getUUID());
             tbCompanyQualification.setTab("企业资质资格");
             tbCompanyQualification.setQualType("监理资质");
-            tbCompanyQualification.setCertNo(quals.get(i).get("caCode").toString());
+            tbCompanyQualification.setCertNo(quals.get(i).get("caCode").toString().replaceAll("[^0-9a-zA-Z\u4e00-\u9fa5.，,。？“”]+", ""));
             tbCompanyQualification.setComId(comId);
             tbCompanyQualification.setComName(quals.get(i).get("corpName").toString());
             tbCompanyQualification.setCertOrg(quals.get(i).get("issueDepartment").toString());
@@ -271,7 +271,7 @@ public class CompanyHighwayService {
             String gradeCode = aptitudeDictionaryMapper.queryGradeCode(grade);
             String quaId;
             String qualCode;
-            if (null != gradeCode && gradeCode.indexOf("级") > -1) {
+            if (null != gradeCode && grade.indexOf("级") > -1) {
                 String catype = quals.get(i).get("catype").toString();
                 StringBuffer str = new StringBuffer(catype);
                 str.append(grade);
@@ -290,16 +290,16 @@ public class CompanyHighwayService {
                     put("qual", qualCode);
                 }});
             }
+            String pkid = companyQualificationMapper.queryCompanyQualficationExist(tbCompanyQualification);
+            if (null != pkid) {
+                companyQualificationMapper.updateCompanyQualfication(pkid);
+            } else {
+                companyQualificationMapper.inertCompanyQualfication(tbCompanyQualification);
+                pkid = tbCompanyQualification.getPkid();
+            }
             if (null != quaId) {
                 TbCompanyAptitude aptitude = new TbCompanyAptitude();
-                String pkid = companyQualificationMapper.queryCompanyQualficationExist(tbCompanyQualification);
-                if (null != pkid) {
-                    companyQualificationMapper.updateCompanyQualfication(pkid);
-                    aptitude.setQualId(pkid);
-                } else {
-                    companyQualificationMapper.inertCompanyQualfication(tbCompanyQualification);
-                    aptitude.setQualId(tbCompanyQualification.getPkid());
-                }
+                aptitude.setQualId(pkid);
                 aptitude.setType("gonglu");
                 aptitude.setComId(comId);
                 aptitude.setAptitudeName(tbCompanyQualification.getQualName());

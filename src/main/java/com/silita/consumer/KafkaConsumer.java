@@ -23,7 +23,6 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.AbstractMessageListenerContainer;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
-import org.springframework.kafka.listener.config.ContainerProperties;
 import org.springframework.kafka.support.Acknowledgment;
 
 import java.util.HashMap;
@@ -104,7 +103,7 @@ public class KafkaConsumer {
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
-        factory.setConcurrency(2);//设置并发数
+        factory.setConcurrency(3);//设置并发数
         factory.getContainerProperties().setPollTimeout(6000);
         factory.setBatchListener(true);
         factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL_IMMEDIATE);
@@ -118,7 +117,7 @@ public class KafkaConsumer {
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerStrFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerStrFactory());
-        factory.setConcurrency(2);//设置并发数
+        factory.setConcurrency(3);//设置并发数
         factory.getContainerProperties().setPollTimeout(6000);
         factory.setBatchListener(true);
         factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL_IMMEDIATE);
@@ -176,7 +175,7 @@ public class KafkaConsumer {
                 process(record, shuiliFactory,acknowledgment);
             }
         } catch (Exception e) {
-            logger.warn("消费公路数据失败！！！", e);
+            logger.warn("消费水利数据失败！！！", e);
         }
     }
 
@@ -193,7 +192,6 @@ public class KafkaConsumer {
                 }
             }
         }
-
     }
 
 }
