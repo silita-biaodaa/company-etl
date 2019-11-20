@@ -14,6 +14,7 @@ public class TbPerson {
     private String name;
     private String sex;
     private String idCard;
+    private String innerId;
     private String category;
     private String certNo;
     private String major;

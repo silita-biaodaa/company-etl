@@ -7,11 +7,20 @@
         select pkid
         from tb_person_${tabCode}
         where `name` = #{name}
-        and sex = #{sex}
-        and category = #{category}
-        and cert_no = #{certNo}
+        <if test="sex != null and sex != ''">
+            and sex = #{sex}
+        </if>
+        <if test="category != null and category != ''">
+            and category = #{category}
+        </if>
+        <if test="certNo != null and certNo != ''">
+            and cert_no = #{certNo}
+        </if>
         <if test="validDate != null and validDate != ''">
             and valid_date = #{validDate}
+        </if>
+        <if test="major != null and major != ''">
+            AND major = #{major}
         </if>
         and com_id =#{comId}
         and com_name =#{comName}
@@ -33,9 +42,14 @@
             `sex`,
         </if>
         `id_card`,
+        <if test="innerId != null and innerId != ''">
+            `innerid`,
+        </if>
         `category`,
         `cert_no`,
-        `major`,
+        <if test="major != null and major != ''">
+            `major`,
+        </if>
         `cert_date`,
         <if test="validDate != null and validDate != ''">
             `valid_date`,
@@ -55,9 +69,14 @@
             #{sex},
         </if>
         #{idCard},
+        <if test="innerId != null and innerId != ''">
+            #{innerId},
+        </if>
         #{category},
         #{certNo},
-        #{major},
+        <if test="major != null and major != ''">
+            #{major},
+        </if>
         #{certDate},
         <if test="validDate != null and validDate != ''">
             #{validDate},

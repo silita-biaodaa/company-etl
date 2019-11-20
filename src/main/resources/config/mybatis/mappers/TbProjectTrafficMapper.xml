@@ -192,8 +192,12 @@
         FROM tb_project_traffic t
         WHERE t.`com_name` = #{comName}
         AND t.`pro_name` = #{proName}
-        AND t.`pro_type` = #{proType}
-        AND t.`section` = #{section}
+        <if test="proType != null and proType != ''">
+            AND t.`pro_type` = #{proType}
+        </if>
+        <if test="section != null and section != ''">
+            AND t.`section` = #{section}
+        </if>
         limit 1
     </select>
 </mapper>

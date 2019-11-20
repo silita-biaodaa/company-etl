@@ -174,6 +174,7 @@ public class CompanyHighwayService {
             person.setSex(sex);
             person.setIdCard(idCard);
             person.setComId(comId);
+            person.setInnerId(perId);
             person.setComName(object.getString("company"));
             person.setCertNo(certs.get(i).get("regCANumber").toString());
             if (null != certs.get(i).get("regValidityTerm")) {

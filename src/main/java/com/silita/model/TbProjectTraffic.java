@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections.MapUtils;
+import org.jsoup.Jsoup;
 
 import java.util.Date;
 
@@ -112,7 +113,7 @@ public class TbProjectTraffic {
 
     public TbProjectTraffic(JSONObject jsonObject){
         this.comName = MapUtils.getString(jsonObject,"corpName");
-        this.proName = MapUtils.getString(jsonObject,"projectName");
+        this.proName = Jsoup.parse(MapUtils.getString(jsonObject,"projectName")).text();
         this.section = MapUtils.getString(jsonObject,"segmentName");
         this.proWhere = MapUtils.getString(jsonObject,"province");
         this.source = MapUtils.getString(jsonObject,"sourceInfo");
