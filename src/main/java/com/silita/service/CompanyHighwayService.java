@@ -290,6 +290,9 @@ public class CompanyHighwayService {
                     put("qual", qualCode);
                 }});
             }
+            if (StringUtils.isEmpty(tbCompanyQualification.getRange())) {
+                continue;
+            }
             String pkid = companyQualificationMapper.queryCompanyQualficationExist(tbCompanyQualification);
             if (null != pkid) {
                 companyQualificationMapper.updateCompanyQualfication(pkid);
