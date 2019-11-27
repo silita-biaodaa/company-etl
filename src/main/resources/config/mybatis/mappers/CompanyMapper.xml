@@ -35,6 +35,9 @@
         <if test="comAddress != null and comAddress != ''">
             `com_address`,
         </if>
+        <if test="url != null and url != ''">
+            `url`,
+        </if>
         `created`,
         `channel`
         )
@@ -55,6 +58,9 @@
         </if>
         <if test="comAddress != null and comAddress != ''">
             #{comAddress},
+        </if>
+        <if test="url != null and url != ''">
+            #{url},
         </if>
         now(),
         #{channel}

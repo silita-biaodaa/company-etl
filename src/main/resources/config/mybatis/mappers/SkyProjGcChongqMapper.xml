@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.SkyProjGcChongqMapper" >
+  <resultMap id="BaseResultMap" type="com.silita.model.SkyProjGcChongq" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="pkid" property="pkid" jdbcType="INTEGER" />
+    <result column="proj_name" property="projName" jdbcType="VARCHAR" />
+    <result column="proj_type" property="projType" jdbcType="VARCHAR" />
+    <result column="proj_address" property="projAddress" jdbcType="VARCHAR" />
+    <result column="proj_com" property="projCom" jdbcType="VARCHAR" />
+    <result column="com_id" property="comId" jdbcType="VARCHAR" />
+    <result column="com_name" property="comName" jdbcType="VARCHAR" />
+    <result column="role" property="role" jdbcType="VARCHAR" />
+    <result column="proj_manager" property="projManager" jdbcType="VARCHAR" />
+    <result column="supervision_person" property="supervisionPerson" jdbcType="VARCHAR" />
+    <result column="explore_person" property="explorePerson" jdbcType="VARCHAR" />
+    <result column="design_person" property="designPerson" jdbcType="VARCHAR" />
+    <result column="contract_scope" property="contractScope" jdbcType="VARCHAR" />
+    <result column="build_scope" property="buildScope" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="CHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="days" property="days" jdbcType="VARCHAR" />
+    <result column="end" property="end" jdbcType="VARCHAR" />
+    <result column="start" property="start" jdbcType="VARCHAR" />
+    <result column="issue_date" property="issueDate" jdbcType="VARCHAR" />
+    <result column="issue_org" property="issueOrg" jdbcType="VARCHAR" />
+    <result column="durable_years" property="durableYears" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.SkyPersonChongqMapper">
+    <resultMap id="BaseResultMap" type="com.silita.model.SkyPersonChongq">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="pkid" property="pkid" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="VARCHAR"/>
+        <result column="category" property="category" jdbcType="VARCHAR"/>
+        <result column="major" property="major" jdbcType="VARCHAR"/>
+        <result column="com_id" property="comId" jdbcType="VARCHAR"/>
+        <result column="is_valid" property="isValid" jdbcType="INTEGER"/>
+        <result column="is_all" property="isAll" jdbcType="INTEGER"/>
+        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="url" property="url" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+
+    <!--查询是否存在-->
+    <select id="queryPersonExits" parameterType="com.silita.model.SkyPersonChongq" resultType="java.lang.String">
+        SELECT
+        `pkid`,
+        `name`,
+        `sex`,
+        `category`,
+        `major`,
+        `cert_no`,
+        `cert_date`,
+        `valid_date`,
+        `com_id`,
+        `url`,
+        `is_valid`,
+        `is_all`,
+        `updated`,
+        `created`
+        FROM
+        sky_person_chongq
+        WHERE
+        `name` = #{name}
+        AND `is_valid` = 1
+        AND `com_id` = #{comId}
+        <if test="sex != null and sex != ''">
+            AND `sex` = #{sex}
+        </if>
+        <if test="category != null and category != ''">
+            AND `category` = #{category}
+        </if>
+        <if test="major != null and major != ''">
+            AND `major` = #{major}
+        </if>
+        <if test="certNo != null and certNo != ''">
+            AND `cert_no` = #{certNo}
+        </if>
+        <if test="certDate != null and certDate != ''">
+            AND `cert_date` = #{certDate}
+        </if>
+        <if test="certDate != null and certDate != ''">
+            AND `cert_date` = #{certDate}
+        </if>
+        <if test="validDate != null and validDate != ''">
+            AND `valid_date` = #{validDate}
+        </if>
+        LIMIT 1
+    </select>
+
+    <!--添加记录-->
+    <insert id="insertPerson" parameterType="com.silita.model.SkyPersonChongq">
+        INSERT INTO `sky_person_chongq` (
+        `name`,
+        <if test="sex != null and sex != ''">
+            `sex`,
+        </if>
+        <if test="category != null and category != ''">
+            `category`,
+        </if>
+        <if test="major != null and major != ''">
+            `major`,
+        </if>
+        <if test="cert_no != null and cert_no != ''">
+            `cert_no`,
+        </if>
+        <if test="certDate != null and certDate != ''">
+            `cert_date`,
+        </if>
+        <if test="validDate != null and validDate != ''">
+            `valid_date`,
+        </if>
+        `com_id`,
+        <if test="url != null and url != ''">
+            `url`,
+        </if>
+        `is_valid`,
+        `is_all`,
+        `created`
+        )
+        VALUES
+        (
+        #{name},
+        <if test="sex != null and sex != ''">
+            #{sex},
+        </if>
+        <if test="category != null and category != ''">
+            #{category},
+        </if>
+        <if test="major != null and major != ''">
+            #{major},
+        </if>
+        <if test="cert_no != null and cert_no != ''">
+            #{certNo},
+        </if>
+        <if test="certDate != null and certDate != ''">
+            #{certDate},
+        </if>
+        <if test="validDate != null and validDate != ''">
+            #{validDate},
+        </if>
+        #{comId},
+        <if test="url != null and url != ''">
+            #{url},
+        </if>
+        1,
+        #{isAll},
+        now()
+        ) ;
+    </insert>
+
+    <!--删除企业人员-->
+    <delete id="batchDeletePerson" parameterType="java.lang.String">
+        DELETE
+        FROM
+          `sky_person_chongq`
+        WHERE `com_id` = #{comId}
+    </delete>
+</mapper>

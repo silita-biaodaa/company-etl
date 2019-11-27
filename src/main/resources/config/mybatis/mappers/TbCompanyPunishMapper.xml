@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbCompanyPunishMapper" >
+  <resultMap id="BaseResultMap" type="com.silita.model.TbCompanyPunish" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="pkid" property="pkid" jdbcType="INTEGER" />
+    <result column="punish_code" property="punishCode" jdbcType="VARCHAR" />
+    <result column="punish_type" property="punishType" jdbcType="VARCHAR" />
+    <result column="punish_name" property="punishName" jdbcType="VARCHAR" />
+    <result column="punish_content" property="punishContent" jdbcType="VARCHAR" />
+    <result column="punish_with" property="punishWith" jdbcType="VARCHAR" />
+    <result column="punish_result" property="punishResult" jdbcType="VARCHAR" />
+    <result column="punish_date" property="punishDate" jdbcType="VARCHAR" />
+    <result column="punish_org" property="punishOrg" jdbcType="VARCHAR" />
+    <result column="com_id" property="comId" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

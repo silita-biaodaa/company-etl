@@ -14,6 +14,14 @@ public interface TbPersonMapper {
     String queryPersonCertExist(TbPerson person);
 
     /**
+     * 查询是否存在该人员证书
+     *
+     * @param person
+     * @return
+     */
+    String queryPersonExist(Object person);
+
+    /**
      * 修改更新时间
      *
      * @return

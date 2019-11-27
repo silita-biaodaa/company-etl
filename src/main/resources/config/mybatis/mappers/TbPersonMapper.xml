@@ -28,6 +28,31 @@
         limit 1
     </select>
 
+    <!--查询是否存在该人员证书-->
+    <select id="queryPersonExist" parameterType="java.lang.Object" resultType="java.lang.String">
+        select pkid
+        from tb_person_${tabCode}
+        where `name` = #{name}
+        <if test="sex != null and sex != ''">
+            and sex = #{sex}
+        </if>
+        <if test="category != null and category != ''">
+            and category = #{category}
+        </if>
+        <if test="certNo != null and certNo != ''">
+            and cert_no = #{certNo}
+        </if>
+        <if test="validDate != null and validDate != ''">
+            and valid_date = #{validDate}
+        </if>
+        <if test="major != null and major != ''">
+            AND major = #{major}
+        </if>
+        and com_id =#{comId}
+        and is_valid = '1'
+        limit 1
+    </select>
+
     <!--修改更新时间-->
     <update id="updateDate" parameterType="com.silita.model.TbPerson">
       UPDATE tb_person_${tabCode} SET updated = now() WHERE pkid = #{pkid}
