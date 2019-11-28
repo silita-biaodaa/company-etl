@@ -43,6 +43,19 @@
         LIMIT 1
     </select>
 
+    <!--根据证书和资质名查询是否存在-->
+    <select id="queryCompanyQualficationCertNo" parameterType="com.silita.model.TbCompanyQualification" resultType="java.lang.String">
+        SELECT
+          t.`pkid`
+        FROM
+          tb_company_qualification t
+        WHERE  t.`cert_no` = #{certNo}
+        AND (t.`qual_name` = CONCAT('%',#{qualName},'%') OR t.range like CONCAT('%',#{qualName},'%'))
+        AND t.`com_id` = #{comId}
+        AND t.`is_valid` = 1
+        LIMIT 1
+    </select>
+
     <!--添加企业资质-->
     <insert id="inertCompanyQualfication" parameterType="com.silita.model.TbCompanyQualification">
         INSERT INTO `tb_company_qualification` (
@@ -57,4 +70,13 @@
     <update id="updateCompanyQualfication" parameterType="java.lang.String">
         UPDATE tb_company_qualification SET updated = now() where pkid = #{pkid}
     </update>
+
+    <!--查询企业下的资质-->
+    <delete id="deleteCompanyQualfication" parameterType="java.util.Map">
+        DELETE
+        FROM
+          `mishu`.`tb_company_qualification`
+        WHERE `com_id` = #{comId}
+        AND `channel` = {channel}
+    </delete>
 </mapper>

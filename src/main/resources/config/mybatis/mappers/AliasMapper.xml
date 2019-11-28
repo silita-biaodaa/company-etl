@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.AliasMapper">
+
+    <!--查询资质或等级别名是否存在-->
+    <select id="queryAnalysisAliasExist" parameterType="java.lang.String">
+        SELECT
+          `pkid`
+        FROM
+          `biaodaa_admin`.`tb_analysis_alias`
+        WHERE `alias_name` = #{alias}
+        limit 1
+    </select>
+
+    <!--查询资质备案-->
+    <select id="queryAnalysisAliasExist" parameterType="java.lang.String">
+        SELECT
+          `pkid`,
+          `qual_name`,
+          `in_region`,
+        FROM
+          `tb_qualification_region`
+        WHERE `qual_name` = #{qual}
+        LIMIT 1;
+    </select>
+
+    <!--添加等级资质别名-->
+    <insert id="insertAnalysisAlias" parameterType="java.util.Map">
+        INSERT INTO `biaodaa_admin`.`tb_analysis_alias` (
+          `alias_name`,
+          `type`,
+          `created`
+        )
+        VALUES
+          (
+            #{aliasName},
+            #{type},
+            now()
+          ) ;
+    </insert>
+
+    <!--添加等级资质别名-->
+    <insert id="insertqueryQualificationRegion" parameterType="java.util.Map">
+        INSERT INTO `tb_qualification_region` (
+          `qual_name`,
+          `in_region`,
+          `created`
+        )
+        VALUES
+          (
+            #{qualName},
+            #{inRegion},
+            now()
+          ) ;
+    </insert>
+
+    <!--修改资质备案-->
+    <update id="updatequeryQualificationRegion" parameterType="java.util.Map">
+        UPDATE
+          `tb_qualification_region`
+        SET
+          `in_region` = #{in_region}
+        WHERE `pkid` = #{pkid};
+    </update>
+</mapper>

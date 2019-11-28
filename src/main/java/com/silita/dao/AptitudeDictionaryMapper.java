@@ -40,4 +40,11 @@ public interface AptitudeDictionaryMapper {
      * @return
      */
     String queryGradeCode(String grade);
+
+    /**
+     * 根据等级别名查询等级code和标准名
+     * @param alias
+     * @return
+     */
+    Map<String,Object> queryGradeByAlias(String alias);
 }

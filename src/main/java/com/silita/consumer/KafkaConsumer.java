@@ -130,7 +130,7 @@ public class KafkaConsumer {
      *
      * @param records
      */
-//    @KafkaListener(topics = "com_etl_queue", containerFactory = "kafkaListenerContainerFactory", groupId = "groupA")
+    @KafkaListener(topics = "com_etl_queue", containerFactory = "kafkaListenerContainerFactory", groupId = "groupA")
     public void getSiKuYiSpiderMessage(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
         try {
             for (ConsumerRecord<?, ?> record : records) {
@@ -151,7 +151,7 @@ public class KafkaConsumer {
      *
      * @param records
      */
-    @KafkaListener(topics = "highway", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
+//    @KafkaListener(topics = "highway", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
     public void getHighwayRecords(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
         try {
             for (ConsumerRecord<?, ?> record : records) {
@@ -168,7 +168,7 @@ public class KafkaConsumer {
      *
      * @param records
      */
-    @KafkaListener(topics = "shuili", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
+//    @KafkaListener(topics = "shuili", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
     public void getShuiliRecords(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
         try {
             for (ConsumerRecord<?, ?> record : records) {

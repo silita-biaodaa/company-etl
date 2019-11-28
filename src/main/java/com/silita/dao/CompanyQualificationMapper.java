@@ -46,6 +46,13 @@ public interface CompanyQualificationMapper {
     String queryCompanyQualficationExist(TbCompanyQualification qualification);
 
     /**
+     * 根据证书和资质名查询是否存在
+     * @param qualification
+     * @return
+     */
+    String queryCompanyQualficationCertNo(TbCompanyQualification qualification);
+
+    /**
      * 添加企业资质
      * @param companyQualification
      * @return
@@ -58,4 +65,11 @@ public interface CompanyQualificationMapper {
      * @return
      */
     int updateCompanyQualfication(String pkid);
+
+    /**
+     * 查询企业下的资质
+     * @param param
+     * @return
+     */
+    int deleteCompanyQualfication(Map<String,Object> param);
 }

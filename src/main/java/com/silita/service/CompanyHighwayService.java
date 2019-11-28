@@ -245,6 +245,11 @@ public class CompanyHighwayService {
             return;
         }
         String comId = MapUtils.getString(company, "com_id");
+        //删除公路四库一企业下的资质
+        companyQualificationMapper.deleteCompanyQualfication(new HashedMap(2){{
+            put("comId",comId);
+            put("channel",4);
+        }});
         List<Map<String, Object>> quals = (List<Map<String, Object>>) object.get("quals");
         String qualType;
         List<TbCompanyAptitude> aptitudes = new ArrayList<>();

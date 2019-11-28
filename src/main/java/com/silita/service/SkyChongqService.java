@@ -43,6 +43,8 @@ public class SkyChongqService {
     private TbCompanyAptitudeMapper tbCompanyAptitudeMapper;
     @Autowired
     private IAptitudeCleanService aptitudeCleanService;
+    @Autowired
+    private AliasService aliasService;
 
     /**
      * 解析基本信息
@@ -97,6 +99,12 @@ public class SkyChongqService {
                 List<Map<String, Object>> persons = (List<Map<String, Object>>) object.get("person");
                 this.analysisCompanyPersonCert(persons, comMap.get("com_id").toString(), regisAddress);
             }
+            //解析企业资质
+            if (object.containsKey("quals")) {
+                List<Map<String, Object>> quals = (List<Map<String, Object>>) object.get("quals");
+                this.analysisCompanyQuals(quals, comMap.get("com_id").toString(), comName);
+            }
+            //解析业绩
             logger.info("----------------解析【" + comName + "】的完成--------------------------------");
         } catch (Exception e) {
             logger.error("解析企业" + comName + "失败！！！", e);
@@ -233,99 +241,96 @@ public class SkyChongqService {
      * 解析企业资质
      */
     public void analysisCompanyQuals(List<Map<String, Object>> quals, String comId, String comName) {
-        if (null != quals && quals.size() > 0) {
-            List<TbCompanyAptitude> aptitudes = new ArrayList<>();
-            int leg = quals.size();
-            for (int i = 0; i < leg; i++) {
-                String qualType = quals.get(i).get("quaType").toString();
-                if (!"水利工程建设监理单位资质".equals(qualType)) {
-                    continue;
-                }
-                //保存企业资质 tb_company_qualification 表
-                TbCompanyQualification tbCompanyQualification = new TbCompanyQualification();
-                tbCompanyQualification.setPkid(CommonUtil.getUUID());
-                tbCompanyQualification.setTab("企业资质资格");
-                tbCompanyQualification.setQualType("水利工程建设监理单位资质");
-                tbCompanyQualification.setCertNo(quals.get(i).get("creditNo").toString());
-                tbCompanyQualification.setComId(comId);
-                tbCompanyQualification.setComName(comName);
-                tbCompanyQualification.setCertOrg(quals.get(i).get("lssueOrg").toString());
-                tbCompanyQualification.setCertDate(quals.get(i).get("forensicDate").toString());
-                tbCompanyQualification.setValidDate(quals.get(i).get("validDate").toString());
-                tbCompanyQualification.setChannel(5);
-                StringBuffer str = new StringBuffer(quals.get(i).get("profesType").toString());
-                String level = quals.get(i).get("level").toString();
-                String gradeCode = aptitudeDictionaryMapper.queryGradeCode(level);
-                String qualCode = aptitudeDictionaryMapper.queryCodeByAlias(str.toString());
-                String quaId;
-                if (null != gradeCode) {
-                    str.append(level);
-                    quaId = aptitudeDictionaryMapper.queryPkidByParam(new HashedMap(2) {{
-                        put("grade", gradeCode);
-                        put("qual", qualCode);
-                    }});
+        if (null == quals || quals.size() <= 0) {
+            return;
+        }
+        //删除重庆企业下的资质
+        companyQualificationMapper.deleteCompanyQualfication(new HashedMap(2){{
+            put("comId",comId);
+            put("channel",6);
+        }});
+        List<TbCompanyAptitude> aptitudes = new ArrayList<>();
+        int leg = quals.size();
+        for (int i = 0; i < leg; i++) {
+            String qualType = quals.get(i).get("sequence").toString();
+            //保存企业资质 tb_company_qualification 表
+            TbCompanyQualification tbCompanyQualification = new TbCompanyQualification();
+            tbCompanyQualification.setPkid(CommonUtil.getUUID());
+            tbCompanyQualification.setTab("企业资质资格");
+            tbCompanyQualification.setQualType("建筑业企业资质");
+            tbCompanyQualification.setCertNo(quals.get(i).get("certificateNo").toString());
+            tbCompanyQualification.setComId(comId);
+            tbCompanyQualification.setComName(comName);
+            tbCompanyQualification.setValidDate(quals.get(i).get("periodValidity").toString());
+            tbCompanyQualification.setChannel(6);
+            StringBuffer str = new StringBuffer(quals.get(i).get("aptitudeType").toString());
+            String level = quals.get(i).get("aptitudeGrade").toString();
+            String gradeCode = null;
+            String gradeName = null;
+            if ("不分等级".equals(level)) {
+                gradeCode = "0";
+                gradeName = level;
+            } else {
+                Map<String, Object> gradeMap = aptitudeDictionaryMapper.queryGradeByAlias(level);
+                //判断dic_alias表中是否有等级别名
+                if (MapUtils.isEmpty(gradeMap)) {
+                    //没有等级别名需加入tb_analysis_alias表中用来填补别名表
+                    aliasService.saveAlias(level, 2);
                 } else {
-                    //非等级资质
-                    quaId = aptitudeDictionaryMapper.queryPkidByParam(new HashedMap(2) {{
-                        put("grade", "0");
-                        put("qual", qualCode);
-                    }});
-                }
-                tbCompanyQualification.setQualName(str.toString());
-                tbCompanyQualification.setRange(str.toString());
-                if (StringUtils.isEmpty(tbCompanyQualification.getRange())) {
-                    continue;
-                }
-                String pkid = companyQualificationMapper.queryCompanyQualficationExist(tbCompanyQualification);
-                if (null != pkid) {
-                    companyQualificationMapper.updateCompanyQualfication(pkid);
-                } else {
-                    companyQualificationMapper.inertCompanyQualfication(tbCompanyQualification);
-                    pkid = tbCompanyQualification.getPkid();
-                }
-                if (null != quaId) {
-                    TbCompanyAptitude aptitude = new TbCompanyAptitude();
-                    aptitude.setQualId(pkid);
-                    aptitude.setType("shuili");
-                    aptitude.setComId(comId);
-                    aptitude.setAptitudeName(tbCompanyQualification.getQualName());
-                    aptitude.setAptitudeUuid(quaId);
-                    aptitude.setMainuuid(qualCode);
-                    aptitudes.add(aptitude);
+                    gradeCode = gradeMap.get("code").toString();
+                    gradeName = gradeMap.get("name").toString();
                 }
             }
-            if (null != aptitudes && aptitudes.size() > 0) {
-                //删除之前旧资质
-                tbCompanyAptitudeMapper.deleteCompanyAptiudeByType(new HashedMap(2) {{
-                    put("comId", comId);
-                    put("type", "shuili");
-                }});
-                //新增资质
-                tbCompanyAptitudeMapper.batchInsertCompanyAptitude(aptitudes);
-                //更新企业range字段
-                aptitudeCleanService.updateCompanyAptitude(comId);
-                logger.info("----------------解析企业资质完成--------------------");
+            String qualCode = aptitudeDictionaryMapper.queryCodeByAlias(str.toString());
+            if (null == qualCode) {
+                //没有资质别名需加入tb_analysis_alias表中用来填补别名表
+                aliasService.saveAlias(str.toString(), 1);
+                continue;
+            }
+            if (null == gradeCode) {
+                continue;
+            }
+            String quaId;
+            String grade = gradeCode;
+            str.append(qualType).append(gradeName);
+            quaId = aptitudeDictionaryMapper.queryPkidByParam(new HashedMap(2) {{
+                put("qual", qualCode);
+                put("grade", grade);
+            }});
+            tbCompanyQualification.setQualName(str.toString());
+            tbCompanyQualification.setRange(str.toString());
+            String pkid = companyQualificationMapper.queryCompanyQualficationCertNo(tbCompanyQualification);
+            if (null != pkid) {
+                companyQualificationMapper.updateCompanyQualfication(pkid);
+            } else {
+                companyQualificationMapper.inertCompanyQualfication(tbCompanyQualification);
+                pkid = tbCompanyQualification.getPkid();
+            }
+            //保存重庆备案资质
+            aliasService.saveQualRegion(str.toString(), "重庆市");
+            if (null != quaId) {
+                TbCompanyAptitude aptitude = new TbCompanyAptitude();
+                aptitude.setQualId(pkid);
+                aptitude.setType("sky_chongq");
+                aptitude.setComId(comId);
+                aptitude.setAptitudeName(tbCompanyQualification.getQualName());
+                aptitude.setAptitudeUuid(quaId);
+                aptitude.setMainuuid(qualCode);
+                aptitudes.add(aptitude);
             }
         }
-    }
-
-    /**
-     * 获取新的注册地
-     *
-     * @param oldRegisAddress 不规范的注册地
-     * @param key
-     * @return
-     */
-    private String getRegisAddress(String oldRegisAddress, String key, int index) {
-        String newRegisAddress;
-        int regisLeg = oldRegisAddress.length();
-        int keyLeg = key.length();
-        if (regisLeg > keyLeg) {
-            newRegisAddress = oldRegisAddress.substring(index, keyLeg + index);
-        } else {
-            newRegisAddress = oldRegisAddress;
+        if (null != aptitudes && aptitudes.size() > 0) {
+            //删除之前旧资质
+            tbCompanyAptitudeMapper.deleteCompanyAptiudeByType(new HashedMap(2) {{
+                put("comId", comId);
+                put("type", "sky_chongq");
+            }});
+            //新增资质
+            tbCompanyAptitudeMapper.batchInsertCompanyAptitude(aptitudes);
+            //更新企业range字段
+            aptitudeCleanService.updateCompanyAptitude(comId);
+            logger.info("----------------解析企业资质完成--------------------");
         }
-        return newRegisAddress;
     }
 
     /**

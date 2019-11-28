@@ -249,6 +249,11 @@ public class CompanyShuiliService {
      */
     public void analysisCompanyQuals(List<Map<String, Object>> quals, String comId, String comName) {
         if (null != quals && quals.size() > 0) {
+            //删除公水利四库一企业下的资质
+            companyQualificationMapper.deleteCompanyQualfication(new HashedMap(2){{
+                put("comId",comId);
+                put("channel",5);
+            }});
             List<TbCompanyAptitude> aptitudes = new ArrayList<>();
             int leg = quals.size();
             for (int i = 0; i < leg; i++) {
@@ -288,9 +293,6 @@ public class CompanyShuiliService {
                 }
                 tbCompanyQualification.setQualName(str.toString());
                 tbCompanyQualification.setRange(str.toString());
-                if (StringUtils.isEmpty(tbCompanyQualification.getRange())) {
-                    continue;
-                }
                 String pkid = companyQualificationMapper.queryCompanyQualficationExist(tbCompanyQualification);
                 if (null != pkid) {
                     companyQualificationMapper.updateCompanyQualfication(pkid);
