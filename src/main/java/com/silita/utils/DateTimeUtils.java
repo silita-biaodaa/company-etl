@@ -1,7 +1,10 @@
 package com.silita.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -64,5 +67,24 @@ public class DateTimeUtils {
      */
     public static int getFixedSleep() {
         return 0;
+    }
+
+    /**
+     * 转换时间格式
+     * @param date 时间
+     * @param oldPaten 原时间格式
+     * @param patten 新时间格式
+     * @return
+     */
+    public static String strFormat(String date,String oldPaten,String patten){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(oldPaten);
+        try {
+            Date time = simpleDateFormat.parse(date);
+            SimpleDateFormat resDateFormat = new SimpleDateFormat(patten);
+            return resDateFormat.format(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

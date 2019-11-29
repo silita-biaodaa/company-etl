@@ -82,4 +82,9 @@ public class SkyProjZbChongq {
      * 中标范围和内容
      */
     private String content;
+
+    /**
+     * 榨取url
+     */
+    private String url;
 }

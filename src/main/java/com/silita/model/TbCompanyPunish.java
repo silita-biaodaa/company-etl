@@ -59,6 +59,11 @@ public class TbCompanyPunish {
     private String comId;
 
     /**
+     * 抓取url
+     */
+    private String url;
+
+    /**
      * 创建时间
      */
     private Date created;

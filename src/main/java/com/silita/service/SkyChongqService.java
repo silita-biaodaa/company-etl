@@ -5,6 +5,7 @@ import com.silita.common.RegionCommon;
 import com.silita.dao.*;
 import com.silita.model.*;
 import com.silita.utils.CommonUtil;
+import com.silita.utils.DateTimeUtils;
 import com.silita.utils.Pinyin;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.collections.map.HashedMap;
@@ -41,6 +42,10 @@ public class SkyChongqService {
     private CompanyQualificationMapper companyQualificationMapper;
     @Autowired
     private TbCompanyAptitudeMapper tbCompanyAptitudeMapper;
+    @Autowired
+    private TbCompanyPunishMapper tbCompanyPunishMapper;
+    @Autowired
+    private SkyProjZbChongqMapper skyProjZbChongqMapper;
     @Autowired
     private IAptitudeCleanService aptitudeCleanService;
     @Autowired
@@ -98,13 +103,26 @@ public class SkyChongqService {
             if (object.containsKey("person")) {
                 List<Map<String, Object>> persons = (List<Map<String, Object>>) object.get("person");
                 this.analysisCompanyPersonCert(persons, comMap.get("com_id").toString(), regisAddress);
+                persons = null;
             }
             //解析企业资质
             if (object.containsKey("quals")) {
                 List<Map<String, Object>> quals = (List<Map<String, Object>>) object.get("quals");
                 this.analysisCompanyQuals(quals, comMap.get("com_id").toString(), comName);
+                quals = null;
             }
-            //解析业绩
+            //解析中标业绩
+            if (object.containsKey("zhongbiao")) {
+                List<Map<String, Object>> zhongbiaos = (List<Map<String, Object>>) object.get("zhongbiaos");
+                this.analysisCompanyZhongbiaoProject(zhongbiaos, comMap.get("com_id").toString(), comName);
+                zhongbiaos = null;
+            }
+            //解析行政处罚
+            if (object.containsKey("punishs")) {
+                List<Map<String, Object>> punishs = (List<Map<String, Object>>) object.get("punishs");
+                this.analysisCompanyPunish(punishs, comMap.get("com_id").toString());
+                punishs = null;
+            }
             logger.info("----------------解析【" + comName + "】的完成--------------------------------");
         } catch (Exception e) {
             logger.error("解析企业" + comName + "失败！！！", e);
@@ -177,64 +195,81 @@ public class SkyChongqService {
     /**
      * 解析企业业绩
      */
-    public void analysisCompanyProject(List<Map<String, Object>> projects, String comName) {
-        int leg = projects.size();
-        List<Map<String, Object>> projectPersons;
-        List<Map<String, Object>> projectAwards;
-        for (int i = 0; i < leg; i++) {
-            TbProjectShuili projectShuili = new TbProjectShuili(projects.get(i));
-            if (StringUtils.isEmpty(projectShuili.getComName())) {
-                continue;
-            }
-            projectShuili.setComName(comName);
-            if (null != projects.get(i).get("projectPersons")) {
-                projectPersons = (List<Map<String, Object>>) projects.get(i).get("projectPersons");
-                if (null != projectPersons && projectPersons.size() > 0) {
-                    int k = projectPersons.size();
-                    List<Map<String, Object>> persons = new ArrayList<>(k);
-                    for (int j = 0; j < k; j++) {
-                        Map map = new HashedMap(8);
-                        map.put("姓名", projectPersons.get(j).get("name"));
-                        map.put("身份证号", projectPersons.get(j).get("idCard"));
-                        map.put("职务", projectPersons.get(j).get("post"));
-                        map.put("职称", projectPersons.get(j).get("job"));
-                        map.put("证书名称", projectPersons.get(j).get("creditName"));
-                        map.put("证书编号", projectPersons.get(j).get("creditNo"));
-                        map.put("证书专业", projectPersons.get(j).get("creditMajor"));
-                        map.put("等级", projectPersons.get(j).get("level"));
-                        persons.add(map);
-                    }
-                    projectShuili.setPersons(JSONObject.toJSONString(persons));
-                }
-            }
-            if (null != projects.get(i).get("projcetAwards")) {
-                projectAwards = (List<Map<String, Object>>) projects.get(i).get("projcetAwards");
-                if (null != projectAwards && projectAwards.size() > 0) {
-                    int k = projectAwards.size();
-                    List<Map<String, Object>> awards = new ArrayList<>(k);
-                    for (int j = 0; j < k; j++) {
-                        Map map = new HashedMap(7);
-                        map.put("奖项名称", projectAwards.get(j).get("awardName"));
-                        map.put("奖项类别", projectAwards.get(j).get("awardType"));
-                        map.put("奖项级别", projectAwards.get(j).get("awardRank"));
-                        map.put("奖项等别", projectAwards.get(j).get("awardLevel"));
-                        map.put("颁奖单位", projectAwards.get(j).get("issueUnit"));
-                        map.put("颁奖文号", projectAwards.get(j).get("issueNo"));
-                        map.put("颁奖时间", projectAwards.get(j).get("issueTime"));
-                        awards.add(map);
-                    }
-                    projectShuili.setPrizes(JSONObject.toJSONString(awards));
-                }
-            }
-            Integer pkid = tbProjectShuiliMapper.queryProjectExits(projectShuili);
-            if (null != pkid && pkid > 0) {
-                projectShuili.setPkid(pkid);
-                tbProjectShuiliMapper.updateProjectTraffic(projectShuili);
-            } else {
-                tbProjectShuiliMapper.insertProjectTraffic(projectShuili);
-            }
+    public void analysisCompanyProject(List<Map<String, Object>> projects, String comId,String comName) {
+
+        logger.info("--------------解析企业竣工业绩完成-----------------------------");
+    }
+
+    /**
+     * 解析企业中标业绩
+     */
+    public void analysisCompanyZhongbiaoProject(List<Map<String, Object>> projects, String comId, String comName) {
+        if (null == projects || projects.size() <= 0) {
+            return;
         }
-        logger.info("--------------解析企业业绩完成-----------------------------");
+        //删除企业下的中标业绩
+        skyProjZbChongqMapper.deleteProjectZhongbiao(comId);
+        for (int i = 0, j = projects.size(); i < j; i++) {
+            SkyProjZbChongq project = new SkyProjZbChongq();
+            project.setComId(comId);
+            project.setComName(comName);
+            project.setProjName(projects.get(i).get("projectName").toString());
+            project.setZhaobiaoCode(projects.get(i).get("biddingCode").toString());
+            project.setZhaobiaoPerson(projects.get(i).get("tenderee").toString());
+            project.setProjManager(projects.get(i).get("projectManager").toString());
+            if (null != projects.get(i).get("biddingPrice")) {
+                Double amount = Double.valueOf(projects.get(i).get("biddingPrice").toString());
+                project.setAmount(String.valueOf(amount / 10000));
+            }
+            project.setDays(projects.get(i).get("biddingDay").toString());
+            project.setUrl(projects.get(i).get("url").toString());
+            if (null != projects.get(i).get("pliesNo")) {
+                project.setFloorNum(projects.get(i).get("pliesNo").toString());
+            }
+            if (null != projects.get(i).get("bidDate")) {
+                project.setPubDate(DateTimeUtils.strFormat(projects.get(i).get("bidDate").toString(),"yyyy/MM/dd HH:mm:ss","yyyy-MM-dd"));
+            }
+            if (null != projects.get(i).get("projectScale")) {
+                project.setScope(projects.get(i).get("projectScale").toString());
+            }
+            if (null != projects.get(i).get("biddingScope")) {
+                project.setContent(projects.get(i).get("biddingScope").toString());
+            }
+            skyProjZbChongqMapper.insertProjectZhongbiao(project);
+        }
+        logger.info("--------------解析企业中标业绩完成-----------------------------");
+    }
+
+    /**
+     * 解析企业的行政处罚
+     */
+    public void analysisCompanyPunish(List<Map<String, Object>> punishs, String comId) {
+        if (null == punishs || punishs.size() <= 0) {
+            return;
+        }
+        //删除公司下的所有行政处罚
+        tbCompanyPunishMapper.deleteCompanyPunish(comId);
+        for (int i = 0, j = punishs.size(); i < j; i++) {
+            Map<String, Object> entity = (Map<String, Object>) punishs.get(i).get("entity");
+            TbCompanyPunish companyPunish = new TbCompanyPunish();
+            companyPunish.setComId(comId);
+            companyPunish.setPunishCode(entity.get("cf_wsh").toString());
+            companyPunish.setPunishType(entity.get("cf_cflb").toString());
+            if (null != entity.get("cf_cfmc")) {
+                companyPunish.setPunishName(entity.get("cf_cfmc").toString());
+            }
+            companyPunish.setPunishContent(entity.get("cf_sy").toString());
+            companyPunish.setPunishWith(entity.get("cf_yj").toString());
+            if (null != entity.get("cf_jg")) {
+                companyPunish.setPunishResult(entity.get("cf_jg").toString());
+            }
+            companyPunish.setPunishDate(entity.get("cf_jdrq").toString());
+            if (null != entity.get("cf_xzjg")) {
+                companyPunish.setPunishOrg(entity.get("cf_xzjg").toString());
+            }
+            companyPunish.setUrl(punishs.get(i).get("url").toString());
+            tbCompanyPunishMapper.insertCompanyPunish(companyPunish);
+        }
     }
 
     /**
@@ -245,9 +280,9 @@ public class SkyChongqService {
             return;
         }
         //删除重庆企业下的资质
-        companyQualificationMapper.deleteCompanyQualfication(new HashedMap(2){{
-            put("comId",comId);
-            put("channel",6);
+        companyQualificationMapper.deleteCompanyQualfication(new HashedMap(2) {{
+            put("comId", comId);
+            put("channel", 6);
         }});
         List<TbCompanyAptitude> aptitudes = new ArrayList<>();
         int leg = quals.size();

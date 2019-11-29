@@ -1,20 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.silita.dao.TbCompanyPunishMapper" >
-  <resultMap id="BaseResultMap" type="com.silita.model.TbCompanyPunish" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="pkid" property="pkid" jdbcType="INTEGER" />
-    <result column="punish_code" property="punishCode" jdbcType="VARCHAR" />
-    <result column="punish_type" property="punishType" jdbcType="VARCHAR" />
-    <result column="punish_name" property="punishName" jdbcType="VARCHAR" />
-    <result column="punish_content" property="punishContent" jdbcType="VARCHAR" />
-    <result column="punish_with" property="punishWith" jdbcType="VARCHAR" />
-    <result column="punish_result" property="punishResult" jdbcType="VARCHAR" />
-    <result column="punish_date" property="punishDate" jdbcType="VARCHAR" />
-    <result column="punish_org" property="punishOrg" jdbcType="VARCHAR" />
-    <result column="com_id" property="comId" jdbcType="VARCHAR" />
-    <result column="created" property="created" jdbcType="TIMESTAMP" />
-  </resultMap>
+<mapper namespace="com.silita.dao.TbCompanyPunishMapper">
+
+    <!--添加-->
+    <insert id="insertCompanyPunish" parameterType="com.silita.model.TbCompanyPunish">
+        INSERT INTO `tb_company_punish` (
+        <if test="punishCode != null and punishCode != ''">
+            `punish_code`,
+        </if>
+        <if test="punishType != null and punishType != ''">
+            `punish_type`,
+        </if>
+        <if test="punishName != null and punishName != ''">
+            `punish_name`,
+        </if>
+        <if test="punishContent != null and punishContent != ''">
+            `punish_content`,
+        </if>
+        <if test="punishWith != null and punishWith != ''">
+            `punish_with`,
+        </if>
+        <if test="punishResult != null and punishResult != ''">
+            `punish_result`,
+        </if>
+        <if test="punishDate != null and punishDate != ''">
+            `punish_date`,
+        </if>
+        <if test="punishOrg != null and punishOrg != ''">
+            `punish_org`,
+        </if>
+        `com_id`,
+        `url`,
+        `created`
+        )
+        VALUES
+        (
+        <if test="punishCode != null and punishCode != ''">
+            #{punishCode},
+        </if>
+        <if test="punishType != null and punishType != ''">
+            #{punishType},
+        </if>
+        <if test="punishName != null and punishName != ''">
+            #{punishName},
+        </if>
+        <if test="punishContent != null and punishContent != ''">
+            #{punishContent},
+        </if>
+        <if test="punishWith != null and punishWith != ''">
+            #{punishWith},
+        </if>
+        <if test="punishResult != null and punishResult != ''">
+            #{punishResult},
+        </if>
+        <if test="punishDate != null and punishDate != ''">
+            #{punishDate},
+        </if>
+        <if test="punishOrg != null and punishOrg != ''">
+            #{punishOrg},
+        </if>
+        #{comId},
+        #{url},
+        now()
+        ) ;
+    </insert>
+
+    <!--根据企业id删除行政处罚-->
+    <delete id="deleteCompanyPunish" parameterType="java.lang.String">
+      DELETE
+      FROM
+        `tb_company_punish`
+      WHERE `com_id` = #{comId}
+  </delete>
 </mapper>
