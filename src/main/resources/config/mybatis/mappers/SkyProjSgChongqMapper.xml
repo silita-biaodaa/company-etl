@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.biaodaa.dao.SkyProjSgChongqMapper">
+
+    <!--查询施工业绩是否存在-->
+    <select id="queryProjectSgExist" parameterType="com.silita.model.SkyProjSgChongq" resultType="java.lang.String">
+        SELECT
+          t.`pkid`
+        FROM
+          sky_proj_sg_chongq t
+        WHERE t.`proj_name` = #{projName}
+    </select>
+
+    <!--添加施工业绩-->
+    <insert id="insertProjectSg" parameterType="com.silita.model.SkyProjSgChongq">
+        INSERT INTO `sky_proj_sg_chongq` (
+        <if test="pkid != null and pkid != ''">
+            `pkid`,
+        </if>
+        <if test="projName != null and projName != ''">
+            `proj_name`,
+        </if>
+        <if test="projState != null and projState != ''">
+            `proj_state`,
+        </if>
+        <if test="projAddress != null and projAddress != ''">
+            `proj_address`,
+        </if>
+        <if test="proOrg != null and proOrg != ''">
+            `proj_org`,
+        </if>
+        <if test="bOrg != null and bOrg != ''">
+            `b_org`,
+        </if>
+        <if test="exploreOrg != null and exploreOrg != ''">
+            `explore_org`,
+        </if>
+        <if test="designOrg != null and designOrg != ''">
+            `design_org`,
+        </if>
+        <if test="superOrg != null and superOrg != ''">
+            `super_org`,
+        </if>
+        <if test="buildScale != null and buildScale != ''">
+            `build_scale`,
+        </if>
+        <if test="scope != null and scope != ''">
+            `scope`,
+        </if>
+        <if test="area != null and area != ''">
+            `area`,
+        </if>
+        <if test="projManager != null and projManager != ''">
+            `proj_manager`,
+        </if>
+        <if test="exploreManager != null and exploreManager != ''">
+            `explore_manager`,
+        </if>
+        <if test="superManager != null and superManager != ''">
+            `super_manager`,
+        </if>
+        <if test="designManager != null and designManager != ''">
+            `design_manager`,
+        </if>
+        <if test="amount != null and amount != ''">
+            `amount`,
+        </if>
+        <if test="days != null and days != ''">
+            `days`,
+        </if>
+        <if test="begined != null and begined != ''">
+            `begined`,
+        </if>
+        <if test="ended != null and ended != ''">
+            `ended`,
+        </if>
+        <if test="issued != null and issued != ''">
+            `issued`,
+        </if>
+        <if test="issueOrg != null and issueOrg != ''">
+            `issue_org`,
+        </if>
+        <if test="url != null and url != ''">
+            `url`,
+        </if>
+        `created`
+        )
+        VALUES
+        (
+        <if test="pkid != null and pkid != ''">
+            #{pkid},
+        </if>
+        <if test="projName != null and projName != ''">
+            #{projName},
+        </if>
+        <if test="projState != null and projState != ''">
+            #{projState},
+        </if>
+        <if test="projAddress != null and projAddress != ''">
+            #{projAddress},
+        </if>
+        <if test="proOrg != null and proOrg != ''">
+            #{proOrg},
+        </if>
+        <if test="bOrg != null and bOrg != ''">
+            #{bOrg},
+        </if>
+        <if test="exploreOrg != null and exploreOrg != ''">
+            #{exploreOrg},
+        </if>
+        <if test="designOrg != null and designOrg != ''">
+            #{designOrg},
+        </if>
+        <if test="superOrg != null and superOrg != ''">
+            #{superOrg},
+        </if>
+        <if test="buildScale != null and buildScale != ''">
+            #{buildScale},
+        </if>
+        <if test="scope != null and scope != ''">
+            #{scope},
+        </if>
+        <if test="area != null and area != ''">
+            #{area},
+        </if>
+        <if test="projManager != null and projManager != ''">
+            #{projManager},
+        </if>
+        <if test="exploreManager != null and exploreManager != ''">
+            #{exploreManager},
+        </if>
+        <if test="superManager != null and superManager != ''">
+            #{superManager},
+        </if>
+        <if test="designManager != null and designManager != ''">
+            #{designManager},
+        </if>
+        <if test="amount != null and amount != ''">
+            #{amount},
+        </if>
+        <if test="days != null and days != ''">
+            #{days},
+        </if>
+        <if test="begined != null and begined != ''">
+            #{begined},
+        </if>
+        <if test="ended != null and ended != ''">
+            #{ended},
+        </if>
+        <if test="issued != null and issued != ''">
+            #{issued},
+        </if>
+        <if test="issueOrg != null and issueOrg != ''">
+            #{issueOrg},
+        </if>
+        <if test="url != null and url != ''">
+            #{url},
+        </if>
+        now()
+        ) ;
+    </insert>
+
+    <!--修改施工业绩-->
+    <update id="updateProjectSg" parameterType="com.silita.model.SkyProjSgChongq">
+        UPDATE
+          `sky_proj_sg_chongq`
+        SET
+          `proj_state` = #{projState},
+          `proj_address` = #{projAddres},
+          `pro_org` = #{proOrg},
+          `b_org` = #{bOrg},
+          `explore_org` = #{exploreOrg},
+          `design_org` = #{designOrg},
+          `super_org` = #{superOrg},
+          `build_scale` = #{buildScale},
+          `scope` = #[scope},
+          `area` = #{area},
+          `proj_manager` = #{projManager},
+          `explore_manager` = #{explore_manager},
+          `super_manager` = #{superManager},
+          `design_manager` = #{designManager},
+          `amount` = #{amount},
+          `days` = #{days},
+          `begined` = #{begined},
+          `ended` = #{ended},
+          `issued` = #{issued},
+          `issue_org` = #{issueOrg},
+          `url` = #{url},
+          `updated` = now(),
+        WHERE `pkid` = #{pkid}
+    </update>
+</mapper>

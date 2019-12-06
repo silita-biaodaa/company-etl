@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.SkyProjectCompanyMapper">
+
+    <!--查询项目企业关联是否存在-->
+    <select id="queryProjectCompanyExist" parameterType="com.silita.model.SkyProjectCompany"
+            resultType="java.lang.Integer">
+        SELECT
+          t.`pkid`
+        FROM
+          sky_project_company t
+        WHERE t.`com_id` = #{comId}
+          AND t.`pro_id` = #{proId}
+          AND t.`role` = #{role}
+    </select>
+
+    <!--添加-->
+    <insert id="insertProjectCompany" parameterType="com.silita.model.SkyProjectCompany">
+        INSERT INTO `sky_project_company` (
+        <if test="proId != null and proId != ''">
+            `pro_id`,
+        </if>
+        <if test="comId != null and comId != ''">
+            `com_id`,
+        </if>
+        <if test="comName != null and comName != ''">
+            `com_name`,
+        </if>
+        <if test="role != null and role != ''">
+            `role`,
+        </if>
+        <if test="tab != null and tab != ''">
+            `tab`,
+        </if>
+        `created`
+        )
+        VALUES
+        (
+        <if test="proId != null and proId != ''">
+            #{proId},
+        </if>
+        <if test="comId != null and comId != ''">
+            #{comId},
+        </if>
+        <if test="comName != null and comName != ''">
+            #{comName},
+        </if>
+        <if test="role != null and role != ''">
+            #{role},
+        </if>
+        <if test="tab != null and tab != ''">
+            #{tab},
+        </if>
+        now()
+        ) ;
+    </insert>
+
+    <!--修改-->
+    <update id="updateProjectCompany" parameterType="com.silita.model.SkyProjectCompany">
+        UPDATE
+          `sky_project_company`
+        SET
+          `updated` = now()
+        WHERE `pkid` = #{pkid};
+    </update>
+</mapper>

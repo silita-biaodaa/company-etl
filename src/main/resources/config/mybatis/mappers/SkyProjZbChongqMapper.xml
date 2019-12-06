@@ -3,8 +3,12 @@
 <mapper namespace="com.silita.dao.SkyProjZbChongqMapper">
 
     <!--添加中标业绩-->
-    <insert id="insertProjectZhongbiao" parameterType="com.silita.model.SkyProjZbChongq">
+    <insert id="insertProjectZhongbiao" parameterType="com.silita.model.SkyProjZbChongq" keyProperty="pkid"
+            useGeneratedKeys="true">
         INSERT INTO `sky_proj_zb_chongq` (
+        <if test="pkid != null and pkid != ''">
+            `pkid`,
+        </if>
         <if test="projName != null and projName != ''">
             `proj_name`,
         </if>
@@ -45,6 +49,9 @@
         )
         VALUES
         (
+        <if test="pkid != null and pkid != ''">
+            #{pkid},
+        </if>
         <if test="projName != null and projName != ''">
             #{projName},
         </if>
@@ -85,11 +92,33 @@
         ) ;
     </insert>
 
-    <!--删除企业的中标业绩-->
-    <delete id="deleteProjectZhongbiao" parameterType="java.lang.String">
-        DELETE
-        FROM
+    <!--修改中标业绩-->
+    <update id="updateProjectZhongbiao" parameterType="com.silita.model.SkyProjZbChongq">
+         UPDATE
           `sky_proj_zb_chongq`
-        WHERE `com_id` = #{comId}
-    </delete>
+        SET
+          `zhaobiao_code` = #{zhaobiaoCode},
+          `zhaobiao_person` = #{zhaobiaoPerson},
+          `proj_manager` = #{projManager},
+          `amount` = #{amount},
+          `days` = #{days},
+          `floor_num` = #{floorNum},
+          `pub_date` = #{pubDate},
+          `scope` = #{scope},
+          `content` = #{content},
+          `url` = #{url},
+          `updated` = now()
+        WHERE `pkid` = #{pkid} ;
+    </update>
+
+    <!--查询中标是否存在-->
+    <select id="queryProjectZhongbiao" parameterType="com.silita.model.SkyProjZbChongq" resultType="java.lang.String">
+        SELECT
+          t.`pkid`
+        FROM
+          `sky_proj_zb_chongq` t
+        WHERE t.`proj_name` = #{projName}
+          AND t.`com_id` = #{comId}
+        LIMIT 1
+    </select>
 </mapper>

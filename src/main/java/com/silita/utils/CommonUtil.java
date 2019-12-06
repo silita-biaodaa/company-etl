@@ -15,7 +15,9 @@ public class CommonUtil {
      */
     public static String getUUID() {
         String uuid = UUID.randomUUID().toString();
-        return uuid.substring(0, 8) + uuid.substring(9, 13) + uuid.substring(14, 18) + uuid.substring(19, 23) + uuid.substring(24);
+        StringBuffer id = new StringBuffer("");
+        id.append(uuid.substring(0, 8)).append(uuid.substring(9, 13)).append(uuid.substring(14, 18)).append(uuid.substring(19, 23)).append(uuid.substring(24));
+        return id.toString().trim();
     }
 
     /**
@@ -35,5 +37,7 @@ public class CommonUtil {
         return pages;
     }
 
-    ;
+    public static void main(String[] args) {
+        System.out.println(getUUID());
+    }
 }

@@ -15,9 +15,16 @@ public interface SkyProjZbChongqMapper  {
     int insertProjectZhongbiao(SkyProjZbChongq skyProjZbChongq);
 
     /**
-     * 删除企业的中标业绩
-     * @param comId
+     * 查询中标是否存在
+     * @param skyProjZbChongq
      * @return
      */
-    int deleteProjectZhongbiao(String comId);
+    String queryProjectZhongbiao(SkyProjZbChongq skyProjZbChongq);
+
+    /**
+     * 修改中标业绩
+     * @param skyProjZbChongq
+     * @return
+     */
+    int updateProjectZhongbiao(SkyProjZbChongq skyProjZbChongq);
 }

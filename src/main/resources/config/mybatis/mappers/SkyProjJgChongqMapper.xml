@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.SkyProjJgChongqMapper">
+
+    <!--查询竣工备案业绩是否存在-->
+    <select id="queryProjectJg" parameterType="com.silita.model.SkyProjJgChongq" resultType="java.lang.String">
+        SELECT
+          t.`pkid`
+        FROM
+          sky_proj_jg_chongq t
+        WHERE t.`proj_name` = #{projName}
+    </select>
+
+    <!--添加竣工备案-->
+    <insert id="insertProjectJg" parameterType="com.silita.model.SkyProjJgChongq">
+        INSERT INTO `sky_proj_jg_chongq` (
+        <if test="pkid != null and pkid != ''">
+            `pkid`,
+        </if>
+        <if test="projName != null and projName != ''">
+            `proj_name`,
+        </if>
+        <if test="proOrg != null and proOrg != ''">
+            `pro_org`,
+        </if>
+        <if test="projAddress != null and projAddress != ''">
+            `proj_address`,
+        </if>
+        <if test="sectionCode != null and sectionCode != ''">
+            `section_code`,
+        </if>
+        <if test="projType != null and projType != ''">
+            `projType`,
+        </if>
+        <if test="bOrg != null and bOrg != ''">
+            `b_org`,
+        </if>
+        <if test="exploreOrg != null and exploreOrg != ''">
+            `explore_org`,
+        </if>
+        <if test="designOrg != null and designOrg != ''">
+            `design_org`,
+        </if>
+        <if test="superOrg != null and superOrg != ''">
+            `super_org`,
+        </if>
+        <if test="area != null and area != ''">
+            `area`,
+        </if>
+        <if test="amount != null and amount != ''">
+            `amount`,
+        </if>
+        <if test="days != null and days != ''">
+            `days`,
+        </if>
+        <if test="ended != null and ended != ''">
+            `ended`,
+        </if>
+        <if test="issued != null and issued != ''">
+            `issued`,
+        </if>
+        <if test="section != null and section != ''">
+            `section`,
+        </if>
+        <if test="url != null and url != ''">
+            `url`,
+        </if>
+        `created`
+        )
+        VALUES
+        (
+        <if test="pkid != null and pkid != ''">
+            #{pkid},
+        </if>
+        <if test="projName != null and projName != ''">
+            #{projName},
+        </if>
+        <if test="proOrg != null and proOrg != ''">
+            #{proOrg},
+        </if>
+        <if test="projAddress != null and projAddress != ''">
+            #{projAddress},
+        </if>
+        <if test="sectionCode != null and sectionCode != ''">
+            #{sectionCode},
+        </if>
+        <if test="projType != null and projType != ''">
+            #{projType},
+        </if>
+        <if test="bOrg != null and bOrg != ''">
+            #{bOrg},
+        </if>
+        <if test="exploreOrg != null and exploreOrg != ''">
+            #{exploreOrg},
+        </if>
+        <if test="designOrg != null and designOrg != ''">
+            #{designOrg},
+        </if>
+        <if test="superOrg != null and superOrg != ''">
+            #{superOrg},
+        </if>
+        <if test="area != null and area != ''">
+            #{area},
+        </if>
+        <if test="amount != null and amount != ''">
+            #{amount},
+        </if>
+        <if test="days != null and days != ''">
+            #{days},
+        </if>
+        <if test="ended != null and ended != ''">
+            #{ended},
+        </if>
+        <if test="issued != null and issued != ''">
+            #{issued},
+        </if>
+        <if test="section != null and section != ''">
+            #{section},
+        </if>
+        <if test="url != null and url != ''">
+            #{url},
+        </if>
+        now()
+        ) ;
+    </insert>
+
+    <!--修改竣工备案-->
+    <update id="updateProjectJg" parameterType="com.silita.model.SkyProjJgChongq">
+        UPDATE
+          `sky_proj_jg_chongq`
+        SET
+          `proj_name` = #{projName},
+          `pro_org` = #{proOrg},
+          `proj_address` = #{projAddress},
+          `section_code` = #{sectionCode},
+          `proj_type` = #{projType},
+          `b_org` = #{bOrg},
+          `explore_org` = #{exploreOrg},
+          `design_org` = #{designOrg},
+          `super_org` = #{superOrg},
+          `area` = #{area},
+          `amount` = #{amount},
+          `days` = #{days},
+          `ended` = #{ended},
+          `issued` = #{issued},
+          `section` = #{section},
+          `url` = #{url},
+          `updated` = now
+        WHERE `pkid` = #{pkid}
+    </update>
+</mapper>

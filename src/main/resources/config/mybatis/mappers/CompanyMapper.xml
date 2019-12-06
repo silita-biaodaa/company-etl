@@ -159,4 +159,14 @@
         LIMIT 1
     </select>
 
+    <!--根据企业名称查询id-->
+    <select id="queryComIdForName" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+          t.`com_id`
+        FROM
+          tb_company t
+        WHERE t.`com_name` = #{comName}
+        LIMIT 1
+    </select>
+
 </mapper>

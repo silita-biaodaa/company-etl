@@ -120,7 +120,7 @@
           `worked` = #{worked},
           `finished` = #{finished},
           `duration` = #{duration},
-          `major_target` = #majorTarget},
+          `major_target` = #{majorTarget},
           `contract_content` = #{contractContent},
           `persons` = #{persons},
           `prizes` = #{prizes},

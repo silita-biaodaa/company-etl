@@ -35,8 +35,6 @@ public class SkyChongqService {
     @Autowired
     private TbPersonMapper tbPersonMapper;
     @Autowired
-    private TbProjectShuiliMapper tbProjectShuiliMapper;
-    @Autowired
     private AptitudeDictionaryMapper aptitudeDictionaryMapper;
     @Autowired
     private CompanyQualificationMapper companyQualificationMapper;
@@ -46,6 +44,12 @@ public class SkyChongqService {
     private TbCompanyPunishMapper tbCompanyPunishMapper;
     @Autowired
     private SkyProjZbChongqMapper skyProjZbChongqMapper;
+    @Autowired
+    private SkyProjectCompanyMapper skyProjectCompanyMapper;
+    @Autowired
+    private SkyProjSgChongqMapper skyProjSgChongqMapper;
+    @Autowired
+    private SkyProjJgChongqMapper skyProjJgChongqMapper;
     @Autowired
     private IAptitudeCleanService aptitudeCleanService;
     @Autowired
@@ -111,11 +115,23 @@ public class SkyChongqService {
                 this.analysisCompanyQuals(quals, comMap.get("com_id").toString(), comName);
                 quals = null;
             }
-            //解析中标业绩
+            //解析中标业绩analysisCompanyProject
             if (object.containsKey("zhongbiao")) {
                 List<Map<String, Object>> zhongbiaos = (List<Map<String, Object>>) object.get("zhongbiaos");
                 this.analysisCompanyZhongbiaoProject(zhongbiaos, comMap.get("com_id").toString(), comName);
                 zhongbiaos = null;
+            }
+            //解析施工许可业绩
+            if (object.containsKey("shigong")) {
+                List<Map<String, Object>> shigongs = (List<Map<String, Object>>) object.get("shigong");
+                this.analysisCompanyProject(shigongs, comMap.get("com_id").toString(), comName);
+                shigongs = null;
+            }
+            //解析竣工备案业绩
+            if (object.containsKey("jungong")) {
+                List<Map<String, Object>> jungongs = (List<Map<String, Object>>) object.get("jungong");
+                this.analysisCompanyProjectJungong(jungongs, comMap.get("com_id").toString(), comName);
+                jungongs = null;
             }
             //解析行政处罚
             if (object.containsKey("punishs")) {
@@ -193,10 +209,125 @@ public class SkyChongqService {
     }
 
     /**
-     * 解析企业业绩
+     * 解析企业施工许可业绩
      */
-    public void analysisCompanyProject(List<Map<String, Object>> projects, String comId,String comName) {
+    public void analysisCompanyProject(List<Map<String, Object>> projects, String comId, String comName) {
+        if (null == projects || projects.size() <= 0) {
+            return;
+        }
+        for (int i = 0, j = projects.size(); i < j; i++) {
+            SkyProjSgChongq project = new SkyProjSgChongq();
+            project.setProjName(projects.get(i).get("projectName").toString());
+            project.setProjState(projects.get(i).get("projectStatus").toString());
+            project.setProjAddress(projects.get(i).get("buildingSite").toString());
+            project.setProOrg(projects.get(i).get("jsUnit").toString());
+            project.setBOrg(projects.get(i).get("sgUnit").toString());
+            project.setExploreOrg(projects.get(i).get("kcUnit").toString());
+            project.setDesignOrg(projects.get(i).get("sjUnit").toString());
+            project.setSuperOrg(projects.get(i).get("jlUnit").toString());
+            project.setScope(projects.get(i).get("contractScope").toString());
+            project.setArea(projects.get(i).get("coveredArea").toString());
+            project.setProjManager(projects.get(i).get("projectManager").toString());
+            project.setExploreManager(projects.get(i).get("kcUnitLeader").toString());
+            project.setSuperManager(projects.get(i).get("engineer").toString());
+            project.setDesignManager(projects.get(i).get("sjUnitLeader").toString());
+            project.setAmount(projects.get(i).get("buildingPrice").toString());
+            project.setDays(projects.get(i).get("contractDay").toString());
+            project.setBegined(projects.get(i).get("contractDay").toString());
+            project.setEnded(projects.get(i).get("contractDay").toString());
+            project.setIssued(projects.get(i).get("issueDate").toString());
+            project.setIssueOrg(projects.get(i).get("issueOffice").toString());
+            project.setUrl(projects.get(i).get("url").toString());
+            String pkid = skyProjSgChongqMapper.queryProjectSgExist(project);
+            if (StringUtils.isNotEmpty(pkid)) {
+                project.setPkid(pkid);
+                skyProjSgChongqMapper.updateProjectSg(project);
+            } else {
+                project.setPkid(CommonUtil.getUUID());
+                skyProjSgChongqMapper.insertProjectSg(project);
+            }
+            //添加项目与业绩的关联关系
+            this.saveProjectCompany(project.getPkid(), comId, comName, "build", "sky_proj_sg_chongq");
+            List<Map<String, Object>> units = new ArrayList<>(3);
+            if (null != project.getExploreOrg()) {
+                units.add(new HashedMap(2) {{
+                    put("comName", project.getExploreOrg());
+                    put("type", "explore");
+                }});
+            }
+            if (null != project.getDesignOrg()) {
+                units.add(new HashedMap(2) {{
+                    put("comName", project.getDesignOrg());
+                    put("type", "design");
+                }});
+            }
+            if (null != project.getSuperOrg()) {
+                units.add(new HashedMap(2) {{
+                    put("comName", project.getSuperOrg());
+                    put("type", "supervision");
+                }});
+            }
+            this.batchSaveProjectCompany(units, project.getPkid(), "sky_proj_sg_chongq");
+        }
+        logger.info("--------------解析企业竣工业绩完成-----------------------------");
+    }
 
+    /**
+     * 解析企业竣工备案业绩
+     */
+    public void analysisCompanyProjectJungong(List<Map<String, Object>> projects, String comId, String comName) {
+        if (null == projects || projects.size() <= 0) {
+            return;
+        }
+        for (int i = 0, j = projects.size(); i < j; i++) {
+            SkyProjJgChongq project = new SkyProjJgChongq();
+            project.setProjName(projects.get(i).get("projectName").toString());
+            project.setSectionCode(projects.get(i).get("recordNo").toString());
+            project.setProjAddress(projects.get(i).get("projectSite").toString());
+            project.setProjType(projects.get(i).get("structureType").toString());
+            project.setProOrg(projects.get(i).get("jsUnit").toString());
+            project.setBOrg(projects.get(i).get("sgUnit").toString());
+            project.setExploreOrg(projects.get(i).get("kcUnit").toString());
+            project.setDesignOrg(projects.get(i).get("sjUnit").toString());
+            project.setSuperOrg(projects.get(i).get("jlUnit").toString());
+            project.setArea(projects.get(i).get("coveredArea").toString());
+            project.setAmount(projects.get(i).get("buildingPrice").toString());
+            project.setDays(projects.get(i).get("durableYears").toString());
+            project.setEnded(projects.get(i).get("completionAllowDate").toString());
+            project.setIssued(projects.get(i).get("recordDate").toString());
+            project.setSection(projects.get(i).get("recordProject").toString());
+            project.setUrl(projects.get(i).get("url").toString());
+            String pkid = skyProjJgChongqMapper.queryProjectJg(project);
+            if (StringUtils.isNotEmpty(pkid)) {
+                project.setPkid(pkid);
+                skyProjJgChongqMapper.updateProjectJg(project);
+            } else {
+                project.setPkid(CommonUtil.getUUID());
+                skyProjJgChongqMapper.insertProjectJg(project);
+            }
+            //添加项目与业绩的关联关系
+            this.saveProjectCompany(project.getPkid(), comId, comName, "build", "sky_proj_jg_chongq");
+            List<Map<String, Object>> units = new ArrayList<>(3);
+            if (null != project.getExploreOrg()) {
+                units.add(new HashedMap(2) {{
+                    put("comName", project.getExploreOrg());
+                    put("type", "explore");
+                }});
+            }
+            if (null != project.getDesignOrg()) {
+                units.add(new HashedMap(2) {{
+                    put("comName", project.getDesignOrg());
+                    put("type", "design");
+                }});
+            }
+            if (null != project.getSuperOrg()) {
+                units.add(new HashedMap(2) {{
+                    put("comName", project.getSuperOrg());
+                    put("type", "supervision");
+                }});
+            }
+            batchSaveProjectCompany(units, project.getPkid(), "sky_proj_jg_chongq");
+        }
         logger.info("--------------解析企业竣工业绩完成-----------------------------");
     }
 
@@ -207,8 +338,6 @@ public class SkyChongqService {
         if (null == projects || projects.size() <= 0) {
             return;
         }
-        //删除企业下的中标业绩
-        skyProjZbChongqMapper.deleteProjectZhongbiao(comId);
         for (int i = 0, j = projects.size(); i < j; i++) {
             SkyProjZbChongq project = new SkyProjZbChongq();
             project.setComId(comId);
@@ -227,7 +356,7 @@ public class SkyChongqService {
                 project.setFloorNum(projects.get(i).get("pliesNo").toString());
             }
             if (null != projects.get(i).get("bidDate")) {
-                project.setPubDate(DateTimeUtils.strFormat(projects.get(i).get("bidDate").toString(),"yyyy/MM/dd HH:mm:ss","yyyy-MM-dd"));
+                project.setPubDate(DateTimeUtils.strFormat(projects.get(i).get("bidDate").toString(), "yyyy/MM/dd HH:mm:ss", "yyyy-MM-dd"));
             }
             if (null != projects.get(i).get("projectScale")) {
                 project.setScope(projects.get(i).get("projectScale").toString());
@@ -235,7 +364,16 @@ public class SkyChongqService {
             if (null != projects.get(i).get("biddingScope")) {
                 project.setContent(projects.get(i).get("biddingScope").toString());
             }
-            skyProjZbChongqMapper.insertProjectZhongbiao(project);
+            String pkid = skyProjZbChongqMapper.queryProjectZhongbiao(project);
+            if (StringUtils.isNotEmpty(pkid)) {
+                skyProjZbChongqMapper.updateProjectZhongbiao(project);
+                project.setPkid(pkid);
+            } else {
+                project.setPkid(CommonUtil.getUUID());
+                skyProjZbChongqMapper.insertProjectZhongbiao(project);
+            }
+            //添加企业与业绩的关联
+            this.saveProjectCompany(project.getPkid(), comId, comName, "zhongbiao", "sky_proj_zb_chongq");
         }
         logger.info("--------------解析企业中标业绩完成-----------------------------");
     }
@@ -384,5 +522,41 @@ public class SkyChongqService {
         }
         //添加人员
         skyPersonChongqMapper.insertPerson(person);
+    }
+
+    private void batchSaveProjectCompany(List<Map<String, Object>> units, String pkid, String tab) {
+        if (null != units && units.size() > 0) {
+            for (int k = 0, n = units.size(); k < n; k++) {
+                String unitName = units.get(k).get("comName").toString();
+                String unitId = companyMapper.queryComIdForName(unitName);
+                if (StringUtils.isEmpty(unitId)) {
+                    continue;
+                }
+                this.saveProjectCompany(pkid, unitId, unitName, units.get(k).get("type").toString(), tab);
+            }
+        }
+    }
+
+    /**
+     * 添加企业与项目的关联关系
+     *
+     * @param proId 项目id
+     * @param comId 企业id
+     * @param type  关联类型,(中标，施工，勘察，设计，监理)
+     * @param tab   表名
+     */
+    private void saveProjectCompany(String proId, String comId, String comName, String type, String tab) {
+        SkyProjectCompany projectCompany = new SkyProjectCompany();
+        projectCompany.setProId(proId);
+        projectCompany.setComName(comName);
+        projectCompany.setComId(comId);
+        projectCompany.setTab(type);
+        projectCompany.setTab(tab);
+        Integer pkid = skyProjectCompanyMapper.queryProjectCompanyExist(projectCompany);
+        if (null != pkid) {
+            skyProjectCompanyMapper.updateProjectCompany(projectCompany);
+            return;
+        }
+        skyProjectCompanyMapper.insertProjectCompany(projectCompany);
     }
 }

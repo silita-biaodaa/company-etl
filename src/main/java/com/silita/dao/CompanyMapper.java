@@ -74,4 +74,11 @@ public interface CompanyMapper {
      * @return
      */
     int insertSafetyCertificate(Map<String,Object> param);
+
+    /**
+     * 根据企业名称查询id
+     * @param comName
+     * @return
+     */
+    String queryComIdForName(String comName);
 }

@@ -11,7 +11,7 @@ public class SkyProjZbChongq {
     /**
      * 主键id
      */
-    private Integer pkid;
+    private String pkid;
 
     /**
      * 项目名称

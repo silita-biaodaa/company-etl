@@ -3,7 +3,7 @@
 <mapper namespace="com.silita.dao.AliasMapper">
 
     <!--查询资质或等级别名是否存在-->
-    <select id="queryAnalysisAliasExist" parameterType="java.lang.String">
+    <select id="queryAnalysisAliasExist" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT
           `pkid`
         FROM
@@ -13,7 +13,7 @@
     </select>
 
     <!--查询资质备案-->
-    <select id="queryAnalysisAliasExist" parameterType="java.lang.String">
+    <select id="queryQualificationRegionExist" parameterType="java.lang.String" resultType="java.util.Map">
         SELECT
           `pkid`,
           `qual_name`,
