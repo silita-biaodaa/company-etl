@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 公路公司解析
@@ -281,6 +283,11 @@ public class SkyChongqService {
         }
         for (int i = 0, j = projects.size(); i < j; i++) {
             SkyProjJgChongq project = new SkyProjJgChongq();
+            //解析平方米和金额
+            if (projects.get(i).containsKey("projectScale") && StringUtils.isNotEmpty(projects.get(i).get("projectScale").toString())) {
+                String projectScale = projects.get(i).get("projectScale").toString();
+                this.analysisAreaAmount(project, projectScale);
+            }
             project.setProjName(projects.get(i).get("projectName").toString());
             project.setSectionCode(projects.get(i).get("recordNo").toString());
             project.setProjAddress(projects.get(i).get("projectSite").toString());
@@ -558,5 +565,43 @@ public class SkyChongqService {
             return;
         }
         skyProjectCompanyMapper.insertProjectCompany(projectCompany);
+    }
+
+    /**
+     * 解析面积和金额
+     *
+     * @param skyProjJgChongq
+     * @param scale
+     */
+    private void analysisAreaAmount(SkyProjJgChongq skyProjJgChongq, String scale) {
+        String pattenArea = "([0-9]{1,}[.][0-9]{1,}|[0-9]{1,}+)[㎡|平方|平|m]";
+        String pattenAmount = "([0-9]{1,}[.][0-9]{1,}|[0-9]{1,}+)[万元|元|万]";
+        Pattern areaPatten = Pattern.compile(pattenArea);
+        Matcher areaMatcher = areaPatten.matcher(scale);
+        if (areaMatcher.find()) {
+            skyProjJgChongq.setArea(CommonUtil.analysisRegx(areaMatcher.group()));
+        }
+        Pattern amountPatten = Pattern.compile(pattenAmount);
+        Matcher amountMatcher = amountPatten.matcher(scale);
+        if (amountMatcher.find()) {
+            skyProjJgChongq.setAmount(CommonUtil.analysisRegx(amountMatcher.group()));
+        }
+    }
+
+    public static void main(String[] args) {
+        String scale = "35492.88㎡ 10000万元";
+        String patten1 = "([0-9]{1,}[.][0-9]{1,}|[0-9]{1,}+)[㎡|平方|平|m]";
+        String patten = "([0-9]{1,}[.][0-9]{1,}|[0-9]{1,}+)[万元|元|万]";
+        String patten3 = "([0-9]{1,}[.][0-9]{1,}|[0-9]{1,}+)";
+        Pattern r = Pattern.compile(patten1);
+        Matcher m = r.matcher(scale);
+        if (m.find()) {
+            System.out.println(m.group());
+            Pattern r1 = Pattern.compile(patten3);
+            Matcher m1 = r1.matcher(m.group());
+            if (m1.find()) {
+                System.out.println(m1.group());
+            }
+        }
     }
 }

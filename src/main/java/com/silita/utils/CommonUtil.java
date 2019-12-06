@@ -1,6 +1,8 @@
 package com.silita.utils;
 
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 工具类 - 公用
@@ -37,7 +39,18 @@ public class CommonUtil {
         return pages;
     }
 
-    public static void main(String[] args) {
-        System.out.println(getUUID());
+    /**
+     * 解析数字
+     * @param salce
+     * @return
+     */
+    public static String analysisRegx(String salce){
+        String pattenShuzi = "([0-9]{1,}[.][0-9]{1,}|[0-9]{1,}+";
+        Pattern r1 = Pattern.compile(pattenShuzi);
+        Matcher m1 = r1.matcher(salce);
+        if (m1.find()){
+            return m1.group();
+        }
+        return null;
     }
 }
