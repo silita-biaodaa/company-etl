@@ -587,21 +587,4 @@ public class SkyChongqService {
             skyProjJgChongq.setAmount(CommonUtil.analysisRegx(amountMatcher.group()));
         }
     }
-
-    public static void main(String[] args) {
-        String scale = "35492.88㎡ 10000万元";
-        String patten1 = "([0-9]{1,}[.][0-9]{1,}|[0-9]{1,}+)[㎡|平方|平|m]";
-        String patten = "([0-9]{1,}[.][0-9]{1,}|[0-9]{1,}+)[万元|元|万]";
-        String patten3 = "([0-9]{1,}[.][0-9]{1,}|[0-9]{1,}+)";
-        Pattern r = Pattern.compile(patten1);
-        Matcher m = r.matcher(scale);
-        if (m.find()) {
-            System.out.println(m.group());
-            Pattern r1 = Pattern.compile(patten3);
-            Matcher m1 = r1.matcher(m.group());
-            if (m1.find()) {
-                System.out.println(m1.group());
-            }
-        }
-    }
 }
