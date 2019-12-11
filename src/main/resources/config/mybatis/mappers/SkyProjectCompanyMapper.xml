@@ -4,7 +4,7 @@
 
     <!--查询项目企业关联是否存在-->
     <select id="queryProjectCompanyExist" parameterType="com.silita.model.SkyProjectCompany"
-            resultType="java.lang.Integer">
+            resultType="java.lang.String">
         SELECT
           t.`pkid`
         FROM

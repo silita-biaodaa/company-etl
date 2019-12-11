@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.silita.common.RegionCommon;
 import com.silita.dao.AliasMapper;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,8 @@ public class AliasService {
      * @param type  别名类型(1:资质，2:等级)
      */
     public void saveAlias(String alias, int type) {
-        int count = aliasMapper.queryAnalysisAliasExist(alias);
-        if (count > 0) {
+        String count = aliasMapper.queryAnalysisAliasExist(alias);
+        if (StringUtils.isNotEmpty(count)) {
             return;
         }
         Map<String, Object> aliasMap = Maps.newHashMapWithExpectedSize(2);
@@ -63,7 +64,7 @@ public class AliasService {
                 }
             }
             aliasMapper.insertqueryQualificationRegion(qualMap);
-        }else {
+        } else {
             StringBuffer inRegion = new StringBuffer(qualMap.get("in_region").toString());
             inRegion.setCharAt(index, '1');
             qualMap.put("inRegion", inRegion.toString());

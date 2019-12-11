@@ -10,7 +10,7 @@ public interface AliasMapper {
      * @param alias
      * @return
      */
-    int queryAnalysisAliasExist(String alias);
+    String queryAnalysisAliasExist(String alias);
 
     /**
      * 添加等级资质别名

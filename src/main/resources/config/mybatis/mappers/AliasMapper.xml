@@ -3,9 +3,9 @@
 <mapper namespace="com.silita.dao.AliasMapper">
 
     <!--查询资质或等级别名是否存在-->
-    <select id="queryAnalysisAliasExist" parameterType="java.lang.String" resultType="java.lang.Integer">
+    <select id="queryAnalysisAliasExist" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT
-          `pkid`
+          IFNULL(pkid, 0) AS pkid
         FROM
           `biaodaa_admin`.`tb_analysis_alias`
         WHERE `alias_name` = #{alias}

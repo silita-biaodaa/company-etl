@@ -25,8 +25,8 @@
           t1.`code`,
           t1.`name`
         FROM
-          dic_alias t
-          JOIN dic_common t1
+          biaodaa_admin.dic_alias t
+          JOIN biaodaa_admin.dic_common t1
             ON t.`std_code` = t1.`code`
         WHERE  t1.`type` = 'qua_grade'
         AND t.`name` = #{alias}

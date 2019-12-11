@@ -140,6 +140,18 @@
         limit 1
     </select>
 
+    <!--企业是否存在-->
+    <select id="queryCompany" parameterType="java.lang.String" resultType="java.util.Map">
+        select
+          t1.com_id,
+          t1.regis_address,
+          t1.channel
+        from
+          tb_company t1
+        where t1.com_name = #{comName}
+        limit 1
+    </select>
+
     <!--修改企业来源-->
     <update id="updateCompanyChannel" parameterType="java.util.Map">
         update tb_company set channel = #{channel},updated = now() where com_id = #{com_id}

@@ -9,7 +9,7 @@ public interface SkyProjectCompanyMapper {
      * @param skyProjectCompany
      * @return
      */
-    int queryProjectCompanyExist(SkyProjectCompany skyProjectCompany);
+    String queryProjectCompanyExist(SkyProjectCompany skyProjectCompany);
 
     /**
      * 添加

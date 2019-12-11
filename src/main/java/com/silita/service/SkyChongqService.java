@@ -71,7 +71,7 @@ public class SkyChongqService {
             put("comName", comName);
         }};
         try {
-            Map<String, Object> comMap = companyMapper.queryCompanyExist(param);
+            Map<String, Object> comMap = companyMapper.queryCompany(param);
             if (MapUtils.isNotEmpty(comMap)) {
                 StringBuffer channel = new StringBuffer(MapUtils.getString(comMap, "channel"));
                 if (channel.length() >= 4) {
@@ -297,8 +297,12 @@ public class SkyChongqService {
             project.setExploreOrg(projects.get(i).get("kcUnit").toString());
             project.setDesignOrg(projects.get(i).get("sjUnit").toString());
             project.setSuperOrg(projects.get(i).get("jlUnit").toString());
-            project.setArea(projects.get(i).get("coveredArea").toString());
-            project.setAmount(projects.get(i).get("buildingPrice").toString());
+            if (null != projects.get(i).get("coveredArea")){
+                project.setArea(projects.get(i).get("coveredArea").toString());
+            }
+            if (null != projects.get(i).get("buildingPrice")){
+                project.setAmount(projects.get(i).get("buildingPrice").toString());
+            }
             project.setDays(projects.get(i).get("durableYears").toString());
             project.setEnded(projects.get(i).get("completionAllowDate").toString());
             project.setIssued(projects.get(i).get("recordDate").toString());
@@ -395,11 +399,14 @@ public class SkyChongqService {
         //删除公司下的所有行政处罚
         tbCompanyPunishMapper.deleteCompanyPunish(comId);
         for (int i = 0, j = punishs.size(); i < j; i++) {
-            Map<String, Object> entity = (Map<String, Object>) punishs.get(i).get("entity");
+            Map<String, Object> data = (Map<String, Object>) punishs.get(i).get("data");
+            Map<String, Object> entity = (Map<String, Object>) data.get("entity");
             TbCompanyPunish companyPunish = new TbCompanyPunish();
             companyPunish.setComId(comId);
             companyPunish.setPunishCode(entity.get("cf_wsh").toString());
-            companyPunish.setPunishType(entity.get("cf_cflb").toString());
+            if (null != entity.get("cf_cflb")){
+                companyPunish.setPunishType(entity.get("cf_cflb").toString());
+            }
             if (null != entity.get("cf_cfmc")) {
                 companyPunish.setPunishName(entity.get("cf_cfmc").toString());
             }
@@ -553,13 +560,16 @@ public class SkyChongqService {
      * @param tab   表名
      */
     private void saveProjectCompany(String proId, String comId, String comName, String type, String tab) {
+        if (StringUtils.isEmpty(comName)){
+            return;
+        }
         SkyProjectCompany projectCompany = new SkyProjectCompany();
         projectCompany.setProId(proId);
         projectCompany.setComName(comName);
         projectCompany.setComId(comId);
-        projectCompany.setTab(type);
+        projectCompany.setRole(type);
         projectCompany.setTab(tab);
-        Integer pkid = skyProjectCompanyMapper.queryProjectCompanyExist(projectCompany);
+        String pkid = skyProjectCompanyMapper.queryProjectCompanyExist(projectCompany);
         if (null != pkid) {
             skyProjectCompanyMapper.updateProjectCompany(projectCompany);
             return;

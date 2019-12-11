@@ -30,7 +30,7 @@
             `section_code`,
         </if>
         <if test="projType != null and projType != ''">
-            `projType`,
+            `proj_type`,
         </if>
         <if test="bOrg != null and bOrg != ''">
             `b_org`,
@@ -145,7 +145,7 @@
           `issued` = #{issued},
           `section` = #{section},
           `url` = #{url},
-          `updated` = now
+          `updated` = now()
         WHERE `pkid` = #{pkid}
     </update>
 </mapper>

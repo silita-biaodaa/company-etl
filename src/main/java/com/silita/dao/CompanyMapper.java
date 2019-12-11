@@ -23,6 +23,14 @@ public interface CompanyMapper {
     Map<String, Object> queryCompanyExist(Map<String, Object> param);
 
     /**
+     * 企业是否存在
+     *
+     * @param param
+     * @return
+     */
+    Map<String, Object> queryCompany(Map<String, Object> param);
+
+    /**
      * 添加企业
      *
      * @param tbCompany

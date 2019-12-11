@@ -45,7 +45,7 @@ public class CommonUtil {
      * @return
      */
     public static String analysisRegx(String salce){
-        String pattenShuzi = "([0-9]{1,}[.][0-9]{1,}|[0-9]{1,}+";
+        String pattenShuzi = "[0-9]{1,}[.][0-9]{1,}|[0-9]{1,}+";
         Pattern r1 = Pattern.compile(pattenShuzi);
         Matcher m1 = r1.matcher(salce);
         if (m1.find()){

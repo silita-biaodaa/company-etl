@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.silita.biaodaa.dao.SkyProjSgChongqMapper">
+<mapper namespace="com.silita.dao.SkyProjSgChongqMapper">
 
     <!--查询施工业绩是否存在-->
     <select id="queryProjectSgExist" parameterType="com.silita.model.SkyProjSgChongq" resultType="java.lang.String">
@@ -27,7 +27,7 @@
             `proj_address`,
         </if>
         <if test="proOrg != null and proOrg != ''">
-            `proj_org`,
+            `pro_org`,
         </if>
         <if test="bOrg != null and bOrg != ''">
             `b_org`,
