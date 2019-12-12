@@ -166,7 +166,7 @@
           `sky_proj_sg_chongq`
         SET
           `proj_state` = #{projState},
-          `proj_address` = #{projAddres},
+          `proj_address` = #{projAddress},
           `pro_org` = #{proOrg},
           `b_org` = #{bOrg},
           `explore_org` = #{exploreOrg},
@@ -176,7 +176,7 @@
           `scope` = #[scope},
           `area` = #{area},
           `proj_manager` = #{projManager},
-          `explore_manager` = #{explore_manager},
+          `explore_manager` = #{exploreManager},
           `super_manager` = #{superManager},
           `design_manager` = #{designManager},
           `amount` = #{amount},
@@ -186,7 +186,7 @@
           `issued` = #{issued},
           `issue_org` = #{issueOrg},
           `url` = #{url},
-          `updated` = now(),
+          `updated` = now()
         WHERE `pkid` = #{pkid}
     </update>
 </mapper>

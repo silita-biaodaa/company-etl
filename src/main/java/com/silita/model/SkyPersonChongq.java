@@ -77,4 +77,6 @@ public class SkyPersonChongq {
      * 抓取url
      */
     private String url;
+
+    private String tabCode;
 }

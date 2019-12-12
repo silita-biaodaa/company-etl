@@ -17,7 +17,7 @@
         SELECT
           `pkid`,
           `qual_name`,
-          `in_region`,
+          `in_region`
         FROM
           `tb_qualification_region`
         WHERE `qual_name` = #{qual}

@@ -2,6 +2,7 @@ package com.silita.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.silita.common.RegionCommon;
+import com.silita.consumer.RedisUtils;
 import com.silita.dao.*;
 import com.silita.model.*;
 import com.silita.utils.CommonUtil;
@@ -56,6 +57,8 @@ public class SkyChongqService {
     private IAptitudeCleanService aptitudeCleanService;
     @Autowired
     private AliasService aliasService;
+    @Autowired
+    private RedisUtils redisUtils;
 
     /**
      * 解析基本信息
@@ -105,9 +108,16 @@ public class SkyChongqService {
                 comMap.put("com_name", comName);
                 comMap.put("regisAddress", regisAddress);
             }
+            //将在渝负责人存入redis
+            if (object.containsKey("charge")){
+                String charge = object.getString("charge");
+                if (StringUtils.isNotEmpty(charge)){
+                    redisUtils.hset("Cache_Company_Leader",comName,charge);
+                }
+            }
             //解析人员
-            if (object.containsKey("person")) {
-                List<Map<String, Object>> persons = (List<Map<String, Object>>) object.get("person");
+            if (object.containsKey("persons")) {
+                List<Map<String, Object>> persons = (List<Map<String, Object>>) object.get("persons");
                 this.analysisCompanyPersonCert(persons, comMap.get("com_id").toString(), regisAddress);
                 persons = null;
             }
@@ -119,7 +129,7 @@ public class SkyChongqService {
             }
             //解析中标业绩analysisCompanyProject
             if (object.containsKey("zhongbiao")) {
-                List<Map<String, Object>> zhongbiaos = (List<Map<String, Object>>) object.get("zhongbiaos");
+                List<Map<String, Object>> zhongbiaos = (List<Map<String, Object>>) object.get("zhongbiao");
                 this.analysisCompanyZhongbiaoProject(zhongbiaos, comMap.get("com_id").toString(), comName);
                 zhongbiaos = null;
             }
@@ -164,6 +174,7 @@ public class SkyChongqService {
         for (int i = 0, j = persons.size(); i < j; i++) {
             perType = persons.get(i).get("perType").toString();
             SkyPersonChongq personCert = new SkyPersonChongq();
+            personCert.setTabCode(tabCode);
             personCert.setName(persons.get(i).get("name").toString().replaceAll(" ", ""));
             personCert.setComId(comId);
             personCert.setUrl(persons.get(i).get("url").toString());
@@ -174,9 +185,13 @@ public class SkyChongqService {
                 if ("register".equals(perType)) {
                     category = category.replace("(", "（").replace(")", "）");
                     String[] cates = category.split("（");
-                    StringBuffer stringBuffer = new StringBuffer("");
-                    stringBuffer.append(cates[1].replace("）", "")).append(cates[0]);
-                    personCert.setCategory(stringBuffer.toString());
+                    if (cates.length > 1) {
+                        StringBuffer stringBuffer = new StringBuffer("");
+                        stringBuffer.append(cates[1].replace("）", "")).append(cates[0]);
+                        personCert.setCategory(stringBuffer.toString());
+                    } else {
+                        personCert.setCategory(cates[0]);
+                    }
                 } else {
                     personCert.setCategory(category);
                 }
@@ -235,8 +250,8 @@ public class SkyChongqService {
             project.setDesignManager(projects.get(i).get("sjUnitLeader").toString());
             project.setAmount(projects.get(i).get("buildingPrice").toString());
             project.setDays(projects.get(i).get("contractDay").toString());
-            project.setBegined(projects.get(i).get("contractDay").toString());
-            project.setEnded(projects.get(i).get("contractDay").toString());
+            project.setBegined(projects.get(i).get("beginTime").toString());
+            project.setEnded(projects.get(i).get("completionTime").toString());
             project.setIssued(projects.get(i).get("issueDate").toString());
             project.setIssueOrg(projects.get(i).get("issueOffice").toString());
             project.setUrl(projects.get(i).get("url").toString());
@@ -297,10 +312,10 @@ public class SkyChongqService {
             project.setExploreOrg(projects.get(i).get("kcUnit").toString());
             project.setDesignOrg(projects.get(i).get("sjUnit").toString());
             project.setSuperOrg(projects.get(i).get("jlUnit").toString());
-            if (null != projects.get(i).get("coveredArea")){
+            if (null != projects.get(i).get("coveredArea")) {
                 project.setArea(projects.get(i).get("coveredArea").toString());
             }
-            if (null != projects.get(i).get("buildingPrice")){
+            if (null != projects.get(i).get("buildingPrice")) {
                 project.setAmount(projects.get(i).get("buildingPrice").toString());
             }
             project.setDays(projects.get(i).get("durableYears").toString());
@@ -358,8 +373,11 @@ public class SkyChongqService {
             project.setZhaobiaoPerson(projects.get(i).get("tenderee").toString());
             project.setProjManager(projects.get(i).get("projectManager").toString());
             if (null != projects.get(i).get("biddingPrice")) {
-                Double amount = Double.valueOf(projects.get(i).get("biddingPrice").toString());
-                project.setAmount(String.valueOf(amount / 10000));
+                String price = projects.get(i).get("biddingPrice").toString();
+                if (!price.contains("%") && !price.contains("百分")) {
+                    Double amount = Double.valueOf(price);
+                    project.setAmount(String.valueOf(amount / 10000));
+                }
             }
             project.setDays(projects.get(i).get("biddingDay").toString());
             project.setUrl(projects.get(i).get("url").toString());
@@ -404,7 +422,7 @@ public class SkyChongqService {
             TbCompanyPunish companyPunish = new TbCompanyPunish();
             companyPunish.setComId(comId);
             companyPunish.setPunishCode(entity.get("cf_wsh").toString());
-            if (null != entity.get("cf_cflb")){
+            if (null != entity.get("cf_cflb")) {
                 companyPunish.setPunishType(entity.get("cf_cflb").toString());
             }
             if (null != entity.get("cf_cfmc")) {
@@ -531,7 +549,7 @@ public class SkyChongqService {
         person.setIsAll(StringUtils.isEmpty(pkid) ? 0 : 1);
         //查询重庆人员表是否存在
         String perId = skyPersonChongqMapper.queryPersonExits(person);
-        if (null == perId) {
+        if (null != perId) {
             return;
         }
         //添加人员
@@ -560,7 +578,7 @@ public class SkyChongqService {
      * @param tab   表名
      */
     private void saveProjectCompany(String proId, String comId, String comName, String type, String tab) {
-        if (StringUtils.isEmpty(comName)){
+        if (StringUtils.isEmpty(comName)) {
             return;
         }
         SkyProjectCompany projectCompany = new SkyProjectCompany();

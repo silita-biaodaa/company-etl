@@ -21,9 +21,6 @@
         <if test="comId != null and comId != ''">
             `com_id`,
         </if>
-        <if test="comName != null and comName != ''">
-            `com_name`,
-        </if>
         <if test="projManager != null and projManager != ''">
             `proj_manager`,
         </if>
@@ -45,6 +42,9 @@
         <if test="content != null and content != ''">
             `content`,
         </if>
+        <if test="url != null and url != ''">
+            `url`,
+        </if>
         `created`
         )
         VALUES
@@ -63,9 +63,6 @@
         </if>
         <if test="comId != null and comId != ''">
             #{comId},
-        </if>
-        <if test="comName != null and comName != ''">
-            #{comName},
         </if>
         <if test="projManager != null and projManager != ''">
             #{projManager},
@@ -87,6 +84,9 @@
         </if>
         <if test="content != null and content != ''">
             #{content},
+        </if>
+        <if test="url != null and url != ''">
+            #{url},
         </if>
         now()
         ) ;

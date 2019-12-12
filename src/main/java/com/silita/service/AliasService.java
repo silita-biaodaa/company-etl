@@ -34,7 +34,7 @@ public class AliasService {
         Map<String, Object> aliasMap = Maps.newHashMapWithExpectedSize(2);
         {
             {
-                aliasMap.put("alias", alias);
+                aliasMap.put("aliasName", alias);
                 aliasMap.put("type", type);
             }
         }

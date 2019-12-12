@@ -21,20 +21,7 @@
     <!--查询是否存在-->
     <select id="queryPersonExits" parameterType="com.silita.model.SkyPersonChongq" resultType="java.lang.String">
         SELECT
-        `pkid`,
-        `name`,
-        `sex`,
-        `category`,
-        `major`,
-        `cert_no`,
-        `cert_date`,
-        `valid_date`,
-        `com_id`,
-        `url`,
-        `is_valid`,
-        `is_all`,
-        `updated`,
-        `created`
+        `pkid`
         FROM
         sky_person_chongq
         WHERE
@@ -78,7 +65,7 @@
         <if test="major != null and major != ''">
             `major`,
         </if>
-        <if test="cert_no != null and cert_no != ''">
+        <if test="certNo != null and certNo != ''">
             `cert_no`,
         </if>
         <if test="certDate != null and certDate != ''">
@@ -107,7 +94,7 @@
         <if test="major != null and major != ''">
             #{major},
         </if>
-        <if test="cert_no != null and cert_no != ''">
+        <if test="certNo != null and certNo != ''">
             #{certNo},
         </if>
         <if test="certDate != null and certDate != ''">
