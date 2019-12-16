@@ -76,9 +76,9 @@ public class KafkaConsumer {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
-        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "100");
+        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 1000 * 60 * 3);
         props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "15000");
-        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 30);
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 10);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
@@ -106,8 +106,9 @@ public class KafkaConsumer {
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
-        factory.setConcurrency(3);//设置并发数
-        factory.getContainerProperties().setPollTimeout(6000);
+        //设置并发数
+        factory.setConcurrency(3);
+        factory.getContainerProperties().setPollTimeout(6000 * 10);
         factory.setBatchListener(true);
         factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL_IMMEDIATE);
         return factory;
@@ -120,8 +121,9 @@ public class KafkaConsumer {
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerStrFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerStrFactory());
-        factory.setConcurrency(3);//设置并发数
-        factory.getContainerProperties().setPollTimeout(1 * 60 * 1000);
+        //设置并发数
+        factory.setConcurrency(3);
+        factory.getContainerProperties().setPollTimeout(6000);
         factory.setBatchListener(true);
         factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL_IMMEDIATE);
         return factory;
@@ -133,7 +135,7 @@ public class KafkaConsumer {
      *
      * @param records
      */
-//    @KafkaListener(topics = "com_etl_queue", containerFactory = "kafkaListenerContainerFactory", groupId = "groupA")
+    @KafkaListener(topics = "com_etl_queue", containerFactory = "kafkaListenerContainerFactory", groupId = "groupA")
     public void getSiKuYiSpiderMessage(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
         try {
             for (ConsumerRecord<?, ?> record : records) {
@@ -181,7 +183,7 @@ public class KafkaConsumer {
      *
      * @param records
      */
-    @KafkaListener(topics = "chongq", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
+//    @KafkaListener(topics = "chongq", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
     public void getChongqRecords(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
         for (ConsumerRecord<?, ?> record : records) {
             this.process(record, skyChongqFactory, acknowledgment);

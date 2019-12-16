@@ -109,10 +109,10 @@ public class SkyChongqService {
                 comMap.put("regisAddress", regisAddress);
             }
             //将在渝负责人存入redis
-            if (object.containsKey("charge")){
+            if (object.containsKey("charge")) {
                 String charge = object.getString("charge");
-                if (StringUtils.isNotEmpty(charge)){
-                    redisUtils.hset("Cache_Company_Leader",comName,charge);
+                if (StringUtils.isNotEmpty(charge)) {
+                    redisUtils.hset("Cache_Company_Leader", comName, charge);
                 }
             }
             //解析人员
@@ -258,6 +258,7 @@ public class SkyChongqService {
             String pkid = skyProjSgChongqMapper.queryProjectSgExist(project);
             if (StringUtils.isNotEmpty(pkid)) {
                 project.setPkid(pkid);
+                logger.info("-----------------施工业绩已存在:项目名称:" + project.getProjName() + "------------------------");
                 skyProjSgChongqMapper.updateProjectSg(project);
             } else {
                 project.setPkid(CommonUtil.getUUID());
@@ -286,7 +287,7 @@ public class SkyChongqService {
             }
             this.batchSaveProjectCompany(units, project.getPkid(), "sky_proj_sg_chongq");
         }
-        logger.info("--------------解析企业竣工业绩完成-----------------------------");
+        logger.info("--------------解析企业施工业绩完成-----------------------------");
     }
 
     /**
@@ -326,6 +327,7 @@ public class SkyChongqService {
             String pkid = skyProjJgChongqMapper.queryProjectJg(project);
             if (StringUtils.isNotEmpty(pkid)) {
                 project.setPkid(pkid);
+                logger.info("-----------------竣工业绩已存在:项目名称:" + project.getProjName() + "------------------------");
                 skyProjJgChongqMapper.updateProjectJg(project);
             } else {
                 project.setPkid(CommonUtil.getUUID());
@@ -395,8 +397,9 @@ public class SkyChongqService {
             }
             String pkid = skyProjZbChongqMapper.queryProjectZhongbiao(project);
             if (StringUtils.isNotEmpty(pkid)) {
-                skyProjZbChongqMapper.updateProjectZhongbiao(project);
+                logger.info("-----------------中标业绩已存在:项目名称:" + project.getProjName() + "------------------------");
                 project.setPkid(pkid);
+                skyProjZbChongqMapper.updateProjectZhongbiao(project);
             } else {
                 project.setPkid(CommonUtil.getUUID());
                 skyProjZbChongqMapper.insertProjectZhongbiao(project);

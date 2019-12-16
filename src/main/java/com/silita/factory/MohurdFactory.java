@@ -3,7 +3,6 @@ package com.silita.factory;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import com.silita.common.Constant;
 import com.silita.consumer.RedisUtils;
-import com.silita.consumer.RedisUtilsAlone;
 import com.silita.service.IAptitudeCleanService;
 import com.silita.service.MohurdService;
 import com.silita.spider.common.model.*;
@@ -50,25 +49,25 @@ public class MohurdFactory extends AbstractFactory {
             boolean exists = redisUtils.hexists(Constant.Cache_Company, md5);
             if (!exists) {//实体MD5不存在
                 String url = company.getUrl();
-                if(url!=null){
+                if (url != null) {
                     try {
                         Integer count = mohurdService.countCompanyByUrl(url);
-                        if(count==0){
+                        if (count == 0) {
                             int result = mohurdService.insertCompany(company);//新增
                             if (result > 0) {
-                                logger.info(String.format("新增企业基本信息【%s】【%s】成功！", com_id,com_name));
-                            }else{
-                                logger.info(String.format("新增企业基本信息【%s】【%s】失败！", com_id,com_name));
+                                logger.info(String.format("新增企业基本信息【%s】【%s】成功！", com_id, com_name));
+                            } else {
+                                logger.info(String.format("新增企业基本信息【%s】【%s】失败！", com_id, com_name));
                             }
-                        }else if(count==1){
+                        } else if (count == 1) {
                             updateCompanyToUrl(company);
-                        }else if(count>1){
+                        } else if (count > 1) {
                             mohurdService.deleteCompanyForUrl(url);
                             int result = mohurdService.insertCompany(company);//新增
                             if (result > 0) {
-                                logger.info(String.format("新增企业基本信息【%s】【%s】成功！", com_id,com_name));
-                            }else{
-                                logger.info(String.format("新增企业基本信息【%s】【%s】失败！", com_id,com_name));
+                                logger.info(String.format("新增企业基本信息【%s】【%s】成功！", com_id, com_name));
+                            } else {
+                                logger.info(String.format("新增企业基本信息【%s】【%s】失败！", com_id, com_name));
                             }
                         }
                     } catch (Exception e) {
@@ -82,7 +81,7 @@ public class MohurdFactory extends AbstractFactory {
                 }
                 redisUtils.hset(Constant.Cache_Company, md5, DateTimeUtils.current());
             } else {
-                logger.info(String.format("[查Redis缓存]【%s】【%s】企业基本信息实体MD5已存在，不做任何操作", md5,com_name));
+                logger.info(String.format("[查Redis缓存]【%s】【%s】企业基本信息实体MD5已存在，不做任何操作", md5, com_name));
                 //企业信息更新updated，擦亮一下，证明更新过 --张夏晖2019-05-16
                 mohurdService.updateCompanyForUpdated(com_id);
             }
@@ -90,12 +89,12 @@ public class MohurdFactory extends AbstractFactory {
             CompanyQualification qualification = (CompanyQualification) object;
             String pkid = qualification.getPkid();
             String md5 = qualification.getMd5();
-            logger.info("====企业资质ETL=【"+qualification.getCom_name()+"】更新资质【"+qualification.getTotal()+"】条======");
-            redisUtils.hset(Constant.Cache_CompanyQual_Num, qualification.getCom_name(), qualification.getTotal()+"|"+DateTimeUtils.current());
+            logger.info("====企业资质ETL=【" + qualification.getCom_name() + "】更新资质【" + qualification.getTotal() + "】条======");
+            redisUtils.hset(Constant.Cache_CompanyQual_Num, qualification.getCom_name(), qualification.getTotal() + "|" + DateTimeUtils.current());
             boolean exists = redisUtils.hexists(Constant.Cache_CompanyQual, md5);
             if (!exists) {//实体MD5不存在
                 try {
-                    if(qualification.getCom_id()!=null&&qualification.getCert_no()!=null){
+                    if (qualification.getCom_id() != null && qualification.getCert_no() != null) {
                         String id = mohurdService.selectCompanyQualification(qualification);
                         if (StringUtils.isBlank(id)) {
                             int result = mohurdService.insertCompanyQualification(qualification);//新增
@@ -109,8 +108,8 @@ public class MohurdFactory extends AbstractFactory {
                             qualification.setPkid(id);
                             updateCompanyQual(qualification);
                         }
-                    }else{
-                        logger.info(String.format("企业资质更新 [%s][%s] 缺失企业ID或资质编号", qualification.getCom_name(),qualification.getQual_name()));
+                    } else {
+                        logger.info(String.format("企业资质更新 [%s][%s] 缺失企业ID或资质编号", qualification.getCom_name(), qualification.getQual_name()));
                     }
 
                 } catch (Exception e) {
@@ -160,8 +159,8 @@ public class MohurdFactory extends AbstractFactory {
             Person person = (Person) object;
             String pkid = person.getPkid();
             String md5 = person.getMd5();
-            logger.info("====企业注册人员ETL=【"+person.getCom_name()+"】更新人员【"+person.getTotal()+"】条======");
-            redisUtils.hset(Constant.Cache_Person_Num, person.getCom_name(), person.getTotal()+"|"+DateTimeUtils.current());
+            logger.info("====企业注册人员ETL=【" + person.getCom_name() + "】更新人员【" + person.getTotal() + "】条======");
+            redisUtils.hset(Constant.Cache_Person_Num, person.getCom_name(), person.getTotal() + "|" + DateTimeUtils.current());
             boolean exists = redisUtils.hexists(Constant.Cache_Person, md5);
             if (!exists) {//实体MD5不存在
                 try {
@@ -408,9 +407,9 @@ public class MohurdFactory extends AbstractFactory {
                     }
                 }
             }
-            int result = mohurdService.updateCompany(company,old);// 更新
+            int result = mohurdService.updateCompany(company, old);// 更新
             if (result > 0) {
-                logger.info(String.format("更新企业基本信息【%s】【%s】", company.getCom_id(),company.getCom_name()));
+                logger.info(String.format("更新企业基本信息【%s】【%s】", company.getCom_id(), company.getCom_name()));
             }
         } catch (Exception e) {
             logger.warn(ExceptionUtils.getMessage(e));
@@ -425,7 +424,7 @@ public class MohurdFactory extends AbstractFactory {
                 List<FieldChange> changes = BeanUtils.compare(qualification, old);
                 if (!changes.isEmpty()) {
                     for (FieldChange change : changes) {
-                        if(change.getColumn_name()!=null&&!"range".equals(change.getColumn_name())){
+                        if (change.getColumn_name() != null && !"range".equals(change.getColumn_name())) {
                             mohurdService.insertFieldChangeRecord(change);
                         }
                     }
@@ -485,7 +484,7 @@ public class MohurdFactory extends AbstractFactory {
                 List<FieldChange> changes = BeanUtils.compare(person, old);
                 if (!changes.isEmpty()) {
                     for (FieldChange change : changes) {
-                        if(change.getColumn_name()!=null&&!"valid_date".equals(change.getColumn_name())){
+                        if (change.getColumn_name() != null && !"valid_date".equals(change.getColumn_name())) {
                             mohurdService.insertFieldChangeRecord(change);
                         }
                     }

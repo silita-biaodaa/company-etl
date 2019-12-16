@@ -17,6 +17,7 @@
         from
         biaodaa_admin.`dic_alias` t
         where t.`name` = #{name}
+        limit 1
     </select>
 
     <!--根据等级别名查询等级code和标准名-->
