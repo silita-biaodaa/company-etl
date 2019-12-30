@@ -500,7 +500,7 @@ public class SkyChongqService {
             }
             String quaId;
             String grade = gradeCode;
-            str.append(qualType).append(gradeName);
+            str.append(qualType);
             quaId = aptitudeDictionaryMapper.queryPkidByParam(new HashedMap(2) {{
                 put("qual", qualCode);
                 put("grade", grade);
@@ -511,6 +511,9 @@ public class SkyChongqService {
             if (null != pkid) {
                 companyQualificationMapper.updateCompanyQualfication(pkid);
             } else {
+                str.append(gradeName);
+                tbCompanyQualification.setQualName(str.toString());
+                tbCompanyQualification.setRange(str.toString());
                 companyQualificationMapper.inertCompanyQualfication(tbCompanyQualification);
                 pkid = tbCompanyQualification.getPkid();
             }

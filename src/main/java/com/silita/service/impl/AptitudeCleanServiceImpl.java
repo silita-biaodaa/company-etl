@@ -166,15 +166,6 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
                 while (iterator.hasNext()) {
                     companyAptitude = new TbCompanyAptitude();
                     String qual = iterator.next();
-//                    String quaInfoId = aptitudeDictionaryMapper.getQulId(qual);
-//                    //如果资质表有数据直接赋值
-//                    if (quaInfoId != null) {
-//                        companyAptitude.setComId(comId);
-//                        companyAptitude.setQualId(qualId);
-//                        companyAptitude.setAptitudeName(qual);
-//                        companyAptitude.setAptitudeUuid(quaInfoId);
-//                        companyQualifications.add(companyAptitude);
-//                    } else {
                     if (qual.contains("不分等级")) {
                         subQual = new StringBuffer((qual.replace("不分等级", "")));
                         subGrade = new StringBuffer("0");
@@ -214,7 +205,6 @@ public class AptitudeCleanServiceImpl implements IAptitudeCleanService {
                         companyQualifications.add(companyAptitude);
                     }
                 }
-//                }
                 if (companyQualifications.size() > 0) {
                     tbCompanyAptitudeMapper.batchInsertCompanyAptitude(companyQualifications);
                 }
