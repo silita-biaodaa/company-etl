@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>war</packaging>
     <groupId>com.silita</groupId>
-    <artifactId>company-etl-chongq</artifactId>
+    <artifactId>company-etl-hs</artifactId>
     <version>1.2.57</version>
 
     <properties>

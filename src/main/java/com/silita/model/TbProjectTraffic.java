@@ -122,7 +122,7 @@ public class TbProjectTraffic {
         this.contractAmount = MapUtils.getString(jsonObject,"contractPrice");
         this.clearingAmount = MapUtils.getString(jsonObject,"settlementPrice");
         this.begined = MapUtils.getString(jsonObject,"beginDate");
-        this.ended = MapUtils.getString(jsonObject,"endDate");
+        this.ended = MapUtils.getString(jsonObject,"handDate");
         this.stakeBegin = MapUtils.getString(jsonObject,"stakeStart");
         this.stakeEnd = MapUtils.getString(jsonObject,"stakeEnd");
         this.assess = MapUtils.getString(jsonObject,"quality");
