@@ -118,7 +118,7 @@ public class TbProjectTraffic {
         this.proWhere = MapUtils.getString(jsonObject,"province");
         this.source = MapUtils.getString(jsonObject,"sourceInfo");
         this.build = MapUtils.getString(jsonObject,"projectStatus");
-        this.technicalGrade = MapUtils.getString(jsonObject,"technicalGrade");
+        this.technicalGrade = MapUtils.getString(jsonObject,"technologyGrade");
         this.contractAmount = MapUtils.getString(jsonObject,"contractPrice");
         this.clearingAmount = MapUtils.getString(jsonObject,"settlementPrice");
         this.begined = MapUtils.getString(jsonObject,"beginDate");

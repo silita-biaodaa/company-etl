@@ -156,7 +156,7 @@ public class KafkaConsumer {
      *
      * @param records
      */
-//    @KafkaListener(topics = "highway", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
+    @KafkaListener(topics = "highway", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
     public void getHighwayRecords(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
         for (ConsumerRecord<?, ?> record : records) {
             process(record, highwayFactory, acknowledgment);
@@ -169,7 +169,7 @@ public class KafkaConsumer {
      *
      * @param records
      */
-//    @KafkaListener(topics = "shuili", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
+    @KafkaListener(topics = "shuili", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
     public void getShuiliRecords(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
         for (ConsumerRecord<?, ?> record : records) {
             process(record, shuiliFactory, acknowledgment);
@@ -183,7 +183,7 @@ public class KafkaConsumer {
      *
      * @param records
      */
-    @KafkaListener(topics = "chongq", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
+//    @KafkaListener(topics = "chongq", containerFactory = "kafkaListenerContainerStrFactory", groupId = "test-consumer-group")
     public void getChongqRecords(List<ConsumerRecord<?, ?>> records, Acknowledgment acknowledgment) {
         for (ConsumerRecord<?, ?> record : records) {
             this.process(record, skyChongqFactory, acknowledgment);

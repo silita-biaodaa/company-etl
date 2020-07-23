@@ -6,7 +6,7 @@
     <packaging>war</packaging>
     <groupId>com.silita</groupId>
     <artifactId>company-etl-hs</artifactId>
-    <version>1.2.57</version>
+    <version>1.2.58</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -40,13 +40,13 @@
     </properties>
 
     <!-- 私有仓库 -->
-    <repositories>
-        <repository>
-            <id>public</id>  <!--这个ID需要与你新建的组group ID一致-->
-            <name>Public Repository</name>
-            <url>http://120.78.253.169:8081/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>public</id>  &lt;!&ndash;这个ID需要与你新建的组group ID一致&ndash;&gt;-->
+            <!--<name>Public Repository</name>-->
+            <!--<url>http://120.78.253.169:8081/nexus/content/groups/public/</url>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 
     <!-- 自动打包 -->
     <distributionManagement>
