@@ -77,6 +77,11 @@ public class TbProjectTraffic {
     private String ended;
 
     /**
+     * 竣工时间
+     */
+    private String completed;
+
+    /**
      * 合同段开始桩号
      */
     private String stakeBegin;
@@ -111,22 +116,23 @@ public class TbProjectTraffic {
      */
     private String remark;
 
-    public TbProjectTraffic(JSONObject jsonObject){
-        this.comName = MapUtils.getString(jsonObject,"corpName");
-        this.proName = Jsoup.parse(MapUtils.getString(jsonObject,"projectName")).text();
-        this.section = MapUtils.getString(jsonObject,"segmentName");
-        this.proWhere = MapUtils.getString(jsonObject,"province");
-        this.source = MapUtils.getString(jsonObject,"sourceInfo");
-        this.build = MapUtils.getString(jsonObject,"projectStatus");
-        this.technicalGrade = MapUtils.getString(jsonObject,"technologyGrade");
-        this.contractAmount = MapUtils.getString(jsonObject,"contractPrice");
-        this.clearingAmount = MapUtils.getString(jsonObject,"settlementPrice");
-        this.begined = MapUtils.getString(jsonObject,"beginDate");
-        this.ended = MapUtils.getString(jsonObject,"handDate");
-        this.stakeBegin = MapUtils.getString(jsonObject,"stakeStart");
-        this.stakeEnd = MapUtils.getString(jsonObject,"stakeEnd");
-        this.assess = MapUtils.getString(jsonObject,"quality");
-        this.remark = MapUtils.getString(jsonObject,"remark");
-        this.proType = MapUtils.getString(jsonObject,"projectType");
+    public TbProjectTraffic(JSONObject jsonObject) {
+        this.comName = MapUtils.getString(jsonObject, "corpName");
+        this.proName = Jsoup.parse(MapUtils.getString(jsonObject, "projectName")).text();
+        this.section = MapUtils.getString(jsonObject, "segmentName");
+        this.proWhere = MapUtils.getString(jsonObject, "province");
+        this.source = MapUtils.getString(jsonObject, "sourceInfo");
+        this.build = MapUtils.getString(jsonObject, "projectStatus");
+        this.technicalGrade = MapUtils.getString(jsonObject, "technologyGrade");
+        this.contractAmount = MapUtils.getString(jsonObject, "contractPrice");
+        this.clearingAmount = MapUtils.getString(jsonObject, "settlementPrice");
+        this.begined = MapUtils.getString(jsonObject, "beginDate");
+        this.ended = MapUtils.getString(jsonObject, "handDate");
+        this.completed = MapUtils.getString(jsonObject, "endDate");
+        this.stakeBegin = MapUtils.getString(jsonObject, "stakeStart");
+        this.stakeEnd = MapUtils.getString(jsonObject, "stakeEnd");
+        this.assess = MapUtils.getString(jsonObject, "quality");
+        this.remark = MapUtils.getString(jsonObject, "remark");
+        this.proType = MapUtils.getString(jsonObject, "projectType");
     }
 }

@@ -42,6 +42,9 @@
         <if test="ended != null and ended != ''">
             `ended`,
         </if>
+        <if test="completed != null and completed != ''">
+            `completed`,
+        </if>
         <if test="stakeBegin != null and stakeBegin != ''">
             `stake_begin`,
         </if>
@@ -97,6 +100,9 @@
         <if test="ended != null and ended != ''">
             #{ended},
         </if>
+        <if test="completed != null and completed != ''">
+            #{completed},
+        </if>
         <if test="stakeBegin != null and stakeBegin != ''">
             #{stakeBegin},
         </if>
@@ -145,6 +151,9 @@
         </if>
         <if test="ended != null and ended != ''">
             `ended` = #{ended},
+        </if>
+        <if test="completed != null and completed != ''">
+            `completed` = #{completed},
         </if>
         <if test="stakeBegin != null and stakeBegin != ''">
             `stake_begin` = #{stakeBegin},
