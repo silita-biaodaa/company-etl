@@ -190,7 +190,7 @@ public class CompanyShuiliService {
         List<Map<String, Object>> projectAwards;
         for (int i = 0; i < leg; i++) {
             TbProjectShuili projectShuili = new TbProjectShuili(projects.get(i));
-            if (StringUtils.isEmpty(projectShuili.getComName())) {
+            if (StringUtils.isEmpty(projectShuili.getProName())) {
                 continue;
             }
             projectShuili.setComName(comName);

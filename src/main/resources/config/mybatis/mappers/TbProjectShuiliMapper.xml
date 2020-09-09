@@ -71,7 +71,7 @@
             #{proWhere},
         </if>
         <if test="proStatus != null and proStatus != ''">
-            #proStatus},
+            #{proStatus},
         </if>
         <if test="contractAmount != null and contractAmount != ''">
             #{contractAmount},
@@ -105,7 +105,7 @@
     </insert>
 
     <!--修改-->
-    <update id="updateProjectTraffic" parameterType="com.silita.model.TbProjectShuili">\
+    <update id="updateProjectTraffic" parameterType="com.silita.model.TbProjectShuili">
         UPDATE
           `tb_project_shuili`
         SET
