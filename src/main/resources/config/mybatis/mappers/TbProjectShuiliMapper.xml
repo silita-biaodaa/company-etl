@@ -100,7 +100,7 @@
         <if test="prizes != null and prizes != ''">
             #{prizes},
         </if>
-        `created`
+        now()
           ) ;
     </insert>
 
