@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.silita.dao.TbProjectShuiliMapper" >
+<mapper namespace="com.silita.dao.TbProjectShuiliMapper">
 
     <!--添加-->
     <insert id="insertProjectTraffic" parameterType="com.silita.model.TbProjectShuili" useGeneratedKeys="true"
@@ -51,10 +51,16 @@
         <if test="prizes != null and prizes != ''">
             `prizes`,
         </if>
-          `created`
+        <if test="proLeader != null and proLeader != ''">
+            `pro_leader`,
+        </if>
+        <if test="techoLeader != null and techoLeader != ''">
+            `techo_leader`,
+        </if>
+        `created`
         )
         VALUES
-          (
+        (
         <if test="comName != null and comName != ''">
             #{comName},
         </if>
@@ -100,8 +106,14 @@
         <if test="prizes != null and prizes != ''">
             #{prizes},
         </if>
+        <if test="proLeader != null and proLeader != ''">
+            #{proLeader},
+        </if>
+        <if test="techoLeader != null and techoLeader != ''">
+            #{techoLeader},
+        </if>
         now()
-          ) ;
+        ) ;
     </insert>
 
     <!--修改-->
@@ -124,6 +136,8 @@
           `contract_content` = #{contractContent},
           `persons` = #{persons},
           `prizes` = #{prizes},
+          `pro_leader` = #{proLeader},
+          `techo_leader` = #{techoLeader},
           `updated` = now()
         WHERE `pkid` = #{pkid}
     </update>

@@ -98,41 +98,55 @@ public class TbProjectShuili {
      * 工程获奖
      */
     private String prizes;
+    /**
+     * 项目负责人
+     */
+    private String proLeader;
+    /**
+     * 技术负责人
+     */
+    private String techoLeader;
 
-    public TbProjectShuili(Map<String,Object> proMap) {
+    public TbProjectShuili(Map<String, Object> proMap) {
         this.proName = proMap.get("proName").toString();
-        if (null != proMap.get("proType")){
+        if (null != proMap.get("proType")) {
             this.proType = proMap.get("proType").toString();
         }
-        if (null !=  proMap.get("proOrg")){
+        if (null != proMap.get("proOrg")) {
             this.proOrg = proMap.get("proOrg").toString();
         }
-        if (null != proMap.get("proWhere")){
+        if (null != proMap.get("proWhere")) {
             this.proWhere = proMap.get("proWhere").toString();
         }
-        if (null !=  proMap.get("proStatus")){
+        if (null != proMap.get("proStatus")) {
             this.proStatus = proMap.get("proStatus").toString();
         }
-        if (null != proMap.get("contractAmount")){
+        if (null != proMap.get("contractAmount")) {
             this.contractAmount = proMap.get("contractAmount").toString();
         }
-        if (null != proMap.get("clearingAmount")){
+        if (null != proMap.get("clearingAmount")) {
             this.clearingAmount = proMap.get("clearingAmount").toString();
         }
-        if (null != proMap.get("worked")){
+        if (null != proMap.get("worked")) {
             this.worked = proMap.get("worked").toString();
         }
-        if (null != proMap.get("finished")){
+        if (null != proMap.get("finished")) {
             this.finished = proMap.get("finished").toString();
         }
-        if(null != proMap.get("duration")){
+        if (null != proMap.get("duration")) {
             this.duration = proMap.get("duration").toString();
         }
-        if(null != proMap.get("majorTarget")){
+        if (null != proMap.get("majorTarget")) {
             this.majorTarget = proMap.get("majorTarget").toString();
         }
-        if(null != proMap.get("contractContent")){
+        if (null != proMap.get("contractContent")) {
             this.contractContent = proMap.get("contractContent").toString();
+        }
+        if (null != proMap.get("proManager")) {
+            this.proLeader = proMap.get("proManager").toString();
+        }
+        if (null != proMap.get("techManager")) {
+            this.techoLeader = proMap.get("techManager").toString();
         }
     }
 }
