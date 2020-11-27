@@ -122,11 +122,11 @@ public class SkyChongqService {
                 persons = null;
             }
             //解析企业资质
-            if (object.containsKey("quals")) {
-                List<Map<String, Object>> quals = (List<Map<String, Object>>) object.get("quals");
-                this.analysisCompanyQuals(quals, comMap.get("com_id").toString(), comName);
-                quals = null;
-            }
+//            if (object.containsKey("quals")) {
+//                List<Map<String, Object>> quals = (List<Map<String, Object>>) object.get("quals");
+//                this.analysisCompanyQuals(quals, comMap.get("com_id").toString(), comName);
+//                quals = null;
+//            }
             //解析中标业绩analysisCompanyProject
             if (object.containsKey("zhongbiao")) {
                 List<Map<String, Object>> zhongbiaos = (List<Map<String, Object>>) object.get("zhongbiao");
