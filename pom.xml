@@ -37,7 +37,7 @@
 
         <ehcache.version>2.6.11</ehcache.version>
         <kafka.version>1.0.0</kafka.version>
-        <elasticsearch.version>1.4.4</elasticsearch.version>
+        <elasticsearch.version>6.8.15</elasticsearch.version>
         <elasticsearch-analysis-ik.version>1.10.1</elasticsearch-analysis-ik.version>
         <spring-data-elasticsearch.version>1.2.0.RELEASE</spring-data-elasticsearch.version>
 
